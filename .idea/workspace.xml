@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
+    <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <ignored path="kraken_trader.iws" />
@@ -33,12 +29,13 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+            <state relative-caret-position="0">
+              <caret line="66" column="3" selection-start-line="66" selection-start-column="3" selection-end-line="66" selection-end-column="3" />
               <folding>
-                <marker date="1461150062465" expanded="true" signature="3144:3156" placeholder="INSERT INTO missing_value... " />
-                <marker date="1461150062465" expanded="true" signature="3144:3173" placeholder="INSERT INTO missing_value... " />
-                <marker date="1461150062465" expanded="true" signature="3144:3252" placeholder="INSERT INTO " />
+                <element signature="e#19#34#0" expanded="true" />
+                <marker date="1461150720798" expanded="true" signature="3288:3300" placeholder="INSERT INTO missing_value... " />
+                <marker date="1461150720798" expanded="true" signature="3288:3317" placeholder="INSERT INTO missing_value... " />
+                <marker date="1461150720798" expanded="true" signature="3288:3396" placeholder="INSERT INTO " />
               </folding>
             </state>
           </provider>
@@ -972,12 +969,20 @@
       <updated>1461007190698</updated>
       <workItem from="1461007195859" duration="1186000" />
       <workItem from="1461056832111" duration="7358000" />
-      <workItem from="1461131777647" duration="12970000" />
+      <workItem from="1461131777647" duration="13156000" />
     </task>
+    <task id="LOCAL-00001" summary="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
+      <created>1461150582538</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1461150582538</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21514000" />
+    <option name="totallyTimeSpent" value="21700000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="24" width="1867" height="1176" extended-state="6" />
@@ -1035,9 +1040,10 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1461150062465" expanded="true" signature="3144:3156" placeholder="INSERT INTO missing_value... " />
-            <marker date="1461150062465" expanded="true" signature="3144:3173" placeholder="INSERT INTO missing_value... " />
-            <marker date="1461150062465" expanded="true" signature="3144:3252" placeholder="INSERT INTO " />
+            <element signature="e#19#34#0" expanded="true" />
+            <marker date="1461150720798" expanded="true" signature="3288:3300" placeholder="INSERT INTO missing_value... " />
+            <marker date="1461150720798" expanded="true" signature="3288:3317" placeholder="INSERT INTO missing_value... " />
+            <marker date="1461150720798" expanded="true" signature="3288:3396" placeholder="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1065,12 +1071,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="17" selection-start-line="4" selection-start-column="17" selection-end-line="4" selection-end-column="17" />
+        <state relative-caret-position="0">
+          <caret line="66" column="3" selection-start-line="66" selection-start-column="3" selection-end-line="66" selection-end-column="3" />
           <folding>
-            <marker date="1461150062465" expanded="true" signature="3144:3156" placeholder="INSERT INTO missing_value... " />
-            <marker date="1461150062465" expanded="true" signature="3144:3173" placeholder="INSERT INTO missing_value... " />
-            <marker date="1461150062465" expanded="true" signature="3144:3252" placeholder="INSERT INTO " />
+            <element signature="e#19#34#0" expanded="true" />
+            <marker date="1461150720798" expanded="true" signature="3288:3300" placeholder="INSERT INTO missing_value... " />
+            <marker date="1461150720798" expanded="true" signature="3288:3317" placeholder="INSERT INTO missing_value... " />
+            <marker date="1461150720798" expanded="true" signature="3288:3396" placeholder="INSERT INTO " />
           </folding>
         </state>
       </provider>

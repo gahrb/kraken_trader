@@ -7,10 +7,9 @@ import psycopg2
 from datetime import datetime
 
 
-simulate = True
-trade_pairs = ['XXBTZEUR','XETHZEUR','XLTCZEUR']
-conn = psycopg2.connect(database="kraken_crawler", user="kraken", password="kraken")
-cur = conn.cursor()
+simulate = True #as long as this is under development, leave it on True
+trade_pairs = ['XXBTZEUR','XETHZEUR','XLTCZEUR'] #basic set of asset pairs
+conn = psycopg2.connect(database="kraken_crawler", user="kraken", password="kraken") #basic connection information for a local postgeSQL-DB, change this to your needs
 
 def main(argv):
 
