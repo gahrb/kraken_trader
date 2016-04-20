@@ -8,11 +8,11 @@ from datetime import datetime
 
 import krakenex
 from kraken_trader.account import kraken_account
-# from kraken_trader.all_traders import *
+from kraken_trader.all_traders import *
 mod = __import__('kraken_trader.all_traders', fromlist=['standard_trader'])
 
 simulate = True  # as long as this is under development, leave it on True
-trade_pairs = ['XXBTXETH','XXBTZEUR', 'XETHZEUR', 'XLTCZEUR']  # basic set of asset pairs
+trade_pairs = ['XXBTZEUR', 'XETHZEUR', 'XLTCZEUR']  # basic set of asset pairs
 conn = psycopg2.connect(database="kraken_crawler", user="kraken",
                         password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 
@@ -40,6 +40,7 @@ def main(argv):
 
     k = krakenex.API()
     k.load_key(keyfile)
+    get_asset_pairs(k)
 
     for opt, arg in opts:
         if opt == '-a' and arg == 'populateDB':
@@ -48,9 +49,9 @@ def main(argv):
             account_info = kraken_account(conn,k)
             print_account_info(account_info)
         elif opt == "-t":
-            trader_class = getattr(mod, arg)
-            print trader_class
-            trader_class.get_sell_advice()
+            trader_class = advanced_trader(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
+            print "Sell advice: " + str(trader_class.get_sell_advice())
+            print "Buy advice: " + str(trader_class.get_buy_advice())
             place_order(k)
 
 def print_account_info(acc):
@@ -65,7 +66,6 @@ def print_account_info(acc):
 
 def populate_db(k):
 
-    get_asset_pairs(k)
     for pair in trade_pairs:
         query = query_market(k, pair)
         if 'result' in query.keys() and len(query['result']):

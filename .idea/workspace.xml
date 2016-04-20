@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kraken_trader/__init__.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kraken_trader/all_traders.py" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/kraken_trader/standard_trader.py" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/account.py" afterPath="$PROJECT_DIR$/kraken_trader/account.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/all_traders.py" afterPath="$PROJECT_DIR$/kraken_trader/all_traders.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <ignored path="kraken_trader.iws" />
@@ -37,33 +34,34 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="570">
-              <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
+            <state relative-caret-position="210">
+              <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
               <folding>
                 <element signature="e#19#32#0" expanded="true" />
-                <element signature="e#2001#2293#0" expanded="false" />
-                <element signature="e#2320#2634#0" expanded="false" />
-                <element signature="e#3288#3633#0" expanded="false" />
-                <element signature="e#3666#3713#0" expanded="false" />
-                <element signature="e#3745#7040#0" expanded="false" />
-                <element signature="e#7059#7560#0" expanded="false" />
-                <marker date="1461155550715" expanded="true" signature="4343:4355" placeholder="INSERT INTO missing_value... " />
-                <marker date="1461155550715" expanded="true" signature="4343:4376" placeholder="INSERT INTO missing_value... " />
-                <marker date="1461155550715" expanded="true" signature="4343:4455" placeholder="INSERT INTO " />
+                <element signature="e#2156#2448#0" expanded="false" />
+                <element signature="e#3420#3765#0" expanded="false" />
+                <element signature="e#3798#3845#0" expanded="false" />
+                <element signature="e#7191#7692#0" expanded="false" />
+                <marker date="1461161691998" expanded="true" signature="4475:4487" placeholder="INSERT INTO missing_value... " />
+                <marker date="1461161691998" expanded="true" signature="4475:4508" placeholder="INSERT INTO missing_value... " />
+                <marker date="1461161691998" expanded="true" signature="4475:4587" placeholder="INSERT INTO " />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="all_traders.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="all_traders.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
-              <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-              <folding />
+            <state relative-caret-position="270">
+              <caret line="30" column="8" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
+              <folding>
+                <marker date="1461162259964" expanded="true" signature="788:829" placeholder="SELECT 'ask_... " />
+                <marker date="1461162259964" expanded="true" signature="788:830" placeholder="SELECT 'ask_... " />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -110,8 +108,8 @@
         <option value="$PROJECT_DIR$/kraken_trader/__init__.py" />
         <option value="$PROJECT_DIR$/kraken_trader/account.py" />
         <option value="$PROJECT_DIR$/kraken_trader/standard_trader.py" />
-        <option value="$PROJECT_DIR$/kraken_trader/all_traders.py" />
         <option value="$PROJECT_DIR$/main.py" />
+        <option value="$PROJECT_DIR$/kraken_trader/all_traders.py" />
       </list>
     </option>
   </component>
@@ -1026,7 +1024,7 @@
       <updated>1461007190698</updated>
       <workItem from="1461007195859" duration="1186000" />
       <workItem from="1461056832111" duration="7358000" />
-      <workItem from="1461131777647" duration="17986000" />
+      <workItem from="1461131777647" duration="23516000" />
     </task>
     <task id="LOCAL-00001" summary="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
       <created>1461150582538</created>
@@ -1049,11 +1047,18 @@
       <option name="project" value="LOCAL" />
       <updated>1461151753081</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="getting the traders to work....">
+      <created>1461155606506</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1461155606506</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="26530000" />
+    <option name="totallyTimeSpent" value="32060000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="24" width="1867" height="1176" extended-state="6" />
@@ -1095,7 +1100,8 @@
     <MESSAGE value="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created." />
     <MESSAGE value="minor changes. mostly comments" />
     <MESSAGE value="added framework foraccount information and traders." />
-    <option name="LAST_COMMIT_MESSAGE" value="added framework foraccount information and traders." />
+    <MESSAGE value="getting the traders to work...." />
+    <option name="LAST_COMMIT_MESSAGE" value="getting the traders to work...." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1114,15 +1120,13 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <element signature="e#2001#2293#0" expanded="false" />
-            <element signature="e#2320#2634#0" expanded="false" />
-            <element signature="e#3288#3633#0" expanded="false" />
-            <element signature="e#3666#3713#0" expanded="false" />
-            <element signature="e#3745#7040#0" expanded="false" />
-            <element signature="e#7059#7560#0" expanded="false" />
-            <marker date="1461155550715" expanded="true" signature="4343:4355" placeholder="INSERT INTO missing_value... " />
-            <marker date="1461155550715" expanded="true" signature="4343:4376" placeholder="INSERT INTO missing_value... " />
-            <marker date="1461155550715" expanded="true" signature="4343:4455" placeholder="INSERT INTO " />
+            <element signature="e#2156#2448#0" expanded="false" />
+            <element signature="e#3420#3765#0" expanded="false" />
+            <element signature="e#3798#3845#0" expanded="false" />
+            <element signature="e#7191#7692#0" expanded="false" />
+            <marker date="1461161691998" expanded="true" signature="4475:4487" placeholder="INSERT INTO missing_value... " />
+            <marker date="1461161691998" expanded="true" signature="4475:4508" placeholder="INSERT INTO missing_value... " />
+            <marker date="1461161691998" expanded="true" signature="4475:4587" placeholder="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1166,29 +1170,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
+    <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="20" column="25" selection-start-line="20" selection-start-column="25" selection-end-line="20" selection-end-column="25" />
-          <folding />
+        <state relative-caret-position="210">
+          <caret line="52" column="39" selection-start-line="52" selection-start-column="39" selection-end-line="52" selection-end-column="39" />
+          <folding>
+            <element signature="e#19#32#0" expanded="true" />
+            <element signature="e#2156#2448#0" expanded="false" />
+            <element signature="e#3420#3765#0" expanded="false" />
+            <element signature="e#3798#3845#0" expanded="false" />
+            <element signature="e#7191#7692#0" expanded="false" />
+            <marker date="1461161691998" expanded="true" signature="4475:4487" placeholder="INSERT INTO missing_value... " />
+            <marker date="1461161691998" expanded="true" signature="4475:4508" placeholder="INSERT INTO missing_value... " />
+            <marker date="1461161691998" expanded="true" signature="4475:4587" placeholder="INSERT INTO " />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
+    <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="51" column="29" selection-start-line="51" selection-start-column="29" selection-end-line="51" selection-end-column="29" />
+        <state relative-caret-position="270">
+          <caret line="30" column="8" selection-start-line="30" selection-start-column="8" selection-end-line="30" selection-end-column="8" />
           <folding>
-            <element signature="e#19#32#0" expanded="true" />
-            <element signature="e#2001#2293#0" expanded="false" />
-            <element signature="e#2320#2634#0" expanded="false" />
-            <element signature="e#3288#3633#0" expanded="false" />
-            <element signature="e#3666#3713#0" expanded="false" />
-            <element signature="e#3745#7040#0" expanded="false" />
-            <element signature="e#7059#7560#0" expanded="false" />
-            <marker date="1461155550715" expanded="true" signature="4343:4355" placeholder="INSERT INTO missing_value... " />
-            <marker date="1461155550715" expanded="true" signature="4343:4376" placeholder="INSERT INTO missing_value... " />
-            <marker date="1461155550715" expanded="true" signature="4343:4455" placeholder="INSERT INTO " />
+            <marker date="1461162259964" expanded="true" signature="788:829" placeholder="SELECT 'ask_... " />
+            <marker date="1461162259964" expanded="true" signature="788:830" placeholder="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
