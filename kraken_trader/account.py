@@ -1,14 +1,10 @@
+class kraken_account:
 
-#TO-DO: create class for handling account information
-
-
-
-class account():
-
-    def __init__(self):
-
-
+    def __init__(self,conn,k):
+        self.conn = conn
+        self.k = k
 
     def get_balance(self):
 
-        return 0
+        self.balance = self.k.query_private('Balance')['result']
+        self.trade_balance = self.k.query_private('TradeBalance',{'Currency':'ZEUR'})['result']

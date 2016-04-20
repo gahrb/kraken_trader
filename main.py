@@ -7,9 +7,12 @@ import sys
 from datetime import datetime
 
 import krakenex
+from kraken_trader.account import kraken_account
+# from kraken_trader.all_traders import *
+mod = __import__('kraken_trader.all_traders', fromlist=['standard_trader'])
 
 simulate = True  # as long as this is under development, leave it on True
-trade_pairs = ['XXBTZEUR', 'XETHZEUR', 'XLTCZEUR']  # basic set of asset pairs
+trade_pairs = ['XXBTXETH','XXBTZEUR', 'XETHZEUR', 'XLTCZEUR']  # basic set of asset pairs
 conn = psycopg2.connect(database="kraken_crawler", user="kraken",
                         password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 
@@ -17,7 +20,7 @@ conn = psycopg2.connect(database="kraken_crawler", user="kraken",
 def main(argv):
     keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
     try:
-        opts, args = getopt.getopt(argv, 'h:a:')
+        opts, args = getopt.getopt(argv, 'ht:a:')
     except getopt.GetoptError:
         print 'test.py -a [action]'  # -i <inputfile> -o <outputfile>'
         sys.exit()
@@ -41,23 +44,35 @@ def main(argv):
     for opt, arg in opts:
         if opt == '-a' and arg == 'populateDB':
             populate_db(k)
+        elif opt == '-a' and arg == 'accountInfo':
+            account_info = kraken_account(conn,k)
+            print_account_info(account_info)
         elif opt == "-t":
-            algorithm = arg
-            print "Running the " + algorithm + " algorithm"
+            trader_class = getattr(mod, arg)
+            print trader_class
+            trader_class.get_sell_advice()
             place_order(k)
 
+def print_account_info(acc):
+    acc.get_balance()
+    print "Single Balances\n---------------------"
+    for curr in acc.balance:
+        print curr[1:] + ": " + acc.balance[curr]
+
+    print "\nOverall Information\n---------------------"
+    for tb in acc.trade_balance:
+        print enum(tb) + ": " + acc.trade_balance[tb]
 
 def populate_db(k):
 
     get_asset_pairs(k)
     for pair in trade_pairs:
         query = query_market(k, pair)
-        if 'result' in query.keys():
+        if 'result' in query.keys() and len(query['result']):
             update_db(query['result'][pair], pair)
         else:
-            print "Error querying pair: " + pair[1:].replace("Z", "-")
+            print "Error querying pair: " + pair[1:4] +"-"+ pair[5:]
             print query['error']
-
 
 def place_order(k):
     if not simulate:
@@ -72,7 +87,6 @@ def place_order(k):
                                      'close[price]': '9001',
                                      'close[volume]': '1'})
 
-
 def get_asset_pairs(k):
     pairs = k.query_public('AssetPairs')
     for pair in pairs['result']:
@@ -84,10 +98,8 @@ def get_asset_pairs(k):
 
     print trade_pairs
 
-
 def query_market(k, pair):
     return k.query_public('Ticker', {'pair': pair})
-
 
 def update_db(res, pair):
     """
@@ -155,6 +167,18 @@ def update_db(res, pair):
                 print e.pgerror
     return
 
+def enum(x):
+    return {
+        'tb': "Trade Balance",
+        'eb': "Equivalent Balance",
+        'm': "Margin Amount of Open Positions",
+        'n': "Unrealized net profit/loss of open positions",
+        'c': "Cost basis of open positions",
+        'v': "Current floating valuation of open positions",
+        'e': "Equity = trade balance + unrealized net profit/loss",
+        'mf': "Free Margin = Equity - Initial Margin",
+        'ml': "Margin level = (equity / initial margin) * 100",
+    }.get(x, "unknown")
 
 if __name__ == "__main__":
     main(sys.argv[1:])
