@@ -1,4 +1,4 @@
-import numpy
+import numpy as np
 
 
 class standard_trader():
@@ -24,7 +24,7 @@ class advanced_trader():
         self.pred = dict()
 
         #Calculate the predicted change
-        self.predict_price(0.995)
+        self.predict_price(0.595)
 
     def get_buy_advice(self):
 
@@ -48,11 +48,14 @@ class advanced_trader():
             sval = res[0][1:]
             diff = []
             for i in range(1,len(res)):
-                diff.append(numpy.subtract(res[i][1:],sval))
+                diff.append(np.subtract(res[i][1:],sval))
                 sval_tmp1 = alpha*res[i][1]+(1-alpha)*sval[0]
                 sval_tmp2 = alpha*res[i][2]+(1-alpha)*sval[1]
                 sval = (sval_tmp1,sval_tmp2)
 
-            #print "Change Predition: "+pair+": "+str(numpy.subtract(sval,res[-1][1:]))
-            self.pred.update({pair:numpy.subtract(sval,res[-1][1:])})
+            abs_change = np.subtract(sval,res[-1][1:])
+            #print "Abs_change: "+str(abs_change)
+            rel_change = np.divide(abs_change,res[-1][1:])
+            print "Rel_change: "+str(rel_change)
+            self.pred.update({pair:rel_change})
 
