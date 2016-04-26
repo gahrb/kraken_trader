@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import getopt
+import logging
 import os
 import psycopg2
 import sys
@@ -12,9 +13,12 @@ from kraken_trader.all_traders import *
 mod = __import__('kraken_trader.all_traders', fromlist=['standard_trader'])
 
 simulate = True  # as long as this is under development, leave it on True
-trade_pairs = ['XXBTZEUR', 'XETHZEUR', 'XLTCZEUR']  # basic set of asset pairs
+trade_pairs = []# ['XXBTZEUR', 'XETHZEUR', 'XLTCZEUR']  # basic set of asset pairs
 conn = psycopg2.connect(database="kraken_crawler", user="kraken",
                         password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
+logging.basicConfig(filename='/var/log/kraken_crawler/kraken_crawler.log',level=logging.INFO,format=FORMAT)
+logger = logging.getLogger('kraken_crawler')
 
 
 def main(argv):
@@ -50,7 +54,7 @@ def main(argv):
             print_account_info(account_info)
         elif opt == "-t":
             trader_class = advanced_trader(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
-            print "Sell advice: " + str(trader_class.get_sell_advice())
+            print "Pred vs. real advice: " + str(trader_class.get_sell_advice())
             print "Buy advice: " + str(trader_class.get_buy_advice())
             place_order(k)
 
@@ -71,8 +75,8 @@ def populate_db(k):
         if 'result' in query.keys() and len(query['result']):
             update_db(query['result'][pair], pair)
         else:
-            print "Error querying pair: " + pair[1:4] +"-"+ pair[5:]
-            print query['error']
+            logger.warning("Error querying pair: " + pair[1:4] +"-"+ pair[5:])
+            logger.warning(query['error'])
 
 def place_order(k):
     if not simulate:
@@ -93,10 +97,10 @@ def get_asset_pairs(k):
         pair = pair.replace(".d", "")
         if not (pair in trade_pairs or pair.find("CAD") >= 0 or pair.find("USD") >= 0 or pair.find(
                 "GBP") >= 0 or pair.find("JPY") >= 0):
-            print pair
+            #print pair
             trade_pairs.append(pair)
 
-    print trade_pairs
+    #print trade_pairs
 
 def query_market(k, pair):
     return k.query_public('Ticker', {'pair': pair})
@@ -115,7 +119,7 @@ def update_db(res, pair):
     """
     cur = conn.cursor()
     try:
-        print "Populating table " + pair
+        logger.info("Populating table " + pair)
         cur.execute(
             "INSERT INTO " + pair + " VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s);",
             (datetime.now(),
@@ -131,9 +135,8 @@ def update_db(res, pair):
         cur.close()
         conn.commit()
     except psycopg2.Error as e:
-        print e.pgcode
-        print e.pgerror
         if e.pgcode == '42P01':  # Table does not exist
+            logger.info("Found new traid pair. Creating a new table...")
             cur = conn.cursor()
             cur.execute("rollback")
             try:
@@ -157,14 +160,18 @@ def update_db(res, pair):
                                                  "high double precision," \
                                                  "high_24h double precision," \
                                                  "opened double precision )"
-                print "Creating table " + pair
+                logger.info("Creating table " + pair)
                 cur.execute(query)
                 cur.close()
                 update_db(res, pair)
             except psycopg2.Error as e:
-                print "Could not create new table."
-                print e.pgcode
-                print e.pgerror
+                logger.error("Could not create new table.")
+                logger.error(pgcode)
+                logger.error(e.pgerror)
+        else:
+            logger.error("Unable to insert new date into the table: " +pair)
+            logger.warning(e.pgcode)
+            logger.warning(e.pgerror)
     return
 
 def enum(x):
