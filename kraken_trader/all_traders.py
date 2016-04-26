@@ -25,20 +25,25 @@ class advanced_trader():
         self.diff = dict()
 
         #Calculate the predicted change
-        self.predict_price(0.895)
+        self.predict_change(0.895)
 
-    def get_buy_advice(self):
+    def get_buy_advice(self,elem):
 
         #return max(self.pred, key=self.pred[:][1].get)
-        return self.diff
+        ask_list_pred = dict()
+        for key in self.pred:
+            ask_list_pred.update({key:self.pred.get(key)[elem][0]})
+        return max(ask_list_pred,key=ask_list_pred.get)
 
-    def get_sell_advice(self):
+    def get_sell_advice(self,elem):
 
-        return self.pred
+        bid_list_pred = dict()
+        for key in self.pred:
+            bid_list_pred.update({key:self.pred.get(key)[elem][1]})
+        return min(bid_list_pred, key=bid_list_pred.get)
 
-    def predict_price(self,alpha):
+    def predict_change(self,alpha):
 
-        self.pair_prediction = []
         for pair in self.pairs:
             cur = self.conn.cursor()
             cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair)
@@ -47,15 +52,8 @@ class advanced_trader():
 
             #TODO: put here the filter, strategy or whatever
             self.pred[pair] = []
-            self.diff[pair] = []
             self.pred[pair].append(np.array(res[0][1:]))
-            self.diff[pair].append(np.array(res[0][1:]))
             for i in range(1,len(res)):
-                self.diff[pair].append(np.array(res[i][1:]))
-                self.pred[pair].append(np.add(alpha*np.array(res[i][1:]),(1-alpha)*np.array(self.pred[pair][-1])))
-
-            abs_change = np.subtract(self.pred[pair][-1],res[-1][1:])
-            #print "Abs_change: "+str(abs_change)
-            self.rel_change = np.divide(abs_change,res[-1][1:])
-            print "Rel_change: "+str(self.rel_change)
-
+                pred_val = np.add(alpha*np.array(res[i][1:]), (1-alpha)*np.array(self.pred[pair][-1]))
+                abs_change = np.subtract(pred_val,res[i][1:])
+                self.pred[pair].append(np.divide(abs_change,res[i][1:]))

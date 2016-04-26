@@ -54,8 +54,8 @@ def main(argv):
             print_account_info(account_info)
         elif opt == "-t":
             trader_class = advanced_trader(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
-            print "Pred vs. real advice: " + str(trader_class.get_sell_advice())
-            print "Buy advice: " + str(trader_class.get_buy_advice())
+            print "Pred vs. real advice: " + str(trader_class.get_sell_advice(-1))
+            print "Buy advice: " + str(trader_class.get_buy_advice(-1))
             place_order(k)
 
 def print_account_info(acc):
