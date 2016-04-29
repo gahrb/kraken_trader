@@ -9,13 +9,16 @@ class standard_trader():
 
     def get_buy_advice(self):
 
-        return 0
+        return (0,1)
 
     def get_sell_advice(self):
 
-        return 0
+        return (0,1)
 
-class advanced_trader():
+class basic_trader():
+    """
+    Returns the most increasing FX to buy and the most decreasing to sell
+    """
 
     def __init__(self,conn,k,pairs):
         self.conn = conn
@@ -25,22 +28,25 @@ class advanced_trader():
         self.diff = dict()
 
         #Calculate the predicted change
-        self.predict_change(0.895)
+        self.predict_change(0.5)
 
-    def get_buy_advice(self,elem):
+    def get_buy_advice(self,time):
 
-        #return max(self.pred, key=self.pred[:][1].get)
         ask_list_pred = dict()
         for key in self.pred:
-            ask_list_pred.update({key:self.pred.get(key)[elem][0]})
-        return max(ask_list_pred,key=ask_list_pred.get)
+            # TODO: check if time is not larger
+            elem = np.argmin(np.abs(np.matrix(self.pred.get(key))[:,0]-time))
+            ask_list_pred.update({key:self.pred.get(key)[elem][1]})
+        return (max(ask_list_pred,key=ask_list_pred.get),1)
 
-    def get_sell_advice(self,elem):
+    def get_sell_advice(self,time):
 
         bid_list_pred = dict()
         for key in self.pred:
-            bid_list_pred.update({key:self.pred.get(key)[elem][1]})
-        return min(bid_list_pred, key=bid_list_pred.get)
+            # TODO: check if time is not larger
+            elem = np.argmin(np.abs(np.matrix(self.pred.get(key))[:,0]-time))
+            bid_list_pred.update({key:self.pred.get(key)[elem][2]})
+        return (min(bid_list_pred, key=bid_list_pred.get),1)
 
     def predict_change(self,alpha):
 
@@ -52,8 +58,9 @@ class advanced_trader():
 
             #TODO: put here the filter, strategy or whatever
             self.pred[pair] = []
-            self.pred[pair].append(np.array(res[0][1:]))
+            self.pred[pair].append(np.array(res[0]))
             for i in range(1,len(res)):
-                pred_val = np.add(alpha*np.array(res[i][1:]), (1-alpha)*np.array(self.pred[pair][-1]))
+                pred_val = np.add(alpha*np.array(res[i][1:]), (1-alpha)*np.array(self.pred[pair][-1][1:]))
                 abs_change = np.subtract(pred_val,res[i][1:])
-                self.pred[pair].append(np.divide(abs_change,res[i][1:]))
+                #TODO: check if correct this way...
+                self.pred[pair].append(np.insert(res[i][0],1,np.divide(abs_change,res[i][1:])))
