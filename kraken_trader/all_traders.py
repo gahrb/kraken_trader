@@ -26,9 +26,10 @@ class basic_trader():
         self.pairs = pairs
         self.pred = dict()
         self.diff = dict()
+        self.price = dict()
 
         #Calculate the predicted change
-        self.predict_change(0.5)
+        self.predict_change(0.001)
 
     def get_buy_advice(self,time):
 
@@ -37,7 +38,7 @@ class basic_trader():
             # TODO: check if time is not larger
             elem = np.argmin(np.abs(np.matrix(self.pred.get(key))[:,0]-time))
             ask_list_pred.update({key:self.pred.get(key)[elem][1]})
-        return (max(ask_list_pred,key=ask_list_pred.get),1)
+        return (max(ask_list_pred,key=ask_list_pred.get),0.5)
 
     def get_sell_advice(self,time):
 
@@ -46,7 +47,7 @@ class basic_trader():
             # TODO: check if time is not larger
             elem = np.argmin(np.abs(np.matrix(self.pred.get(key))[:,0]-time))
             bid_list_pred.update({key:self.pred.get(key)[elem][2]})
-        return (min(bid_list_pred, key=bid_list_pred.get),1)
+        return (min(bid_list_pred, key=bid_list_pred.get),0.5)
 
     def predict_change(self,alpha):
 
@@ -58,9 +59,13 @@ class basic_trader():
 
             #TODO: put here the filter, strategy or whatever
             self.pred[pair] = []
+            self.price[pair] = []
             self.pred[pair].append(np.array(res[0]))
+            self.price[pair].append(np.array(res[0]))
             for i in range(1,len(res)):
                 pred_val = np.add(alpha*np.array(res[i][1:]), (1-alpha)*np.array(self.pred[pair][-1][1:]))
                 abs_change = np.subtract(pred_val,res[i][1:])
                 #TODO: check if correct this way...
                 self.pred[pair].append(np.insert(res[i][0],1,np.divide(abs_change,res[i][1:])))
+                #Important for the later analysis, so that we have the actual price
+                self.price[pair].append(np.array(res[i]))
