@@ -1,4 +1,5 @@
 import numpy as np
+import json
 
 
 class standard_trader():
@@ -28,8 +29,17 @@ class basic_trader():
         self.diff = dict()
         self.price = dict()
 
+        # Get Configuration Values for Trader from JSON File
+        # This is required in case, we want ot optimize the algorithms later on.
+        trader_name = get_tader_name(self)
+        filename = "traders.json"
+        json_data=open("./kraken_trader/"+filename).read()
+        data = json.loads(json_data)
+        self.alpha = data[trader_name]["alpha"]
+        self.beta = data[trader_name]["beta"]
+
         #Calculate the predicted change
-        self.predict_change(0.001)
+        self.predict_change(self.alpha)
 
     def get_buy_advice(self,time):
 
@@ -38,7 +48,7 @@ class basic_trader():
             # TODO: check if time is not larger
             elem = np.argmin(np.abs(np.matrix(self.pred.get(key))[:,0]-time))
             ask_list_pred.update({key:self.pred.get(key)[elem][1]})
-        return (max(ask_list_pred,key=ask_list_pred.get),0.5)
+        return (max(ask_list_pred,key=ask_list_pred.get),self.beta)
 
     def get_sell_advice(self,time):
 
@@ -47,7 +57,7 @@ class basic_trader():
             # TODO: check if time is not larger
             elem = np.argmin(np.abs(np.matrix(self.pred.get(key))[:,0]-time))
             bid_list_pred.update({key:self.pred.get(key)[elem][2]})
-        return (min(bid_list_pred, key=bid_list_pred.get),0.5)
+        return (min(bid_list_pred, key=bid_list_pred.get),self.beta)
 
     def predict_change(self,alpha):
 
@@ -69,3 +79,10 @@ class basic_trader():
                 self.pred[pair].append(np.insert(res[i][0],1,np.divide(abs_change,res[i][1:])))
                 #Important for the later analysis, so that we have the actual price
                 self.price[pair].append(np.array(res[i]))
+
+
+
+def get_tader_name(input_class):
+    name_sidx = str(input_class).find("all_traders.")
+    name_eidx = str(input_class).find(" instance")
+    return str(input_class)[name_sidx+12:name_eidx]
