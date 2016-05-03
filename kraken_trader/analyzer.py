@@ -59,4 +59,17 @@ class analyzer:
                     eq_bal = eq_bal + tmp
             print "Starting balance: "+ str(balance)
             print "Equivalent in EUR: " + str(eq_bal)
+        return eq_bal
+
+
+    def gradient(self):
+        """
+        calculates the gradient of the trader with it's constants: alpha, beta, ...
+        afterwards steepest descend/ascend can be applied
+        """
+        vec = []
+        for i=0 in range(0,10):
+            vec[i] = self.trader.enum(i)
+
+
 

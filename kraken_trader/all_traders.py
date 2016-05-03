@@ -8,6 +8,14 @@ class standard_trader():
         self.conn = conn
         self.k = k
 
+        # Get Configuration Values for Trader from JSON File
+        # This is required in case, we want ot optimize the algorithms later on.
+        trader_name = get_tader_name(self)
+        filename = "traders.json"
+        json_data=open("./kraken_trader/"+filename).read()
+        data = json.loads(json_data)
+        self.alpha = data[trader_name]
+
     def get_buy_advice(self):
 
         return (0,1)
