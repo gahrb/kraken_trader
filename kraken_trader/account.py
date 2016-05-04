@@ -16,3 +16,5 @@ class kraken_account:
         for balance in trade_balance:
             self.trade_balance[str(balance)] = float(trade_balance[balance])
 
+        self.asset_pair = self.k.query_public('AssetPairs')['result']
+

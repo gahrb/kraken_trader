@@ -25,7 +25,7 @@ logger = logging.getLogger('kraken_crawler')
 def main(argv):
     keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
     try:
-        opts, args = getopt.getopt(argv, 'ht:a:s')
+        opts, args = getopt.getopt(argv, 'ht:a:s:o')
     except getopt.GetoptError:
         print 'test.py -a [action]'  # -i <inputfile> -o <outputfile>'
         sys.exit()
@@ -55,13 +55,16 @@ def main(argv):
             print_account_info(account_info)
         elif opt == "-t":
             trader_class = basic_trader(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
-            print "Pred vs. real advice: " + str(trader_class.get_sell_advice(datetime.now()))
-            print "Buy advice: " + str(trader_class.get_buy_advice(datetime.now()))
             place_order(k)
+            if simulate:
+                a = analyzer(trader_class,kraken_account(conn,k))
+                a.simulate()
+        elif opt == "-o":
+            trader_class = basic_trader(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
+            a = analyzer(trader_class,kraken_account(conn,k))
+            a.gradient()
 
-    if simulate:
-        a = analyzer(trader_class,kraken_account(conn,k))
-        a.simulate()
+
 
 def print_account_info(acc):
     acc.get_balance()

@@ -1,5 +1,6 @@
 import numpy as np
 import json
+import datetime as dt
 
 
 class standard_trader():
@@ -14,7 +15,7 @@ class standard_trader():
         filename = "traders.json"
         json_data=open("./kraken_trader/"+filename).read()
         data = json.loads(json_data)
-        self.alpha = data[trader_name]
+        self.constant = data[trader_name]
 
     def get_buy_advice(self):
 
@@ -43,11 +44,11 @@ class basic_trader():
         filename = "traders.json"
         json_data=open("./kraken_trader/"+filename).read()
         data = json.loads(json_data)
-        self.alpha = data[trader_name]["alpha"]
-        self.beta = data[trader_name]["beta"]
+        self.constant = data[trader_name]
+        self.constant = data[trader_name]
 
         #Calculate the predicted change
-        self.predict_change(self.alpha)
+        self.predict_change()
 
     def get_buy_advice(self,time):
 
@@ -55,8 +56,12 @@ class basic_trader():
         for key in self.pred:
             # TODO: check if time is not larger
             elem = np.argmin(np.abs(np.matrix(self.pred.get(key))[:,0]-time))
+            if elem < 100: #avoid prediciton on untrained data
+                continue
             ask_list_pred.update({key:self.pred.get(key)[elem][1]})
-        return (max(ask_list_pred,key=ask_list_pred.get),self.beta)
+        if len(ask_list_pred)==0:
+            return (key,0)
+        return (max(ask_list_pred,key=ask_list_pred.get),self.constant["beta"])
 
     def get_sell_advice(self,time):
 
@@ -64,10 +69,14 @@ class basic_trader():
         for key in self.pred:
             # TODO: check if time is not larger
             elem = np.argmin(np.abs(np.matrix(self.pred.get(key))[:,0]-time))
+            if elem < 1000: #avoid prediciton on untrained data
+                continue
             bid_list_pred.update({key:self.pred.get(key)[elem][2]})
-        return (min(bid_list_pred, key=bid_list_pred.get),self.beta)
+        if len(bid_list_pred)==0:
+            return (key,0)
+        return (min(bid_list_pred, key=bid_list_pred.get),self.constant["beta"])
 
-    def predict_change(self,alpha):
+    def predict_change(self):
 
         for pair in self.pairs:
             cur = self.conn.cursor()
@@ -81,12 +90,17 @@ class basic_trader():
             self.pred[pair].append(np.array(res[0]))
             self.price[pair].append(np.array(res[0]))
             for i in range(1,len(res)):
-                pred_val = np.add(alpha*np.array(res[i][1:]), (1-alpha)*np.array(self.pred[pair][-1][1:]))
+                pred_val = np.add(self.constant["alpha"]*np.array(res[i][1:]), (1-self.constant["alpha"])*np.array(self.pred[pair][-1][1:]))
                 abs_change = np.subtract(pred_val,res[i][1:])
                 #TODO: check if correct this way...
                 self.pred[pair].append(np.insert(res[i][0],1,np.divide(abs_change,res[i][1:])))
                 #Important for the later analysis, so that we have the actual price
                 self.price[pair].append(np.array(res[i]))
+
+
+
+
+
 
 
 
