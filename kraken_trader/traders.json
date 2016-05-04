@@ -1,7 +1,6 @@
-{
-  "standard_trader":0,
-  "basic_trader":{
-    "alpha": 0.00022,
-    "beta":0.221
+{"standard_trader": 0,
+  "basic_trader":
+  {"alpha": 0.00032,
+    "beta": 0.22108548
   }
 }

@@ -109,12 +109,13 @@ class analyzer:
         self.stepsize(g,f_x,1)
 
         for i in range(0,99):
-            if np.linalg.norm(g) < eps*pow(10,-3): #avoid too small gradiants
+            if np.linalg.norm(g) < eps: #avoid too small gradiants
                 print "Stopping Optimization because of too small gradient"
                 break
             self.gradient()
 
         print "Optimal Constants After 99 Iterations: "+str(self.trader.constant)
+        self.trader.write_new_trader()
 
 
 

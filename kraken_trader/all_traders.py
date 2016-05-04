@@ -2,6 +2,7 @@ import numpy as np
 import json
 import datetime as dt
 
+filename = "traders.json"
 
 class standard_trader():
 
@@ -41,14 +42,14 @@ class basic_trader():
         # Get Configuration Values for Trader from JSON File
         # This is required in case, we want ot optimize the algorithms later on.
         trader_name = get_tader_name(self)
-        filename = "traders.json"
-        json_data=open("./kraken_trader/"+filename).read()
-        data = json.loads(json_data)
-        self.constant = data[trader_name]
-        self.constant = data[trader_name]
+        self.constant = get_trader_config()[trader_name]
 
         #Calculate the predicted change
         self.predict_change()
+
+    def write_new_trader(self):
+
+        save_trader_config(self.constant,get_tader_name(self))
 
     def get_buy_advice(self,time):
 
@@ -99,9 +100,15 @@ class basic_trader():
 
 
 
+def get_trader_config():
+    json_data=open("./kraken_trader/"+filename).read()
+    return json.loads(json_data)
 
-
-
+def save_trader_config(data,trader_name):
+    json_data = get_trader_config()
+    # TODO: replace the config of the current trader with the new constants
+    json_data[trader_name] = data
+    open("./kraken_trader/"+filename,mode='w').write(str(json_data))
 
 
 def get_tader_name(input_class):
