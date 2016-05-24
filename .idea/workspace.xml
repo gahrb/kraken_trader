@@ -2,11 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kraken_trader/traders.json.bak" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/all_traders.py" afterPath="$PROJECT_DIR$/kraken_trader/all_traders.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/analyzer.py" afterPath="$PROJECT_DIR$/kraken_trader/analyzer.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/traders.json" afterPath="$PROJECT_DIR$/kraken_trader/traders.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <ignored path="kraken_trader.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,8 +22,8 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/kraken_trader$main.coverage" NAME="main Coverage Results" MODIFIED="1461250510624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/kraken_trader$trade__advanced_trader_.coverage" NAME="trade (advanced trader) Coverage Results" MODIFIED="1461936759499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/kraken_trader$optimize.coverage" NAME="optimize Coverage Results" MODIFIED="1462372308687" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kraken_trader$trade__advanced_trader_.coverage" NAME="trade (basic trader) Coverage Results" MODIFIED="1464081051186" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kraken_trader$optimize.coverage" NAME="optimize Coverage Results" MODIFIED="1462741086804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$populateDB.coverage" NAME="populateDB Coverage Results" MODIFIED="1461688331218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$account_info.coverage" NAME="accountINFO Coverage Results" MODIFIED="1461250731775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$simulate.coverage" NAME="simulate Coverage Results" MODIFIED="1462348197549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -47,13 +47,12 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="105">
-              <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+            <state relative-caret-position="220">
+              <caret line="63" column="20" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
               <folding>
-                <element signature="e#4305#4352#0" expanded="false" />
-                <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-                <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-                <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+                <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+                <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+                <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
               </folding>
             </state>
           </provider>
@@ -62,8 +61,8 @@
       <file leaf-file-name="analyzer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kraken_trader/analyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
-              <caret line="111" column="38" selection-start-line="111" selection-start-column="38" selection-end-line="111" selection-end-column="38" />
+            <state relative-caret-position="255">
+              <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -71,26 +70,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="all_traders.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="all_traders.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="256">
-              <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+            <state relative-caret-position="480">
+              <caret line="143" column="53" selection-start-line="143" selection-start-column="53" selection-end-line="143" selection-end-column="53" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-                <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+                <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+                <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="traders.json.bak" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json.bak">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="90">
-              <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -105,11 +94,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="traders.json" pinned="false" current-in-tab="true">
+      <file leaf-file-name="traders.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="21" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+            <state relative-caret-position="0">
+              <caret line="0" column="126" selection-start-line="0" selection-start-column="126" selection-end-line="0" selection-end-column="126" />
               <folding />
             </state>
           </provider>
@@ -143,18 +132,19 @@
         <option value="$PROJECT_DIR$/kraken_trader/__init__.py" />
         <option value="$PROJECT_DIR$/kraken_trader/standard_trader.py" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/kraken_trader/account.py" />
         <option value="$PROJECT_DIR$/kraken_trader/analyzer.py" />
-        <option value="$PROJECT_DIR$/kraken_trader/all_traders.py" />
+        <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/kraken_trader/traders.json" />
+        <option value="$PROJECT_DIR$/kraken_trader/all_traders.py" />
       </list>
     </option>
   </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" />
-  <component name="JsBuildToolPackageJson" detection-done="true" />
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
   <component name="JsGulpfileManager">
     <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -223,30 +213,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kraken_trader" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kraken_trader" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kraken_trader" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kraken_trader" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="kraken_trader" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
@@ -275,7 +241,7 @@
       <recent name="$PROJECT_DIR$/kraken_trader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.optimize">
+  <component name="RunManager" selected="Python.trade (basic trader)">
     <configuration default="false" name="populateDB" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -971,7 +937,7 @@
       <envs />
       <method />
     </configuration>
-    <configuration default="false" name="trade (advanced trader)" type="PythonConfigurationType" factoryName="Python">
+    <configuration default="false" name="trade (basic trader)" type="PythonConfigurationType" factoryName="Python">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -985,7 +951,7 @@
       <module name="kraken_trader" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
-      <option name="PARAMETERS" value="-t advanced_trader" />
+      <option name="PARAMETERS" value="-t basic_trader" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
     </configuration>
@@ -1044,7 +1010,7 @@
       <method />
     </configuration>
     <list size="5">
-      <item index="0" class="java.lang.String" itemvalue="Python.trade (advanced trader)" />
+      <item index="0" class="java.lang.String" itemvalue="Python.trade (basic trader)" />
       <item index="1" class="java.lang.String" itemvalue="Python.simulate" />
       <item index="2" class="java.lang.String" itemvalue="Python.optimize" />
       <item index="3" class="java.lang.String" itemvalue="Python.accountInfo" />
@@ -1092,7 +1058,11 @@
       <workItem from="1462284648894" duration="3980000" />
       <workItem from="1462348043681" duration="7915000" />
       <workItem from="1462358529358" duration="5678000" />
-      <workItem from="1462370410425" duration="1867000" />
+      <workItem from="1462370410425" duration="1903000" />
+      <workItem from="1462724536017" duration="16804000" />
+      <workItem from="1462866658677" duration="26000" />
+      <workItem from="1462882173128" duration="5000" />
+      <workItem from="1464076569788" duration="2112000" />
     </task>
     <task id="LOCAL-00001" summary="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
       <created>1461150582538</created>
@@ -1185,11 +1155,18 @@
       <option name="project" value="LOCAL" />
       <updated>1462366131542</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="write new values out to file. is NOT yet working">
+      <created>1462372412430</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1462372412430</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="84422000" />
+    <option name="totallyTimeSpent" value="103405000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="24" width="2507" height="1056" extended-state="6" />
@@ -1203,18 +1180,18 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32991612" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.37040922" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36999068" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12604707" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.12564819" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Maven-2 Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39874083" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43651626" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1278,22 +1255,11 @@
     <MESSAGE value="added a json file which stores all the trader's constants. optimizing the algorithm (and storing the optimal solution) becomes easier" />
     <MESSAGE value="started gradient search" />
     <MESSAGE value="added a basic stepest descent algorithm" />
-    <option name="LAST_COMMIT_MESSAGE" value="added a basic stepest descent algorithm" />
+    <MESSAGE value="write new values out to file. is NOT yet working" />
+    <option name="LAST_COMMIT_MESSAGE" value="write new values out to file. is NOT yet working" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/kraken_trader/all_traders.py</url>
-          <line>110</line>
-          <option name="timeStamp" value="140" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/kraken_trader/all_traders.py</url>
-          <line>104</line>
-          <option name="timeStamp" value="141" />
-        </line-breakpoint>
-      </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
           <properties notifyOnTerminate="true" exception="BaseException">
@@ -1301,7 +1267,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="142" />
+      <option name="time" value="242" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1315,10 +1281,9 @@
         <state relative-caret-position="1335">
           <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1329,8 +1294,8 @@
           <caret line="95" column="50" selection-start-line="95" selection-start-column="50" selection-end-line="95" selection-end-column="50" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1366,10 +1331,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1380,8 +1344,8 @@
           <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1427,10 +1391,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1441,8 +1404,8 @@
           <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1488,10 +1451,9 @@
         <state relative-caret-position="690">
           <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1502,8 +1464,8 @@
           <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1549,10 +1511,9 @@
         <state relative-caret-position="795">
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1563,8 +1524,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1592,10 +1553,9 @@
         <state relative-caret-position="795">
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1606,8 +1566,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1635,10 +1595,9 @@
         <state relative-caret-position="720">
           <caret line="57" column="68" selection-start-line="57" selection-start-column="68" selection-end-line="57" selection-end-column="68" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1649,8 +1608,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1668,10 +1627,9 @@
         <state relative-caret-position="720">
           <caret line="57" column="68" selection-start-line="57" selection-start-column="68" selection-end-line="57" selection-end-column="68" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1682,8 +1640,8 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1701,10 +1659,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1715,8 +1672,8 @@
           <caret line="56" column="68" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="68" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1734,10 +1691,9 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1748,8 +1704,8 @@
           <caret line="56" column="68" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="68" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
         </state>
       </provider>
@@ -1770,6 +1726,11 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="120">
+          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+        </state>
+      </provider>
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="75">
@@ -1778,21 +1739,22 @@
           <second_editor />
         </state>
       </provider>
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="8" column="15" selection-start-line="8" selection-start-column="15" selection-end-line="8" selection-end-column="15" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json.bak">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="7" column="3" selection-start-line="7" selection-start-column="3" selection-end-line="7" selection-end-column="3" />
+        <state relative-caret-position="220">
+          <caret line="63" column="20" selection-start-line="63" selection-start-column="20" selection-end-line="63" selection-end-column="20" />
           <folding>
-            <element signature="e#4305#4352#0" expanded="false" />
-            <marker date="1462348322289" expanded="true" signature="4989:5001" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5022" placeholder="INSERT INTO missing_value... " />
-            <marker date="1462348322289" expanded="true" signature="4989:5101" placeholder="INSERT INTO " />
+            <marker date="1464081150540" expanded="true" signature="5171:5183" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5204" ph="INSERT INTO missing_value... " />
+            <marker date="1464081150540" expanded="true" signature="5171:5283" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1805,18 +1767,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json.bak">
+    <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="6" column="1" selection-start-line="6" selection-start-column="1" selection-end-line="6" selection-end-column="1" />
+        <state relative-caret-position="0">
+          <caret line="0" column="126" selection-start-line="0" selection-start-column="126" selection-end-line="0" selection-end-column="126" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kraken_trader/analyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
-          <caret line="111" column="38" selection-start-line="111" selection-start-column="38" selection-end-line="111" selection-end-column="38" />
+        <state relative-caret-position="255">
+          <caret line="23" column="20" selection-start-line="23" selection-start-column="20" selection-end-line="23" selection-end-column="20" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
@@ -1825,21 +1787,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="104" column="0" selection-start-line="104" selection-start-column="0" selection-end-line="104" selection-end-column="0" />
+        <state relative-caret-position="480">
+          <caret line="143" column="53" selection-start-line="143" selection-start-column="53" selection-end-line="143" selection-end-column="53" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1462372184044" expanded="true" signature="2533:2574" placeholder="SELECT 'ask_... " />
-            <marker date="1462372184044" expanded="true" signature="2533:2575" placeholder="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2601" ph="SELECT 'ask_... " />
+            <marker date="1464081490636" expanded="true" signature="2560:2602" ph="SELECT 'ask_... " />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="21" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
-          <folding />
         </state>
       </provider>
     </entry>

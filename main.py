@@ -54,7 +54,14 @@ def main(argv):
             account_info = kraken_account(conn,k)
             print_account_info(account_info)
         elif opt == "-t":
-            trader_class = basic_trader(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
+            try:
+                trader_class = eval(arg)
+            except:
+                print "Invalid trader class name!"
+                logger.error("Invalid trader class name!")
+                break
+            print trader_class
+            trader_class = trader_class(conn,k,trade_pairs)
             place_order(k)
             if simulate:
                 a = analyzer(trader_class,kraken_account(conn,k))
