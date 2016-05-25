@@ -15,14 +15,14 @@ mod = __import__('kraken_trader.all_traders', fromlist=['standard_trader'])
 
 simulate = False  # as long as this is under development, leave it on True
 trade_pairs = []# ['XXBTZEUR', 'XETHZEUR', 'XLTCZEUR']  # basic set of asset pairs
-conn = psycopg2.connect(database="kraken_crawler", user="kraken",
-                        password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+conn = psycopg2.connect(database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
 logging.basicConfig(filename='/var/log/kraken_crawler/kraken_crawler.log',level=logging.INFO,format=FORMAT)
 logger = logging.getLogger('kraken_crawler')
 
 
 def main(argv):
+    global simulate
     keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
     try:
         opts, args = getopt.getopt(argv, 'ht:a:o:s')
@@ -43,6 +43,7 @@ def main(argv):
         elif opt == "-s":
             simulate = True
 
+
     k = krakenex.API()
     k.load_key(keyfile)
     get_asset_pairs(k)
@@ -51,8 +52,8 @@ def main(argv):
         if opt == '-a' and arg == 'populateDB':
             populate_db(k)
         elif opt == '-a' and arg == 'accountInfo':
-            account_info = kraken_account(conn,k)
-            print_account_info(account_info)
+            account = kraken_account(conn,k)
+            print_account_info(account)
         elif opt == "-t":
             try:
                 trader_class = eval(arg)
@@ -62,10 +63,18 @@ def main(argv):
                 break
             print trader_class
             trader_class = trader_class(conn,k,trade_pairs)
-            place_order(k)
+
             if simulate:
                 a = analyzer(trader_class,kraken_account(conn,k))
                 a.simulate()
+            else:
+                account = kraken_account(conn,k)
+                print_account_info(account)
+                sell = trader_class.get_sell_advice(dt.datetime.now())
+                buy = trader_class.get_buy_advice(dt.datetime.now())
+                account.place_orders(sell)
+                account.place_orders(buy)
+                # TODO: print_orders()
         elif opt == "-o":
             try:
                 trader_class = eval(arg)
@@ -81,7 +90,6 @@ def main(argv):
 
 
 def print_account_info(acc):
-    acc.get_balance()
     print "Single Balances\n---------------------"
     for curr in acc.balance:
         print curr[1:] + ": " + str(acc.balance[curr])
@@ -99,19 +107,6 @@ def populate_db(k):
         else:
             logger.warning("Error querying pair: " + pair[1:4] +"-"+ pair[5:])
             logger.warning(query['error'])
-
-def place_order(k):
-    if not simulate:
-        k.query_private('AddOrder', {'pair': 'XXBTZEUR',
-                                     'type': 'buy',
-                                     'ordertype': 'limit',
-                                     'price': '1',
-                                     'volume': '1',
-                                     'close[pair]': 'XXBTZEUR',
-                                     'close[type]': 'sell',
-                                     'close[ordertype]': 'limit',
-                                     'close[price]': '9001',
-                                     'close[volume]': '1'})
 
 def get_asset_pairs(k):
     pairs = k.query_public('AssetPairs')

@@ -5,6 +5,8 @@ class kraken_account:
         self.k = k
         self.balance = dict()
         self.trade_balance = dict()
+        self.simulate = True
+        self.get_balance()
 
     def get_balance(self):
 
@@ -16,5 +18,24 @@ class kraken_account:
         for balance in trade_balance:
             self.trade_balance[str(balance)] = float(trade_balance[balance])
 
+    def get_assets(self):
         self.asset_pair = self.k.query_public('AssetPairs')['result']
 
+    def get_orders(self):
+        #TODO: get all open orders from account
+
+
+    def place_orders(self,k):
+        if not self.simulate:
+            # TODO: implement the trading request
+            res = k.query_private('AddOrder', {'pair': 'XXBTZEUR',
+                                         'type': 'buy',
+                                         'ordertype': 'limit',
+                                         'price': '1',
+                                         'volume': '1',
+                                         'close[pair]': 'XXBTZEUR',
+                                         'close[type]': 'sell',
+                                         'close[ordertype]': 'limit',
+                                         'close[price]': '9001',
+                                         'close[volume]': '1'})
+            print res

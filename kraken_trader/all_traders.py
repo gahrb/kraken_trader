@@ -38,6 +38,7 @@ class basic_trader():
         self.pred = dict()
         self.diff = dict()
         self.price = dict()
+        self.simulate = True
 
         # Get Configuration Values for Trader from JSON File
         # This is required in case, we want ot optimize the algorithms later on.
@@ -127,7 +128,6 @@ class ma_trader():
 
     def get_buy_advice(self,time):
 
-        #TODO: find currency(ies) which are most underrated
         allow_trade = dict()
         for pair in self.pairs:
             elem = get_closest_elem(self.ma[pair]["ask"],time)
@@ -137,18 +137,23 @@ class ma_trader():
                 allow_trade[pair]=-1
 
         if not all(val==-1 for val in allow_trade.values()):
+            performTrades = dict()
+            for (k,v) in allow_trade.items():
+                elem = get_closest_elem(self.price[k],time)
+                change = (v-self.price[k][elem][1])/v
+                if v!=-1 and change >= self.constant["gamma"]:
+                    performTrades[k] = change *self.constant["beta"]
             # This is ugly... iknow...
-            allow_trade = dict((k,(v-self.price[k][get_closest_elem(self.price[k],time)][1])/v * self.constant["beta"]) \
-                for k, v in allow_trade.items() \
-                if v!=-1 and (v-self.price[k][get_closest_elem(self.price[k],time)][1])/v >= self.constant["gamma"]) # the price must be over gamma-% of the average
+            # allow_trade = dict((k,(v-self.price[k][get_closest_elem(self.price[k],time)][1])/v * self.constant["beta"]) \
+            #     for k, v in allow_trade.items() \
+            #     if v!=-1 and (v-self.price[k][get_closest_elem(self.price[k],time)][1])/v >= self.constant["gamma"]) # the price must be over gamma-% of the average
 
-            if (allow_trade):
-                return allow_trade
+            if (performTrades):
+                return performTrades
         return False
 
     def get_sell_advice(self,time):
 
-        #TODO: find currency(ies) which are most overrated
         allow_trade = dict()
         for pair in self.pairs:
             elem = get_closest_elem(self.ma[pair]["bid"],time)
@@ -159,11 +164,20 @@ class ma_trader():
 
         if not all(val==-1 for val in allow_trade.values()):
             # This is ugly... iknow...
-            allow_trade = dict((k,(self.price[k][get_closest_elem(self.price[k],time)][2]-v)/v * self.constant["beta"]) \
-                    for k, v in allow_trade.items() \
-                    if v!=-1 and (self.price[k][get_closest_elem(self.price[k],time)][2]-v)/v >= self.constant["gamma"]) # the price must be over gamma-% of the average
-            if (allow_trade):
-                return allow_trade
+            performTrades = dict()
+            for (k,v) in allow_trade.items():
+                elem = get_closest_elem(self.price[k],time)
+                change = (self.price[k][elem][2]-v)/v
+                if v!=-1 and change >= self.constant["gamma"]:
+                    performTrades[k] = change *self.constant["beta"]
+
+            # This is ugly... iknow...
+            # allow_trade = dict((k,(self.price[k][get_closest_elem(self.price[k],time)][2]-v)/v * self.constant["beta"]) \
+            #         for k, v in allow_trade.items() \
+            #         if v!=-1 and (self.price[k][get_closest_elem(self.price[k],time)][2]-v)/v >= self.constant["gamma"]) # the price must be over gamma-% of the average
+
+            if (performTrades):
+                return performTrades
         return False
 
     def run_trader(self):
