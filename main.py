@@ -25,9 +25,9 @@ logger = logging.getLogger('kraken_crawler')
 def main(argv):
     keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
     try:
-        opts, args = getopt.getopt(argv, 'ht:a:s:o')
+        opts, args = getopt.getopt(argv, 'ht:a:o:s')
     except getopt.GetoptError:
-        print 'test.py -a [action]'  # -i <inputfile> -o <outputfile>'
+        print 'Invalid Usage: test.py -a [action]'  # -i <inputfile> -o <outputfile>'
         sys.exit()
 
     for opt, arg in opts:
@@ -67,7 +67,14 @@ def main(argv):
                 a = analyzer(trader_class,kraken_account(conn,k))
                 a.simulate()
         elif opt == "-o":
-            trader_class = basic_trader(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
+            try:
+                trader_class = eval(arg)
+            except:
+                print "Invalid trader class name!"
+                logger.error("Invalid trader class name!")
+                break
+            print trader_class
+            trader_class = trader_class(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
             a = analyzer(trader_class,kraken_account(conn,k))
             a.gradient()
 
@@ -77,11 +84,11 @@ def print_account_info(acc):
     acc.get_balance()
     print "Single Balances\n---------------------"
     for curr in acc.balance:
-        print curr[1:] + ": " + acc.balance[curr]
+        print curr[1:] + ": " + str(acc.balance[curr])
 
     print "\nOverall Information\n---------------------"
     for tb in acc.trade_balance:
-        print enum(tb) + ": " + acc.trade_balance[tb]
+        print enum(tb) + ": " + str(acc.trade_balance[tb])
 
 def populate_db(k):
 

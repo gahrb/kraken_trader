@@ -77,7 +77,7 @@ class basic_trader():
             return (key,0)
         return (min(bid_list_pred, key=bid_list_pred.get),max(min(self.constant["beta"],1),0))
 
-    def predict_change(self):
+    def run_trader(self):
 
         for pair in self.pairs:
             cur = self.conn.cursor()
@@ -108,7 +108,7 @@ class ma_trader():
         self.conn = conn
         self.k = k
         self.pairs = pairs
-        self.pred = dict()
+        #self.pred = dict()
         self.diff = dict()
         self.price = dict()
 
@@ -118,26 +118,74 @@ class ma_trader():
         self.constant = get_trader_config()[trader_name]
 
         #Calculate the predicted change
-        self.calc_ma()
+        self.run_trader()
 
 
 
-def write_new_trader(self):
-
-    save_trader_config(self.constant,get_tader_name(self))
+    def write_new_trader(self):
+        save_trader_config(self.constant,get_tader_name(self))
 
     def get_buy_advice(self,time):
 
-        return (self.pred.get(0),0)
+        #TODO: find currency(ies) which are most underrated
+        allow_trade = dict()
+        for pair in self.pairs:
+            elem = get_closest_elem(self.ma[pair]["ask"],time)
+            if elem > self.constant["alpha"]:
+                allow_trade[pair]=self.ma[pair]["ask"][elem][1]
+            else:
+                allow_trade[pair]=-1
+
+        if not all(val==-1 for val in allow_trade.values()):
+            # This is ugly... iknow...
+            allow_trade = dict((k,(v-self.price[k][get_closest_elem(self.price[k],time)][1])/v * self.constant["beta"]) \
+                for k, v in allow_trade.items() \
+                if v!=-1 and (v-self.price[k][get_closest_elem(self.price[k],time)][1])/v >= self.constant["gamma"]) # the price must be over gamma-% of the average
+
+            if (allow_trade):
+                return allow_trade
+        return False
 
     def get_sell_advice(self,time):
 
-        return (self.pred.get(0),0)
+        #TODO: find currency(ies) which are most overrated
+        allow_trade = dict()
+        for pair in self.pairs:
+            elem = get_closest_elem(self.ma[pair]["bid"],time)
+            if elem > self.constant["alpha"]:
+                allow_trade[pair]=self.ma[pair]["bid"][elem][1]
+            else:
+                allow_trade[pair]=-1
 
-    def calc_ma(self):
-        return 0
+        if not all(val==-1 for val in allow_trade.values()):
+            # This is ugly... iknow...
+            allow_trade = dict((k,(self.price[k][get_closest_elem(self.price[k],time)][2]-v)/v * self.constant["beta"]) \
+                    for k, v in allow_trade.items() \
+                    if v!=-1 and (self.price[k][get_closest_elem(self.price[k],time)][2]-v)/v >= self.constant["gamma"]) # the price must be over gamma-% of the average
+            if (allow_trade):
+                return allow_trade
+        return False
 
+    def run_trader(self):
+        self.ma = dict()
+        for pair in self.pairs:
+            cur = self.conn.cursor()
+            cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair)
+            res = cur.fetchall()
+            cur.close()
+            self.price[pair] = []
+            self.price[pair].append(np.array(res[0]))
 
+            self.ma[pair] = dict()
+            self.ma[pair]["ask"] = []
+            self.ma[pair]["bid"] = []
+            self.ma[pair]["ask"].append([res[0][0],res[0][1]])
+            self.ma[pair]["bid"].append([res[0][0],res[0][2]])
+            for i in range(1,len(res)):
+                lookback = min(int(self.constant["alpha"]),i)
+                self.ma[pair]["ask"].append([res[i][0],np.mean(np.array(res[i-lookback:i])[:,1])])
+                self.ma[pair]["bid"].append([res[i][0],np.mean(np.array(res[i-lookback:i])[:,2])])
+                self.price[pair].append(np.array(res[i]))
 
 
 def get_trader_config():
@@ -156,3 +204,6 @@ def get_tader_name(input_class):
     name_sidx = str(input_class).find("all_traders.")
     name_eidx = str(input_class).find(" instance")
     return str(input_class)[name_sidx+12:name_eidx]
+
+def get_closest_elem(list,time):
+    return np.argmin(np.abs(np.matrix(list)[:,0]-time))

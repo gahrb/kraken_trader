@@ -8,7 +8,7 @@ class analyzer:
         self.account = account
         self.iter_count = 0
 
-    def simulate(self):
+    def simulate(self,n=-1):
         """
         Simulates a trader's performance. creates new the variables eq_bal as equivalent balance
         (i.e. all values are transfered into Bitcoins (XBT) in order to compare them easily -
@@ -28,48 +28,54 @@ class analyzer:
             print "Starting balance: "+ str(self.account.balance)
             print "Equivalent in XBT: " + str(self.account.eq_bal)
 
-        self.trader.predict_change()
+        self.trader.run_trader()
         balance = self.account.balance.copy()
-        pair = self.trader.pred.iterkeys().next()
+        pair = self.trader.price.iterkeys().next()
         now = dt.datetime.now()
         i=0
-        for key in self.trader.pred[pair]:
+        if n==-1:
+            n = len(self.trader.price[pair])
+        for key in self.trader.price[pair][len(self.trader.price[pair])-n:]:
             i=i+1
             #if key[0]< now-dt.timedelta(days=31): # restrict simulation to the last month -- speed reasons
                 #continue
             #Sell action
             sell = self.trader.get_sell_advice(key[0])
-            sellFX = sell[0][:4]
-            buyFX = sell[0][4:]
-            #Check if we buy/sell a new currency: (sell can happen, when the advice is: buy nothing)
-            if not(balance.has_key(sellFX)):
-                balance.update({sellFX:0.0})
-            if not(balance.has_key(buyFX)):
-                balance.update({buyFX:0.0})
-            amountSell = min(balance[sellFX]*sell[1],balance[sellFX]) #Ensure, we're not selling more than we have
+            if not type(sell) is bool:
+                for sellPair in sell:
+                    sellFX = sellPair[:4]
+                    buyFX = sellPair[4:]
+                    #Check if we buy/sell a new currency: (sell can happen, when the advice is: buy nothing)
+                    if not(balance.has_key(sellFX)):
+                        balance.update({sellFX:0.0})
+                    if not(balance.has_key(buyFX)):
+                        balance.update({buyFX:0.0})
+                    amountSell = min(sell[sellPair],1)*balance[sellFX]#Ensure, we're not selling more than we have
 
-            elem = get_closest_elem(self.trader.price[sell[0]],key[0])
-            # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
-            amountBuy = amountSell*self.trader.price[sell[0]][elem][2]*(1-self.account.asset_pair[sell[0]]['fees'][0][1]/100)
-            balance[sellFX] = max(balance[sellFX] - amountSell,0)
-            balance[buyFX] = balance[buyFX] + amountBuy
+                    elem = get_closest_elem(self.trader.price[sellPair],key[0])
+                    # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
+                    amountBuy = amountSell*self.trader.price[sellPair][elem][2]*(1-self.account.asset_pair[sellPair]['fees'][0][1]/100)
+                    balance[sellFX] = max(balance[sellFX] - amountSell,0)
+                    balance[buyFX] += amountBuy
 
             # buy action
             buy = self.trader.get_buy_advice(key[0])
-            buyFX = buy[0][:4]
-            sellFX= buy[0][4:]
-            #Check if we buy a new currency:
-            if not(balance.has_key(sellFX)):
-                balance.update({sellFX:0.0})
-            if not(balance.has_key(buyFX)):
-                balance.update({buyFX:0.0})
-            amountSell = min(balance[sellFX]*buy[1],balance[sellFX]) #Ensure, we're not buying more than we can afford
+            if not type(buy) is bool:
+                for buyPair in buy:
+                    buyFX = buyPair[:4]
+                    sellFX= buyPair[4:]
+                    #Check if we buy a new currency:
+                    if not(balance.has_key(sellFX)):
+                        balance.update({sellFX:0.0})
+                    if not(balance.has_key(buyFX)):
+                        balance.update({buyFX:0.0})
+                    amountSell = min(1,buy[buyPair])*balance[sellFX] #Ensure, we're not buying more than we can afford
 
-            elem = get_closest_elem(self.trader.price[buy[0]],key[0])
-            # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
-            amountBuy = amountSell/self.trader.price[buy[0]][elem][1]*(1-self.account.asset_pair[buy[0]]['fees'][0][1]/100)
-            balance[sellFX] = max(balance[sellFX] - amountSell,0)
-            balance[buyFX] = balance[buyFX] + amountBuy
+                    elem = get_closest_elem(self.trader.price[buyPair],key[0])
+                    # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
+                    amountBuy = amountSell/self.trader.price[buyPair][elem][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
+                    balance[sellFX] = max(balance[sellFX] - amountSell,0)
+                    balance[buyFX] += amountBuy
 
 
             eq_bal = balance["XXBT"]
@@ -78,19 +84,22 @@ class analyzer:
                     pair = bal+"XXBT"
                     try:
                         try:
+                            elem = get_closest_elem(self.trader.price[pair],key[0])
                             tmp =  balance[bal]*self.trader.price[pair][elem][2]
                         except KeyError:
                             pair = "XXBT"+bal
+                            elem = get_closest_elem(self.trader.price[pair],key[0])
                             tmp =  balance[bal]/self.trader.price[pair][elem][2]
                     except IndexError:
-                        elem = get_closest_elem(self.trader.price[pair],key[0])
                         if pair[0:4]=="XXBT":
                             tmp = balance[bal]/self.trader.price[pair][elem][2]
                         else:
                             tmp = balance[bal]/self.trader.price[pair][elem][2]
-                    eq_bal = eq_bal + tmp
+                    eq_bal += tmp
             # print "Balance: "+str(i)+", "+ str(balance)
-            # print "Equivalent in XBT: "+str(i)+", " + str(eq_bal)
+            if not type(buy) is bool or not type(sell) is bool:
+                print "Performed a trade: sell: "+str(sell)+" buy: "+str(buy)
+            print str(key[0])+": Equivalent in XBT: "+str(i)+", " + str(eq_bal)
         return eq_bal
 
 
@@ -99,18 +108,19 @@ class analyzer:
         calculates the gradient of the trader with it's constants: alpha, beta, ...
         afterwards steepest descend/ascend can be applied
         """
+        sim_length = 100
         eps = pow(10,-4)
         if vec.size==0:
             for i in range(0,len(self.trader.constant)):
                 vec = np.hstack((vec,self.trader.constant[constant_enum(i)]))
-        f_x = self.simulate()
+        f_x = self.simulate(sim_length)
         #vec_eps = vec.copy()
         g = np.empty([len(self.trader.constant),1])
         for i in range(0,len(self.trader.constant)):
             #vec_eps[i] = vec[i] + eps
             #self.trader.constant[constant_enum(i)] = vec_eps[i]
             self.trader.constant[constant_enum(i)] = vec[i] + eps
-            f_x_eps = self.simulate()
+            f_x_eps = self.simulate(sim_length)
             g[i] = (f_x_eps - f_x)/eps
             #vec_eps[i] = vec[i]
 
@@ -118,7 +128,7 @@ class analyzer:
         if np.linalg.norm(g)>0.5:
             g = g/np.linalg.norm(g)/1000  #reduce size of g
 
-        if (self.stepsize(g,f_x,1.1) == g).all(): # i.e. no changes, as the gradient would lead to not allowed constant values
+        if (self.stepsize(g,f_x,1.1,sim_length) == g).all(): # i.e. no changes, as the gradient would lead to not allowed constant values
             print "Optimal Constants Found after "+str(self.iter_count)+" Iterations: "+str(self.trader.constant)
             self.trader.write_new_trader()
             return
@@ -135,19 +145,19 @@ class analyzer:
 
 
 
-    def stepsize(self,g,f_x,size):
+    def stepsize(self,g,f_x,size,sim_length=-1):
 
         for i in range(0,len(g)):
-            if self.trader.constant[constant_enum(i)] + float(g[i])>0 and self.trader.constant[constant_enum(i)] + float(g[i])<1:
+            if self.trader.constant[constant_enum(i)] + float(g[i])>0:# and self.trader.constant[constant_enum(i)] + float(g[i])<1:
                 self.trader.constant[constant_enum(i)] = self.trader.constant[constant_enum(i)] + float(g[i])
             else:
                 return g
 
-        f_x_g = self.simulate()
+        f_x_g = self.simulate(sim_length)
         if f_x_g > f_x:
             print "Next adaptive stepsize: "+str(g*size).replace("\n","")
             print "Last optimal Equivalent Balance: "+str(f_x_g)
-            g = self.stepsize(g*size,f_x_g,size)
+            g = self.stepsize(g*size,f_x_g,size,sim_length)
         else:
             g = g/size #resetting g to the last optimizing state
             for i in range(0,len(g)):
