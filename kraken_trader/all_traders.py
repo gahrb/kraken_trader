@@ -31,10 +31,10 @@ class basic_trader():
     Returns the most increasing FX to buy and the most decreasing to sell
     """
 
-    def __init__(self,conn,k,pairs):
+    def __init__(self,conn,k,account):
         self.conn = conn
         self.k = k
-        self.pairs = pairs
+        self.pairs = account.asset_pair.keys()
         self.pred = dict()
         self.diff = dict()
         self.price = dict()
@@ -105,10 +105,10 @@ class ma_trader():
     Returns sell/buy advices on the moving average, if a currency is under rated or overrated
     """
 
-    def __init__(self,conn,k,pairs):
+    def __init__(self,conn,k,account):
         self.conn = conn
         self.k = k
-        self.pairs = pairs
+        self.pairs = account.asset_pair.keys()
         #self.pred = dict()
         self.diff = dict()
         self.price = dict()

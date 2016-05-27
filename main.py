@@ -14,7 +14,6 @@ from kraken_trader.analyzer import *
 mod = __import__('kraken_trader.all_traders', fromlist=['standard_trader'])
 
 simulate = False  # as long as this is under development, leave it on True
-trade_pairs = []# ['XXBTZEUR', 'XETHZEUR', 'XLTCZEUR']  # basic set of asset pairs
 conn = psycopg2.connect(database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
 logging.basicConfig(filename='/var/log/kraken_crawler/kraken_crawler.log',level=logging.INFO,format=FORMAT)
@@ -46,13 +45,13 @@ def main(argv):
 
     k = krakenex.API()
     k.load_key(keyfile)
-    get_asset_pairs(k)
+
 
     for opt, arg in opts:
         if opt == '-a' and arg == 'populateDB':
             populate_db(k)
         elif opt == '-a' and arg == 'accountInfo':
-            account = kraken_account(conn,k)
+            account = kraken_account(conn,k,simulate)
             print_account_info(account)
         elif opt == "-t":
             try:
@@ -62,20 +61,28 @@ def main(argv):
                 logger.error("Invalid trader class name!")
                 break
             print trader_class
-            trader_class = trader_class(conn,k,trade_pairs)
+            account = kraken_account(conn,k,simulate)
+            trader_class = trader_class(conn,k,account)
 
             if simulate:
-                a = analyzer(trader_class,kraken_account(conn,k))
+                a = analyzer(trader_class,account)
                 a.simulate()
             else:
-                account = kraken_account(conn,k)
+                account = kraken_account(conn,k,simulate)
                 print_account_info(account)
                 sell = trader_class.get_sell_advice(dt.datetime.now())
                 buy = trader_class.get_buy_advice(dt.datetime.now())
-                account.place_orders(sell)
-                account.place_orders(buy)
-                # TODO: print_orders()
+                if not type(buy) is bool or not type(sell) is bool:
+                    print "Performing Trades\n---------------------"
+                    account.place_orders(k,sell)
+                    account.place_orders(k,buy)
+                    account.get_open_orders()
+                    print_orders(account)
+                else:
+                    print "No trade ordes received!"
+
         elif opt == "-o":
+            account = kraken_account(conn,k,simulate)
             try:
                 trader_class = eval(arg)
             except:
@@ -83,8 +90,8 @@ def main(argv):
                 logger.error("Invalid trader class name!")
                 break
             print trader_class
-            trader_class = trader_class(conn,k,trade_pairs)# TODO: get a class by the input argument getattr(mod, arg)
-            a = analyzer(trader_class,kraken_account(conn,k))
+            trader_class = trader_class(conn,k,account)
+            a = analyzer(trader_class,account)
             a.gradient()
 
 
@@ -97,10 +104,18 @@ def print_account_info(acc):
     print "\nOverall Information\n---------------------"
     for tb in acc.trade_balance:
         print enum(tb) + ": " + str(acc.trade_balance[tb])
+    print_orders(acc)
+
+def print_orders(acc):
+    print "\nOpen Orders\n---------------------"
+    for oo in acc.open_orders['open']:
+        timestr = datetime.fromtimestamp(int(acc.open_orders['open'][oo]['opentm'])).strftime('%Y-%m-%d %H:%M:%S')
+        print timestr+": Volumen: "+acc.open_orders['open'][oo]['vol']
+        print acc.open_orders['open'][oo]['descr']
 
 def populate_db(k):
 
-    for pair in trade_pairs:
+    for pair in get_asset_pairs(k):
         query = query_market(k, pair)
         if 'result' in query.keys() and len(query['result']):
             update_db(query['result'][pair], pair)
@@ -110,14 +125,14 @@ def populate_db(k):
 
 def get_asset_pairs(k):
     pairs = k.query_public('AssetPairs')
+    trade_pairs = []
     for pair in pairs['result']:
-        pair = pair.replace(".d", "")
-        if not (pair in trade_pairs or pair.find("CAD") >= 0 or pair.find("USD") >= 0 or pair.find(
+        #pair = pair.replace(".d", "")
+        if not (pair.find(".d")>=0 or pair.find("CAD") >= 0 or pair.find("USD") >= 0 or pair.find(
                 "GBP") >= 0 or pair.find("JPY") >= 0):
-            #print pair
             trade_pairs.append(pair)
 
-    #print trade_pairs
+    return trade_pairs
 
 def query_market(k, pair):
     return k.query_public('Ticker', {'pair': pair})

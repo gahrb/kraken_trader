@@ -16,9 +16,6 @@ class analyzer:
         """
 
         # only query the sel. balance and populate the self.account.eq_bal, if not yet done.
-        if len(self.account.balance)==0:
-            self.account.balance["XXBT"] = 1
-            self.account.get_assets()
 #             self.account.get_balance()
 #             self.account.eq_bal = self.account.balance["XXBT"]
 #             for bal in self.account.balance:
@@ -113,6 +110,8 @@ class analyzer:
                     eq_bal += tmp
             # print "Balance: "+str(i)+", "+ str(balance)
             if not type(buy) is bool or not type(sell) is bool:
+                #for bal in balance:
+                    #print str(bal) + ": "+str(balance[bal])
                 print "Performed a trade: sell: "+str(sell)+" buy: "+str(buy)
             print str(key[0])+" "+str(i)+", Equivalent in XBT: " + str(eq_bal)
         print "Final Balance"
@@ -127,12 +126,13 @@ class analyzer:
         calculates the gradient of the trader with it's constants: alpha, beta, ...
         afterwards steepest descend/ascend can be applied
         """
-        sim_length = 100
-        eps = pow(10,-4)
+        sim_length = 1500
+        eps = pow(10,-5)
         if vec.size==0:
             for i in range(0,len(self.trader.constant)):
                 vec = np.hstack((vec,self.trader.constant[constant_enum(i)]))
         f_x = self.simulate(sim_length)
+        print "-----------------\nStarting with eq_balance: "+str(f_x)+"\n-----------------"
         #vec_eps = vec.copy()
         g = np.empty([len(self.trader.constant),1])
         for i in range(0,len(self.trader.constant)):
