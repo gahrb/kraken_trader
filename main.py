@@ -62,6 +62,7 @@ def main(argv):
                 break
             print trader_class
             account = kraken_account(conn,k,simulate)
+            #account = kraken_account(conn,k,False)
             trader_class = trader_class(conn,k,account)
 
             if simulate:

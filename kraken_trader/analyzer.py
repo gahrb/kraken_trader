@@ -39,56 +39,58 @@ class analyzer:
             #if key[0]< now-dt.timedelta(days=31): # restrict simulation to the last month -- speed reasons
                 #continue
             #Sell action
-            sell = self.trader.get_sell_advice(key[0])
-            if not type(sell) is bool:
-                tmpBal = balance.copy() # is used, in order to avoid over-spending (e.g. spend all xbt to buy eur and spend in a second step again xbts to by eth)
-                for sellPair in sell:
+            sell_advice = self.trader.get_sell_advice(key[0])
+            sold = dict()
+            # TODO: add reserved amount for trading, to avoid trading with money which is already in use.
+            credit_item = dict((key,0) for key in balance)
+            if not type(sell_advice) is bool:
+                for sellPair in sorted(sell_advice, key=lambda key: sell_advice[key],reverse=True):
                     sellFX = sellPair[:4]
                     buyFX = sellPair[4:]
                     #Check if we buy/sell a new currency: (sell can happen, when the advice is: buy nothing)
                     if not(balance.has_key(sellFX)):
                         balance.update({sellFX:0.0})
-                        tmpBal.update({sellFX:0.0})
                     if not(balance.has_key(buyFX)):
                         balance.update({buyFX:0.0})
-                        tmpBal.update({buyFX:0.0})
-                    amountSell = min(min(sell[sellPair],1)*balance[sellFX],tmpBal[sellFX]) # Ensure, we're not selling more than we have or have spent on previous transactions
+                    amountSell = min(sell_advice[sellPair],1)*balance[sellFX] # Ensure, we're not selling more than we have or have spent on previous transactions
 
+                    #Minimal amount required by kraken
                     elem = get_closest_elem(self.trader.price[sellPair],key[0])
                     # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
                     amountBuy = amountSell*self.trader.price[sellPair][elem][2]*(1-self.account.asset_pair[sellPair]['fees'][0][1]/100)
-                    tmpBal[sellFX] -= amountSell
-                    tmpBal[buyFX] += amountBuy
-
-                for k in tmpBal:
-                    balance[k] = tmpBal[k]
-                # balance[sellFX] = max(balance[sellFX] - amountSell,0)
-                # balance[buyFX] += amountBuy
+                    if amountSell > 0.01 and amountBuy > 0.01:
+                        balance[sellFX] -= amountSell
+                        credit_item[buyFX] += amountBuy
+                        sold[sellPair] = [amountSell, amountBuy]
 
             # buy action
-            buy = self.trader.get_buy_advice(key[0])
-            if not type(buy) is bool:
-                tmpBal = balance.copy() # is used, in order to avoid over-spending (e.g. spend all xbt to buy eur and spend in a second step again xbts to by eth)
-                for buyPair in buy:
+            buy_advice = self.trader.get_buy_advice(key[0])
+            bought = dict()
+            if not type(buy_advice) is bool:
+                for buyPair in sorted(buy_advice, key=lambda key: buy_advice[key],reverse=True):
                     buyFX = buyPair[:4]
                     sellFX= buyPair[4:]
                     #Check if we buy a new currency:
                     if not(balance.has_key(sellFX)):
                         balance.update({sellFX:0.0})
-                        tmpBal.update({sellFX:0.0})
                     if not(balance.has_key(buyFX)):
                         balance.update({buyFX:0.0})
-                        tmpBal.update({buyFX:0.0})
-                    amountSell = min(min(1,buy[buyPair])*balance[sellFX],tmpBal[sellFX]) #Ensure, we're not buying more than we can afford
+                    amountSell = min(1,buy_advice[buyPair])*balance[sellFX] #Ensure, we're not buying more than we can afford
 
                     elem = get_closest_elem(self.trader.price[buyPair],key[0])
+                    #Minimal amount required by kraken
                     # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
                     amountBuy = amountSell/self.trader.price[buyPair][elem][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
-                    tmpBal[sellFX] -= amountSell
-                    tmpBal[buyFX] += amountBuy
+                    if amountSell > 0.01 and amountBuy > 0.01:
+                        balance[sellFX] -= amountSell
+                        credit_item[buyFX] += amountBuy
+                        bought[buyPair] = [amountBuy, amountSell]
 
-                for k in tmpBal:
-                    balance[k] = tmpBal[k]
+            # Write credit items to the account balance
+            if credit_item:
+                for curr in credit_item:
+                    balance[curr] += credit_item[curr]
+
 
             eq_bal = balance["XXBT"]
             for bal in balance:
@@ -109,10 +111,12 @@ class analyzer:
                             tmp = balance[bal]/self.trader.price[pair][elem][2]
                     eq_bal += tmp
             # print "Balance: "+str(i)+", "+ str(balance)
-            if not type(buy) is bool or not type(sell) is bool:
-                #for bal in balance:
-                    #print str(bal) + ": "+str(balance[bal])
-                print "Performed a trade: sell: "+str(sell)+" buy: "+str(buy)
+            # if not type(buy_advice) is bool or not type(sell_advice) is bool:
+            #     # for bal in balance:
+            #     #     print str(bal) + ": "+str(balance[bal])
+            #     print "Trade advice (%): sell: "+str(sell_advice)+" buy: "+str(buy_advice)
+            if sold or bought:
+                print "Performed trade ($): sell: "+str(sold)+" buy: "+str(bought)
             print str(key[0])+" "+str(i)+", Equivalent in XBT: " + str(eq_bal)
         print "Final Balance"
         for bal in balance:

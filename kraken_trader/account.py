@@ -40,6 +40,7 @@ class kraken_account:
             for trade in trades:
                 print trade
                 res = trades[trade]
+                # TODO: Add minimum trade check: allowed only larger amounts than 0.01 of a currency
                 # res = k.query_private('AddOrder', {'pair': 'XXBTZEUR',
                 #                          'type': 'buy',
                 #                          'ordertype': 'limit',
