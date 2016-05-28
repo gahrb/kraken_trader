@@ -28,12 +28,17 @@ class analyzer:
 #             print "Equivalent in XBT: " + str(self.account.eq_bal)
 
         self.trader.run_trader()
-        balance = self.account.balance.copy()
+        balance = self.account.balance
         pair = self.trader.price.iterkeys().next()
-        now = dt.datetime.now()
         i=0
         if n==-1:
             n = len(self.trader.price[pair])
+
+        start_time = self.trader.price[pair][len(self.trader.price[pair])-n][0]
+        end_time = dt.datetime.now()
+        start_bal = self.get_eq_bal(balance,start_time)
+        end_bal = self.get_eq_bal(balance,end_time)
+
         for key in self.trader.price[pair][len(self.trader.price[pair])-n:]:
             i=i+1
             #if key[0]< now-dt.timedelta(days=31): # restrict simulation to the last month -- speed reasons
@@ -91,39 +96,39 @@ class analyzer:
                 for curr in credit_item:
                     balance[curr] += credit_item[curr]
 
+            eq_bal = self.get_eq_bal(balance,key[0])
 
-            eq_bal = balance["XXBT"]
-            for bal in balance:
-                if bal!="XXBT":
-                    pair = bal+"XXBT"
-                    try:
-                        try:
-                            elem = get_closest_elem(self.trader.price[pair],key[0])
-                            tmp =  balance[bal]*self.trader.price[pair][elem][2]
-                        except KeyError:
-                            pair = "XXBT"+bal
-                            elem = get_closest_elem(self.trader.price[pair],key[0])
-                            tmp =  balance[bal]/self.trader.price[pair][elem][2]
-                    except IndexError:
-                        if pair[0:4]=="XXBT":
-                            tmp = balance[bal]/self.trader.price[pair][elem][2]
-                        else:
-                            tmp = balance[bal]/self.trader.price[pair][elem][2]
-                    eq_bal += tmp
-            # print "Balance: "+str(i)+", "+ str(balance)
-            # if not type(buy_advice) is bool or not type(sell_advice) is bool:
-            #     # for bal in balance:
-            #     #     print str(bal) + ": "+str(balance[bal])
-            #     print "Trade advice (%): sell: "+str(sell_advice)+" buy: "+str(buy_advice)
             if sold or bought:
                 print "Performed trade ($): sell: "+str(sold)+" buy: "+str(bought)
             print str(key[0])+" "+str(i)+", Equivalent in XBT: " + str(eq_bal)
-        print "Final Balance"
+
+        print "Start balance: "+str(start_bal)
+        print "Market adjusted end balance: "+str(end_bal)
+        print "Return: "+str(eq_bal/start_bal*100-100)+"%"
+        print "-----------------------\nSingle Positions:"
         for bal in balance:
             print str(bal) + ": "+str(balance[bal])
         return eq_bal
 
 
+    def get_eq_bal(self,balance,time):
+        """
+        Calculate the equivalent balance in XBTs
+        """
+        eq_bal = balance["XXBT"]
+        for bal in balance:
+            if bal!="XXBT":
+                pair = bal+"XXBT"
+                buy = True
+                if not(pair in self.account.asset_pair):
+                    pair = "XXBT"+bal
+                    buy = False
+                elem = get_closest_elem(self.trader.price[pair],time)
+                if buy:
+                    eq_bal +=  balance[bal]*self.trader.price[pair][elem][1]
+                else:
+                    eq_bal +=  balance[bal]/self.trader.price[pair][elem][2]
+        return eq_bal
 
     def gradient(self,vec = np.empty([0])):
         """

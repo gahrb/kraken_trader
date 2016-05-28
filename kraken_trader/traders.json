@@ -1,1 +1,1 @@
-{"ma_trader": {"alpha": 25.00, "beta": 6.00, "gamma": 0.05}, "standard_trader": 0, "basic_trader": {"alpha": 0.09680870950688335, "beta": 0.0006854641562708591}}
+{"ma_trader": {"alpha": 25.00, "beta": 5.0, "gamma": 0.05}, "standard_trader": 0, "basic_trader": {"alpha": 0.09680870950688335, "beta": 0.0006854641562708591}}

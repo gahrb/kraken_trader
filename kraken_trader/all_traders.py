@@ -108,6 +108,7 @@ class ma_trader():
     def __init__(self,conn,k,account):
         self.conn = conn
         self.k = k
+        self.account = account
         self.pairs = account.asset_pair.keys()
         #self.pred = dict()
         self.diff = dict()

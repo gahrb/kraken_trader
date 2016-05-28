@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="">
+    <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="added sorted trading to the analyzer. -&gt; way better performdd">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/account.py" afterPath="$PROJECT_DIR$/kraken_trader/account.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/all_traders.py" afterPath="$PROJECT_DIR$/kraken_trader/all_traders.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/analyzer.py" afterPath="$PROJECT_DIR$/kraken_trader/analyzer.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/traders.json" afterPath="$PROJECT_DIR$/kraken_trader/traders.json" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <ignored path="kraken_trader.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,7 +21,7 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/kraken_trader$main.coverage" NAME="main Coverage Results" MODIFIED="1461250510624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/kraken_trader$simulate__ma_trader_.coverage" NAME="simulate (ma_trader) Coverage Results" MODIFIED="1464363225152" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kraken_trader$simulate__ma_trader_.coverage" NAME="simulate (ma_trader) Coverage Results" MODIFIED="1464418922038" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$trade__advanced_trader_.coverage" NAME="trade (basic trader) Coverage Results" MODIFIED="1464085835306" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$optimize.coverage" NAME="optimize Coverage Results" MODIFIED="1462741086804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$optimize__ma_trader_.coverage" NAME="optimize (ma_trader) Coverage Results" MODIFIED="1464338333333" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -52,13 +51,13 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="960">
-              <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
+            <state relative-caret-position="300">
+              <caret line="64" column="12" selection-start-line="64" selection-start-column="12" selection-end-line="64" selection-end-column="12" />
               <folding>
                 <element signature="e#19#32#0" expanded="true" />
-                <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-                <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-                <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+                <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+                <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+                <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
               </folding>
             </state>
           </provider>
@@ -67,8 +66,8 @@
       <file leaf-file-name="analyzer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kraken_trader/analyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="360">
-              <caret line="113" column="12" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="12" />
+            <state relative-caret-position="409">
+              <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
               </folding>
@@ -79,13 +78,13 @@
       <file leaf-file-name="all_traders.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1095">
-              <caret line="75" column="64" selection-start-line="75" selection-start-column="64" selection-end-line="75" selection-end-column="64" />
+            <state relative-caret-position="329">
+              <caret line="131" column="0" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-                <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-                <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+                <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+                <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+                <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
               </folding>
             </state>
           </provider>
@@ -139,10 +138,10 @@
         <option value="$PROJECT_DIR$/kraken_trader/__init__.py" />
         <option value="$PROJECT_DIR$/kraken_trader/standard_trader.py" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/kraken_trader/all_traders.py" />
         <option value="$PROJECT_DIR$/kraken_trader/account.py" />
         <option value="$PROJECT_DIR$/main.py" />
         <option value="$PROJECT_DIR$/kraken_trader/traders.json" />
+        <option value="$PROJECT_DIR$/kraken_trader/all_traders.py" />
         <option value="$PROJECT_DIR$/kraken_trader/analyzer.py" />
       </list>
     </option>
@@ -164,7 +163,7 @@
     <option name="x" value="53" />
     <option name="y" value="24" />
     <option name="width" value="1867" />
-    <option name="height" value="1176" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -210,9 +209,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -255,6 +253,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1148,7 +1147,8 @@
       <workItem from="1464266096876" duration="78000" />
       <workItem from="1464302636569" duration="12401000" />
       <workItem from="1464346074429" duration="4962000" />
-      <workItem from="1464360522475" duration="2816000" />
+      <workItem from="1464360522475" duration="4754000" />
+      <workItem from="1464417650903" duration="1385000" />
     </task>
     <task id="LOCAL-00001" summary="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
       <created>1461150582538</created>
@@ -1276,14 +1276,21 @@
       <option name="project" value="LOCAL" />
       <updated>1464340839257</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="added sorted trading to the analyzer. -&gt; way better performance.">
+      <created>1464363380381</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1464363380381</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="163563000" />
+    <option name="totallyTimeSpent" value="166886000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="53" y="24" width="1867" height="1176" extended-state="6" />
+    <frame x="53" y="24" width="1867" height="1056" extended-state="6" />
     <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1294,7 +1301,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32991612" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.36999068" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3693599" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1305,7 +1312,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.43522832" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.43441764" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1374,7 +1381,8 @@
     <MESSAGE value="ma_trader is now working (more or less), sanity checks should be done..." />
     <MESSAGE value="added some better account functionality... no big changes" />
     <MESSAGE value="code refactoring, added starting balance for simulation to all currencies = 1" />
-    <option name="LAST_COMMIT_MESSAGE" value="code refactoring, added starting balance for simulation to all currencies = 1" />
+    <MESSAGE value="added sorted trading to the analyzer. -&gt; way better performance." />
+    <option name="LAST_COMMIT_MESSAGE" value="added sorted trading to the analyzer. -&gt; way better performance." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1385,7 +1393,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="383" />
+      <option name="time" value="392" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1407,9 +1415,9 @@
           <caret line="99" column="0" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1420,9 +1428,9 @@
           <caret line="95" column="50" selection-start-line="95" selection-start-column="50" selection-end-line="95" selection-end-column="50" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1459,9 +1467,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1472,9 +1480,9 @@
           <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1521,9 +1529,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1534,9 +1542,9 @@
           <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1583,9 +1591,9 @@
           <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1596,9 +1604,9 @@
           <caret line="16" column="37" selection-start-line="16" selection-start-column="37" selection-end-line="16" selection-end-column="37" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1645,9 +1653,9 @@
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1658,9 +1666,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1689,9 +1697,9 @@
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1702,9 +1710,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1733,9 +1741,9 @@
           <caret line="57" column="68" selection-start-line="57" selection-start-column="68" selection-end-line="57" selection-end-column="68" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1746,9 +1754,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1767,9 +1775,9 @@
           <caret line="57" column="68" selection-start-line="57" selection-start-column="68" selection-end-line="57" selection-end-column="68" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1780,9 +1788,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1801,9 +1809,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1814,9 +1822,9 @@
           <caret line="56" column="68" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="68" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1835,9 +1843,9 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
           </folding>
         </state>
       </provider>
@@ -1848,9 +1856,9 @@
           <caret line="56" column="68" selection-start-line="56" selection-start-column="68" selection-end-line="56" selection-end-column="68" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
           </folding>
         </state>
       </provider>
@@ -1892,32 +1900,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1095">
-          <caret line="75" column="64" selection-start-line="75" selection-start-column="64" selection-end-line="75" selection-end-column="64" />
-          <folding>
-            <element signature="e#0#18#0" expanded="true" />
-            <marker date="1464336107799" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
-            <marker date="1464336107799" expanded="true" signature="6823:6865" ph="SELECT modti... missing_value" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="960">
-          <caret line="69" column="0" selection-start-line="69" selection-start-column="0" selection-end-line="69" selection-end-column="0" />
-          <folding>
-            <element signature="e#19#32#0" expanded="true" />
-            <marker date="1464350015012" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
-            <marker date="1464350015012" expanded="true" signature="5753:5865" ph="INSERT INTO " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/kraken_trader/account.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
@@ -1934,10 +1916,36 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="64" column="12" selection-start-line="64" selection-start-column="12" selection-end-line="64" selection-end-column="12" />
+          <folding>
+            <element signature="e#19#32#0" expanded="true" />
+            <marker date="1464365241207" expanded="true" signature="5753:5765" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5786" ph="INSERT INTO missing_value... " />
+            <marker date="1464365241207" expanded="true" signature="5753:5865" ph="INSERT INTO " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="131" column="0" selection-start-line="131" selection-start-column="0" selection-end-line="131" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#18#0" expanded="true" />
+            <marker date="1464418880305" expanded="true" signature="2607:2648" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="2607:2649" ph="SELECT 'ask_... " />
+            <marker date="1464418880305" expanded="true" signature="6854:6896" ph="SELECT modti... missing_value" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/kraken_trader/analyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="113" column="12" selection-start-line="113" selection-start-column="12" selection-end-line="113" selection-end-column="12" />
+        <state relative-caret-position="409">
+          <caret line="52" column="0" selection-start-line="52" selection-start-column="0" selection-end-line="52" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
           </folding>
