@@ -7,6 +7,7 @@ class analyzer:
         self.trader = trader
         self.account = account
         self.iter_count = 0
+        self.optimize = False
 
     def simulate(self,n=-1):
         """
@@ -15,20 +16,10 @@ class analyzer:
             be careful, this depends heavily on the exchange rates!!!)
         """
 
-        # only query the sel. balance and populate the self.account.eq_bal, if not yet done.
-#             self.account.get_balance()
-#             self.account.eq_bal = self.account.balance["XXBT"]
-#             for bal in self.account.balance:
-#                 if bal!="XXBT":
-#                     try:
-#                         self.account.eq_bal = self.account.eq_bal + self.account.balance[bal]*self.trader.price[bal+"XXBT"][0][2]
-#                     except KeyError:
-#                         self.account.eq_bal = self.account.eq_bal + self.account.balance[bal]/self.trader.price["XXBT"+bal][0][2]
-#             print "Starting balance: "+ str(self.account.balance)
-#             print "Equivalent in XBT: " + str(self.account.eq_bal)
-
         self.trader.run_trader()
         balance = self.account.balance
+        if not self.optimize:
+            s_balance = balance.copy()
         pair = self.trader.price.iterkeys().next()
         i=0
         if n==-1:
@@ -98,9 +89,12 @@ class analyzer:
 
             eq_bal = self.get_eq_bal(balance,key[0])
 
-            if sold or bought:
-                print "Performed trade ($): sell: "+str(sold)+" buy: "+str(bought)
-            print str(key[0])+" "+str(i)+", Equivalent in XBT: " + str(eq_bal)
+
+            if not self.optimize:
+                if sold or bought:
+                    print "Performed trade ($): sell: "+str(sold)+" buy: "+str(bought)
+                s_eq_bal = self.get_eq_bal(s_balance,key[0])
+                print str(key[0])+" "+str(i)+", Equivalent in XBT: " + str(eq_bal)+", Compared to market: " + str((eq_bal-s_eq_bal)/s_eq_bal*100)+"%"
 
         print "Start balance: "+str(start_bal)
         print "Market adjusted end balance: "+str(end_bal)
@@ -135,19 +129,21 @@ class analyzer:
         calculates the gradient of the trader with it's constants: alpha, beta, ...
         afterwards steepest descend/ascend can be applied
         """
-        sim_length = 1500
+        sim_length = -1
         eps = pow(10,-5)
         if vec.size==0:
             for i in range(0,len(self.trader.constant)):
                 vec = np.hstack((vec,self.trader.constant[constant_enum(i)]))
+        self.account.populate_balance() #set balance back to all = 1
         f_x = self.simulate(sim_length)
-        print "-----------------\nStarting with eq_balance: "+str(f_x)+"\n-----------------"
+        print "-----------------\nEquivalent optimized balance: "+str(f_x)+"\n-----------------"
         #vec_eps = vec.copy()
         g = np.empty([len(self.trader.constant),1])
         for i in range(0,len(self.trader.constant)):
             #vec_eps[i] = vec[i] + eps
             #self.trader.constant[constant_enum(i)] = vec_eps[i]
             self.trader.constant[constant_enum(i)] = vec[i] + eps
+            self.account.populate_balance() #set balance back to all = 1
             f_x_eps = self.simulate(sim_length)
             g[i] = (f_x_eps - f_x)/eps
             #vec_eps[i] = vec[i]
@@ -181,6 +177,7 @@ class analyzer:
             else:
                 return g
 
+        self.account.populate_balance() #set balance back to all = 1
         f_x_g = self.simulate(sim_length)
         if f_x_g > f_x:
             print "Next adaptive stepsize: "+str(g*size).replace("\n","")

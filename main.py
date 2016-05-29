@@ -11,7 +11,6 @@ import krakenex
 from kraken_trader.account import kraken_account
 from kraken_trader.all_traders import *
 from kraken_trader.analyzer import *
-mod = __import__('kraken_trader.all_traders', fromlist=['standard_trader'])
 
 simulate = False  # as long as this is under development, leave it on True
 conn = psycopg2.connect(database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
@@ -71,12 +70,12 @@ def main(argv):
             else:
                 account = kraken_account(conn,k,simulate)
                 print_account_info(account)
-                sell = trader_class.get_sell_advice(dt.datetime.now())
-                buy = trader_class.get_buy_advice(dt.datetime.now())
-                if not type(buy) is bool or not type(sell) is bool:
+                trade = dict()
+                trade["sell"] = trader_class.get_sell_advice(dt.datetime.now())
+                trade["buy"] = trader_class.get_buy_advice(dt.datetime.now())
+                if trade["sell"] or trade["buy"]:
                     print "Performing Trades\n---------------------"
-                    account.place_orders(k,sell)
-                    account.place_orders(k,buy)
+                    account.place_orders(k,trade,trader_class)
                     account.get_open_orders()
                     print_orders(account)
                 else:
@@ -93,6 +92,7 @@ def main(argv):
             print trader_class
             trader_class = trader_class(conn,k,account)
             a = analyzer(trader_class,account)
+            a.optimize = True
             a.gradient()
 
 

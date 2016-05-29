@@ -33,25 +33,37 @@ class kraken_account:
     def get_open_orders(self):
         self.open_orders = self.k.query_private('OpenOrders')['result']
 
-    def place_orders(self,k,trades=False):
+    def place_orders(self,k,trades,trader):
         # TODO: implement the trading request
-        print trades
-        if not self.simulate and not type(trades) is bool:
-            for trade in trades:
-                print trade
-                res = trades[trade]
+        for action in trades:
+            if action:
+                for pair in trades[action]:
+                    action_idx=1
+                    if action == "sell":
+                        action_idx=2
+                    # TODO: check if for current pair other open orders are existing: if yes, stop, or cancle and replace them!
+                    order =  ("AddOrder",[('pair', pair),
+                           ('type', action),
+                           ('ordertype', 'limit'),
+                           ('price', 1),
+                           ('volume', 1),
+                           ('close[pair]', pair),
+                           ('close[type]', action),
+                           ('close[ordertype]', 'limit'),
+                           ('close[price]', trader.price[pair][-1][action_idx]),
+                           ('close[volume]', trades[action][pair])])
+                    print order
                 # TODO: Add minimum trade check: allowed only larger amounts than 0.01 of a currency
-                # res = k.query_private('AddOrder', {'pair': 'XXBTZEUR',
-                #                          'type': 'buy',
+                # res = k.query_private('AddOrder', {'pair': pair,
+                #                          'type': 'action',
                 #                          'ordertype': 'limit',
                 #                          'price': '1',
                 #                          'volume': '1',
-                #                          'close[pair]': 'XXBTZEUR',
-                #                          'close[type]': 'sell',
+                #                          'close[pair]': 'pair',
+                #                          'close[type]': 'action',
                 #                          'close[ordertype]': 'limit',
-                #                          'close[price]': '9001',
-                #                          'close[volume]': '1'})
-                print res
+                #                          'close[price]': 'trader.price[pair][-1][action]',
+                #                          'close[volume]': 'trades[action][pair]'})
 
     def populate_balance(self):
         self.balance = dict()
