@@ -1,6 +1,9 @@
+import logging
+
+
 class kraken_account:
 
-    def __init__(self,conn,k,simulate=True):
+    def __init__(self,conn,k,simulate=True,logger=""):
         self.conn = conn
         self.k = k
         self.balance = dict()
@@ -13,6 +16,8 @@ class kraken_account:
             self.get_balance()
             self.get_trade_balance()
             self.get_open_orders()
+
+        self.logger = logger
 
     def get_balance(self):
         all_balances = self.k.query_private('Balance')['result']
@@ -42,34 +47,29 @@ class kraken_account:
                     if action == "sell":
                         action_idx=2
                     # TODO: check if for current pair other open orders are existing: if yes, stop, or cancle and replace them!
-                    order =  ("AddOrder",[('pair', pair),
-                           ('type', action),
-                           ('ordertype', 'limit'),
-                           ('price', 1),
-                           ('volume', 1),
-                           ('close[pair]', pair),
-                           ('close[type]', action),
-                           ('close[ordertype]', 'limit'),
-                           ('close[price]', trader.price[pair][-1][action_idx]),
-                           ('close[volume]', trades[action][pair])])
-                    print order
-                # TODO: Add minimum trade check: allowed only larger amounts than 0.01 of a currency
-                # res = k.query_private('AddOrder', {'pair': pair,
-                #                          'type': 'action',
-                #                          'ordertype': 'limit',
-                #                          'price': '1',
-                #                          'volume': '1',
-                #                          'close[pair]': 'pair',
-                #                          'close[type]': 'action',
-                #                          'close[ordertype]': 'limit',
-                #                          'close[price]': 'trader.price[pair][-1][action]',
-                #                          'close[volume]': 'trades[action][pair]'})
+                    if trades[action][pair]*self.balance[pair[:4]] > 0.01:
+                        res = k.query_private("AddOrder",{'pair': pair,
+                                   'type': action,
+                                   'ordertype': 'limit',
+                                   'price': trader.price[pair][-1][action_idx],
+                                   'volume': trades[action][pair]*self.balance[pair[:4]]})
+                        print res
+                        self.logger.info(res)
 
     def populate_balance(self):
-        self.balance = dict()
+        empty = False
+        if not hasattr(self,"balance" ):
+            self.balance = dict()
+            emtpy = True
         for pair in self.asset_pair.keys():
-            if not(pair[:4] in self.balance):
-                self.balance[pair[:4]] = 1
-            if not(pair[4:] in self.balance):
-                self.balance[pair[4:]] = 1
+            if self.simulate or not(pair[:4] in self.balance):
+                if empty:
+                    self.balance[pair[:4]] = 0
+                else:
+                    self.balance[pair[:4]] = 1
+            if self.simulate or not(pair[4:] in self.balance):
+                if empty:
+                    self.balance[pair[:4]] = 0
+                else:
+                    self.balance[pair[4:]] = 1
 

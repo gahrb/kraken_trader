@@ -142,16 +142,12 @@ class ma_trader():
             for (k,v) in allow_trade.items():
                 elem = get_closest_elem(self.price[k],time)
                 change = (v-self.price[k][elem][1])/v
-                if v!=-1 and change >= self.constant["gamma"]:
+                if v!=-1 and change >= self.constant["gamma"] and not k[:4] in self.constant["donottrade"] and not k[4:] in self.constant["donottrade"]:
                     performTrades[k] = change *self.constant["beta"]
-            # This is ugly... iknow...
-            # allow_trade = dict((k,(v-self.price[k][get_closest_elem(self.price[k],time)][1])/v * self.constant["beta"]) \
-            #     for k, v in allow_trade.items() \
-            #     if v!=-1 and (v-self.price[k][get_closest_elem(self.price[k],time)][1])/v >= self.constant["gamma"]) # the price must be over gamma-% of the average
 
             if (performTrades):
                 return performTrades
-        return False
+        return []
 
     def get_sell_advice(self,time):
 
@@ -169,38 +165,32 @@ class ma_trader():
             for (k,v) in allow_trade.items():
                 elem = get_closest_elem(self.price[k],time)
                 change = (self.price[k][elem][2]-v)/v
-                if v!=-1 and change >= self.constant["gamma"]:
+                if v!=-1 and change >= self.constant["gamma"] and not k[:4] in self.constant["donottrade"] and not k[4:] in self.constant["donottrade"]:
                     performTrades[k] = change *self.constant["beta"]
-
-            # This is ugly... iknow...
-            # allow_trade = dict((k,(self.price[k][get_closest_elem(self.price[k],time)][2]-v)/v * self.constant["beta"]) \
-            #         for k, v in allow_trade.items() \
-            #         if v!=-1 and (self.price[k][get_closest_elem(self.price[k],time)][2]-v)/v >= self.constant["gamma"]) # the price must be over gamma-% of the average
 
             if (performTrades):
                 return performTrades
-        return False
+        return []
 
     def run_trader(self):
         self.ma = dict()
         for pair in self.pairs:
-            cur = self.conn.cursor()
-            cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair)
-            res = cur.fetchall()
-            cur.close()
-            self.price[pair] = []
-            self.price[pair].append(np.array(res[0]))
+            if not self.price.has_key(pair): #no new results shall be queried, when in the optimization loop!
+                cur = self.conn.cursor()
+                cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair)
+                res = cur.fetchall()
+                cur.close()
+                self.price[pair] = res
 
             self.ma[pair] = dict()
             self.ma[pair]["ask"] = []
             self.ma[pair]["bid"] = []
-            self.ma[pair]["ask"].append([res[0][0],res[0][1]])
-            self.ma[pair]["bid"].append([res[0][0],res[0][2]])
-            for i in range(1,len(res)):
+            self.ma[pair]["ask"].append([self.price[pair][0][0],self.price[pair][0][1]])
+            self.ma[pair]["bid"].append([self.price[pair][0][0],self.price[pair][0][2]])
+            for i in range(1,len(self.price[pair])):
                 lookback = min(int(self.constant["alpha"]),i)
-                self.ma[pair]["ask"].append([res[i][0],np.mean(np.array(res[i-lookback:i])[:,1])])
-                self.ma[pair]["bid"].append([res[i][0],np.mean(np.array(res[i-lookback:i])[:,2])])
-                self.price[pair].append(np.array(res[i]))
+                self.ma[pair]["ask"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,1])])
+                self.ma[pair]["bid"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,2])])
 
 
 def get_trader_config():

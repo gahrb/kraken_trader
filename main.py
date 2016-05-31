@@ -15,7 +15,7 @@ from kraken_trader.analyzer import *
 simulate = False  # as long as this is under development, leave it on True
 conn = psycopg2.connect(database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
-logging.basicConfig(filename='/var/log/kraken_crawler/kraken_crawler.log',level=logging.INFO,format=FORMAT)
+logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT)
 logger = logging.getLogger('kraken_crawler')
 
 
@@ -48,11 +48,13 @@ def main(argv):
 
     for opt, arg in opts:
         if opt == '-a' and arg == 'populateDB':
+            logger = logging.getLogger('kraken_crawler')
             populate_db(k)
         elif opt == '-a' and arg == 'accountInfo':
             account = kraken_account(conn,k,simulate)
             print_account_info(account)
         elif opt == "-t":
+            logger = logging.getLogger('kraken_trader')
             try:
                 trader_class = eval(arg)
             except:
@@ -60,26 +62,30 @@ def main(argv):
                 logger.error("Invalid trader class name!")
                 break
             print trader_class
-            account = kraken_account(conn,k,simulate)
-            #account = kraken_account(conn,k,False)
+            account = kraken_account(conn,k,simulate,logger)
             trader_class = trader_class(conn,k,account)
 
             if simulate:
                 a = analyzer(trader_class,account)
                 a.simulate()
             else:
-                account = kraken_account(conn,k,simulate)
+                #account = kraken_account(conn,k,simulate)
+                logger.info("Starting Trader...")
                 print_account_info(account)
                 trade = dict()
+                logger.info("Getting Sell Advices...")
                 trade["sell"] = trader_class.get_sell_advice(dt.datetime.now())
+                logger.info("Getting Buy Advices...")
                 trade["buy"] = trader_class.get_buy_advice(dt.datetime.now())
                 if trade["sell"] or trade["buy"]:
-                    print "Performing Trades\n---------------------"
+                    print "---------------------\nPerforming Trades:\n---------------------"
+                    logger.info("Performing Trades:")
                     account.place_orders(k,trade,trader_class)
                     account.get_open_orders()
                     print_orders(account)
                 else:
-                    print "No trade ordes received!"
+                    print "---------------------\nNo trade orders received!\n---------------------"
+                    logger.info("No trade orders received!")
 
         elif opt == "-o":
             account = kraken_account(conn,k,simulate)
@@ -94,8 +100,6 @@ def main(argv):
             a = analyzer(trader_class,account)
             a.optimize = True
             a.gradient()
-
-
 
 def print_account_info(acc):
     print "Single Balances\n---------------------"

@@ -8,6 +8,7 @@ class analyzer:
         self.account = account
         self.iter_count = 0
         self.optimize = False
+        self.reference_curr = "ZEUR"
 
     def simulate(self,n=-1):
         """
@@ -16,7 +17,6 @@ class analyzer:
             be careful, this depends heavily on the exchange rates!!!)
         """
 
-        self.trader.run_trader()
         balance = self.account.balance
         if not self.optimize:
             s_balance = balance.copy()
@@ -92,9 +92,9 @@ class analyzer:
 
             if not self.optimize:
                 if sold or bought:
-                    print "Performed trade ($): sell: "+str(sold)+" buy: "+str(bought)
+                    print "-----\nPerformed trade ($): sell: "+str(sold)+" buy: "+str(bought)
                 s_eq_bal = self.get_eq_bal(s_balance,key[0])
-                print str(key[0])+" "+str(i)+", Equivalent in XBT: " + str(eq_bal)+", Compared to market: " + str((eq_bal-s_eq_bal)/s_eq_bal*100)+"%"
+                print str(key[0])+" "+str(i)+", Equivalent in "+self.reference_curr+": " + str(round(eq_bal,2))+", Compared to market: " + str(round((eq_bal-s_eq_bal)/s_eq_bal*100,2))+"%"
 
         print "Start balance: "+str(start_bal)
         print "Market adjusted end balance: "+str(end_bal)
@@ -105,19 +105,30 @@ class analyzer:
         return eq_bal
 
 
-    def get_eq_bal(self,balance,time):
+    def get_eq_bal(self,balance,time,toXBT=False):
         """
         Calculate the equivalent balance in XBTs
         """
-        eq_bal = balance["XXBT"]
+        if toXBT:
+            reference_curr = "XXBT"
+        else:
+            reference_curr = self.reference_curr
+        eq_bal = balance[reference_curr]
         for bal in balance:
-            if bal!="XXBT":
-                pair = bal+"XXBT"
+            if bal!=reference_curr and not bal in self.trader.constant["donottrade"]:
+                pair = bal+reference_curr
                 buy = True
                 if not(pair in self.account.asset_pair):
-                    pair = "XXBT"+bal
+                    pair = reference_curr+bal
                     buy = False
-                elem = get_closest_elem(self.trader.price[pair],time)
+                try:
+                    elem = get_closest_elem(self.trader.price[pair],time)
+                except KeyError: #not able to translate the currency directly to the reference currency...
+                    elem = get_closest_elem(self.trader.price["XXBT"+bal],time)
+                    eq_xbt = balance[bal]/self.trader.price["XXBT"+bal][elem][1]
+                    elem = get_closest_elem(self.trader.price["XXBT"+reference_curr],time)
+                    eq_bal += eq_xbt*self.trader.price["XXBT"+reference_curr][elem][2]
+                    continue
                 if buy:
                     eq_bal +=  balance[bal]*self.trader.price[pair][elem][1]
                 else:
@@ -132,21 +143,25 @@ class analyzer:
         sim_length = -1
         eps = pow(10,-5)
         if vec.size==0:
-            for i in range(0,len(self.trader.constant)):
-                vec = np.hstack((vec,self.trader.constant[constant_enum(i)]))
+            for i in self.trader.constant["float"]:
+                vec = np.hstack((vec,self.trader.constant[i]))
+        print "Current constants: "+str(vec)
         self.account.populate_balance() #set balance back to all = 1
+        self.trader.run_trader()
         f_x = self.simulate(sim_length)
         print "-----------------\nEquivalent optimized balance: "+str(f_x)+"\n-----------------"
-        #vec_eps = vec.copy()
-        g = np.empty([len(self.trader.constant),1])
-        for i in range(0,len(self.trader.constant)):
-            #vec_eps[i] = vec[i] + eps
-            #self.trader.constant[constant_enum(i)] = vec_eps[i]
-            self.trader.constant[constant_enum(i)] = vec[i] + eps
+        g = np.empty([len(self.trader.constant["float"]),1])
+        for i in range(len(g)):
+            for j in range(len(g)):
+                if j==i:
+                    self.trader.constant[self.trader.constant["float"][i]] = vec[i] + eps
+                else:
+                    self.trader.constant[self.trader.constant["float"][i]] = vec[i]
             self.account.populate_balance() #set balance back to all = 1
+            self.trader.run_trader()
             f_x_eps = self.simulate(sim_length)
             g[i] = (f_x_eps - f_x)/eps
-            #vec_eps[i] = vec[i]
+        print "Current gradient: "+str(g)
 
         print "Starting adaptive stepsize algorithm"
         if np.linalg.norm(g)>0.5:
@@ -159,9 +174,10 @@ class analyzer:
 
         if self.iter_count < 100:
             self.iter_count = self.iter_count +1
+            print str(self.iter_count)+" Iterations: "+str(self.trader.constant)
+            #self.trader.write_new_trader()
             if np.linalg.norm(g) < eps: #avoid too small gradiants
                 print "Stopping Optimization because of too small gradient"
-                self.trader.write_new_trader()
             else:
                 self.gradient()
         else:
@@ -171,13 +187,14 @@ class analyzer:
 
     def stepsize(self,g,f_x,size,sim_length=-1):
 
-        for i in range(0,len(g)):
-            if self.trader.constant[constant_enum(i)] + float(g[i])>0:# and self.trader.constant[constant_enum(i)] + float(g[i])<1:
-                self.trader.constant[constant_enum(i)] = self.trader.constant[constant_enum(i)] + float(g[i])
+        for i in range(len(g)):
+            if self.trader.constant[self.trader.constant["float"][i]] + float(g[i])>0:# and self.trader.constant[constant_enum(i)] + float(g[i])<1:
+                self.trader.constant[self.trader.constant["float"][i]] = self.trader.constant[self.trader.constant["float"][i]] + float(g[i])
             else:
                 return g
 
         self.account.populate_balance() #set balance back to all = 1
+        self.trader.run_trader()
         f_x_g = self.simulate(sim_length)
         if f_x_g > f_x:
             print "Next adaptive stepsize: "+str(g*size).replace("\n","")
@@ -186,7 +203,7 @@ class analyzer:
         else:
             g = g/size #resetting g to the last optimizing state
             for i in range(0,len(g)):
-                self.trader.constant[constant_enum(i)] = self.trader.constant[constant_enum(i)] - float(g[i])*size
+                self.trader.constant[self.trader.constant["float"][i]] = self.trader.constant[self.trader.constant["float"][i]]- float(g[i])*size
         return g
 
 
