@@ -140,6 +140,7 @@ class analyzer:
         calculates the gradient of the trader with it's constants: alpha, beta, ...
         afterwards steepest descend/ascend can be applied
         """
+        self.reference_curr = "XXBT" #For performance reasons
         sim_length = -1
         eps = pow(10,-5)
         if vec.size==0:

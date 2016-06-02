@@ -55,6 +55,8 @@ class kraken_account:
                                    'volume': trades[action][pair]*self.balance[pair[:4]]})
                         print res
                         self.logger.info(res)
+                    else:
+                        self.logger.info("Not trading "+pair+ ", due to insufficient balance. Action: "+action)
 
     def populate_balance(self):
         empty = False

@@ -1,1 +1,1 @@
-{"ma_trader": {"float": ["beta", "gamma"], "beta": 5.0003844503742965, "gamma": 0.082710930000000002, "alpha": 26, "integer": ["alpha"], "donottrade": ["XXDG", "XDAO", "XXLM"]}, "standard_trader": 0, "basic_trader": {"alpha": 0.09680870950688335, "beta": 0.0006854641562708591}}
+{"ma_trader": {"float": ["beta", "gamma"], "beta": 1.5003844503742965, "gamma": 0.052710930000000002, "alpha": 36, "integer": ["alpha"], "donottrade": ["XXDG", "XXLM", "XDAO"]}, "standard_trader": 0, "basic_trader": {"alpha": 0.09680870950688335, "beta": 0.0006854641562708591}}
