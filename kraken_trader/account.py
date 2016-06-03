@@ -53,10 +53,12 @@ class kraken_account:
                                    'ordertype': 'limit',
                                    'price': trader.price[pair][-1][action_idx],
                                    'volume': trades[action][pair]*self.balance[pair[:4]]})
-                        print res
                         self.logger.info(res)
+                        if res['error']:
+                            self.logger.warning("Unable to perform a trade. Due to the error above.")
+                            self.logger.info("Trade: "+str(action)+", "+str(pair)+", "+str(trades[action][pair]*self.balance[pair[:4]]))
                     else:
-                        self.logger.info("Not trading "+pair+ ", due to insufficient balance. Action: "+action)
+                        self.logger.info("Not trading "+pair+ ", due to insufficient balance. Action: "+action+" Pair: "+pair)
 
     def populate_balance(self):
         empty = False
