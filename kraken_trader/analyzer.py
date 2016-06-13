@@ -142,7 +142,7 @@ class analyzer:
         """
         self.reference_curr = "XXBT" #For performance reasons
         sim_length = -1
-        eps = pow(10,-5)
+        eps = pow(10,-3)
         if vec.size==0:
             for i in self.trader.constant["float"]:
                 vec = np.hstack((vec,self.trader.constant[i]))
