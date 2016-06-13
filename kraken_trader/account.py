@@ -55,6 +55,7 @@ class kraken_account:
                                    'volume': trades[action][pair]*self.balance[pair[:4]]})
                         if res['error']:
                             self.logger.warning("Unable to perform a trade. Due to the error:")
+                            self.logger.info(res['error'])
                             self.logger.info("Trade: "+str(action)+", "+str(pair)+", "+str(trades[action][pair]*self.balance[pair[:4]]))
                         else:
                             self.logger.info("Performed trade:")

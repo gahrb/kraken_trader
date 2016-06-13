@@ -91,7 +91,7 @@
         <entry file="file://$PROJECT_DIR$/kraken_trader/account.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="795">
-              <caret line="56" column="92" selection-start-line="56" selection-start-column="92" selection-end-line="56" selection-end-column="92" />
+              <caret line="57" column="54" selection-start-line="57" selection-start-column="54" selection-end-line="57" selection-end-column="54" />
               <folding />
             </state>
           </provider>
@@ -1118,7 +1118,7 @@
       <workItem from="1465546384259" duration="111000" />
       <workItem from="1465546525153" duration="293000" />
       <workItem from="1465636324820" duration="51000" />
-      <workItem from="1465805946732" duration="331000" />
+      <workItem from="1465805946732" duration="432000" />
     </task>
     <task id="LOCAL-00001" summary="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
       <created>1461150582538</created>
@@ -1288,11 +1288,18 @@
       <option name="project" value="LOCAL" />
       <updated>1464948342958</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="nicer logging informations....">
+      <created>1465806301459</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1465806301459</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="233605000" />
+    <option name="totallyTimeSpent" value="233706000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1653" y="24" width="1867" height="1176" extended-state="6" />
@@ -1392,7 +1399,8 @@
     <MESSAGE value="fixed some bugs, nicer loggings. finally able to really trade. v1.0 is out" />
     <MESSAGE value="better trading constants" />
     <MESSAGE value="added more logging information, when trade fails." />
-    <option name="LAST_COMMIT_MESSAGE" value="added more logging information, when trade fails." />
+    <MESSAGE value="nicer logging informations...." />
+    <option name="LAST_COMMIT_MESSAGE" value="nicer logging informations...." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1938,7 +1946,7 @@
     <entry file="file://$PROJECT_DIR$/kraken_trader/account.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="795">
-          <caret line="56" column="92" selection-start-line="56" selection-start-column="92" selection-end-line="56" selection-end-column="92" />
+          <caret line="57" column="54" selection-start-line="57" selection-start-column="54" selection-end-line="57" selection-end-column="54" />
           <folding />
         </state>
       </provider>
