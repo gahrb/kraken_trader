@@ -47,7 +47,7 @@ class kraken_account:
                     if action == "sell":
                         action_idx=2
                     # TODO: check if for current pair other open orders are existing: if yes, stop, or cancle and replace them!
-                    if trades[action][pair]*self.balance[pair[:4]] > 0.01:
+                    if ((trades[action][pair]*self.balance[pair[:4]] > 0.01) and action_idx==2) or (trades[action][pair]*self.balance[pair[4:]] > 0.01 and action_idx==1):
                         res = k.query_private("AddOrder",{'pair': pair,
                                    'type': action,
                                    'ordertype': 'limit',
