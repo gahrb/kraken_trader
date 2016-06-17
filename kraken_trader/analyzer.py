@@ -9,6 +9,9 @@ class analyzer:
         self.iter_count = 0
         self.optimize = False
         self.reference_curr = "ZEUR"
+        self.keepAmount = 0
+        if self.trader.constant["delta"]:
+            self.keepAmount = self.trader.constant["delta"]
 
     def simulate(self,n=-1):
         """
@@ -17,13 +20,14 @@ class analyzer:
             be careful, this depends heavily on the exchange rates!!!)
         """
 
-        balance = self.account.balance
+        balance = self.account.balance # Important: this copys only the pointer. changing balance will change self.account.balance
         if not self.optimize:
-            s_balance = balance.copy()
+            s_balance = self.account.balance.copy()
         pair = self.trader.price.iterkeys().next()
         i=0
         if n==-1:
             n = len(self.trader.price[pair])
+
 
         start_time = self.trader.price[pair][len(self.trader.price[pair])-n][0]
         end_time = dt.datetime.now()
@@ -32,55 +36,60 @@ class analyzer:
 
         for key in self.trader.price[pair][len(self.trader.price[pair])-n:]:
             i=i+1
-            #if key[0]< now-dt.timedelta(days=31): # restrict simulation to the last month -- speed reasons
-                #continue
             #Sell action
-            sell_advice = self.trader.get_sell_advice(key[0])
+            advice = self.trader.get_sell_advice(key[0])
             sold = dict()
-            # TODO: add reserved amount for trading, to avoid trading with money which is already in use.
             credit_item = dict((key,0) for key in balance)
-            if not type(sell_advice) is bool:
-                for sellPair in sorted(sell_advice, key=lambda key: sell_advice[key],reverse=True):
+            if not type(advice) is bool:
+                for sellPair in sorted(advice, key=lambda key: advice[key],reverse=True):
                     sellFX = sellPair[:4]
                     buyFX = sellPair[4:]
-                    #Check if we buy/sell a new currency: (sell can happen, when the advice is: buy nothing)
-                    if not(balance.has_key(sellFX)):
-                        balance.update({sellFX:0.0})
-                    if not(balance.has_key(buyFX)):
-                        balance.update({buyFX:0.0})
-                    amountSell = min(sell_advice[sellPair],1)*balance[sellFX] # Ensure, we're not selling more than we have or have spent on previous transactions
+                    # #Check if we buy/sell a new currency: (sell can happen, when the advice is: buy nothing)
+                    # if not(balance.has_key(sellFX)):
+                    #     balance.update({sellFX:0.0})
+                    # if not(balance.has_key(buyFX)):
+                    #     balance.update({buyFX:0.0})
+                    # amountSell = min(advice[sellPair],1)*balance[sellFX] # Ensure, we're not selling more than we have or have spent on previous transactions
 
-                    #Minimal amount required by kraken
                     elem = get_closest_elem(self.trader.price[sellPair],key[0])
+                    #Check if sufficient funds
+                    advice[sellPair] = min(advice[sellPair],balance[sellFX]-self.keepAmount)
                     # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
-                    amountBuy = amountSell*self.trader.price[sellPair][elem][2]*(1-self.account.asset_pair[sellPair]['fees'][0][1]/100)
-                    if amountSell > 0.01 and amountBuy > 0.01:
-                        balance[sellFX] -= amountSell
+                    amountBuy = advice[sellPair]*self.trader.price[sellPair][elem][2]*(1-self.account.asset_pair[sellPair]['fees'][0][1]/100)
+                    if advice[sellPair] > min(self.trader.keep,0.01) :
+                        balance[sellFX] -= advice[sellPair]
                         credit_item[buyFX] += amountBuy
-                        sold[sellPair] = [amountSell, amountBuy]
+                        sold[sellPair] = [advice[sellPair], amountBuy]
 
             # buy action
-            buy_advice = self.trader.get_buy_advice(key[0])
+            advice = self.trader.get_buy_advice(key[0])
             bought = dict()
-            if not type(buy_advice) is bool:
-                for buyPair in sorted(buy_advice, key=lambda key: buy_advice[key],reverse=True):
+            if not type(advice) is bool:
+                for buyPair in sorted(advice, key=lambda key: advice[key],reverse=True):
                     buyFX = buyPair[:4]
                     sellFX= buyPair[4:]
-                    #Check if we buy a new currency:
-                    if not(balance.has_key(sellFX)):
-                        balance.update({sellFX:0.0})
-                    if not(balance.has_key(buyFX)):
-                        balance.update({buyFX:0.0})
-                    amountSell = min(1,buy_advice[buyPair])*balance[sellFX] #Ensure, we're not buying more than we can afford
+                    # #Check if we buy a new currency:
+                    # if not(balance.has_key(sellFX)):
+                    #     balance.update({sellFX:0.0})
+                    # if not(balance.has_key(buyFX)):
+                    #     balance.update({buyFX:0.0})
+                    # amountSell = min(1,advice[buyPair])*balance[sellFX] #Ensure, we're not buying more than we can afford
 
                     elem = get_closest_elem(self.trader.price[buyPair],key[0])
-                    #Minimal amount required by kraken
-                    # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
-                    amountBuy = amountSell/self.trader.price[buyPair][elem][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
-                    if amountSell > 0.01 and amountBuy > 0.01:
-                        balance[sellFX] -= amountSell
-                        credit_item[buyFX] += amountBuy
-                        bought[buyPair] = [amountBuy, amountSell]
+                    # amountBuy = amountSell/self.trader.price[buyPair][elem][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
+                    sellAmount = advice[buyPair]*self.trader.price[buyPair][elem][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
+                    if advice[buyPair] > 0.01 :
+                        #Chek if enough money is left to buy
+                        if sellAmount - self.keepAmount > balance[sellFX]:
+                            sellAmount = balance[sellFX] - self.keepAmount
+                            #Estimate the buyAmount
+                            advice[buyPair] = sellAmount/self.trader.price[buyPair][elem][1]
+                            #Apply Fees
+                            sellAmount = sellAmount*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
+
+                        balance[sellFX] -= sellAmount
+                        credit_item[buyFX] += advice[buyPair]
+                        bought[buyPair] = [sellAmount, advice[buyPair]]
 
             # Write credit items to the account balance
             if credit_item:

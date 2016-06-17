@@ -119,6 +119,9 @@ class ma_trader():
         trader_name = get_tader_name(self)
         self.constant = get_trader_config()[trader_name]
 
+
+        self.keep = min(0.01,self.constant["delta"])
+
         #Calculate the predicted change
         self.run_trader()
 
@@ -130,20 +133,20 @@ class ma_trader():
     def get_buy_advice(self,time):
 
         allow_trade = dict()
+        elem = dict()
         for pair in self.pairs:
-            elem = get_closest_elem(self.ma[pair]["ask"],time)
-            if elem > self.constant["alpha"]:
-                allow_trade[pair]=self.ma[pair]["ask"][elem][1]
+            elem[pair] = get_closest_elem(self.ma[pair]["ask"],time)
+            if elem[pair] > self.constant["alpha"]:
+                allow_trade[pair]=self.ma[pair]["ask"][elem[pair]][1]
             else:
                 allow_trade[pair]=-1
 
         if not all(val==-1 for val in allow_trade.values()):
             performTrades = dict()
-            for (k,v) in allow_trade.items():
-                elem = get_closest_elem(self.price[k],time)
-                change = (v-self.price[k][elem][1])/v
-                if v!=-1 and change >= self.constant["gamma"] and not k[:4] in self.constant["donottrade"] and not k[4:] in self.constant["donottrade"]:
-                    performTrades[k] = change *self.constant["beta"]
+            for (pair,v) in allow_trade.items():
+                change = (v-self.price[pair][elem[pair]][1])/v
+                if v!=-1 and change >= self.constant["gamma"] and not pair[:4] in self.constant["donottrade"] and not pair[4:] in self.constant["donottrade"]:
+                    performTrades[pair] = change *self.constant["beta"]*self.account.balance[pair[4:]]
 
             if (performTrades):
                 return performTrades
@@ -152,21 +155,20 @@ class ma_trader():
     def get_sell_advice(self,time):
 
         allow_trade = dict()
+        elem = dict()
         for pair in self.pairs:
-            elem = get_closest_elem(self.ma[pair]["bid"],time)
-            if elem > self.constant["alpha"]:
-                allow_trade[pair]=self.ma[pair]["bid"][elem][1]
+            elem[pair] = get_closest_elem(self.ma[pair]["bid"],time)
+            if elem[pair] > self.constant["alpha"]:
+                allow_trade[pair]=self.ma[pair]["bid"][elem[pair]][1]
             else:
                 allow_trade[pair]=-1
 
         if not all(val==-1 for val in allow_trade.values()):
-            # This is ugly... iknow...
             performTrades = dict()
-            for (k,v) in allow_trade.items():
-                elem = get_closest_elem(self.price[k],time)
-                change = (self.price[k][elem][2]-v)/v
-                if v!=-1 and change >= self.constant["gamma"] and not k[:4] in self.constant["donottrade"] and not k[4:] in self.constant["donottrade"]:
-                    performTrades[k] = change *self.constant["beta"]
+            for (pair,v) in allow_trade.items():
+                change = (self.price[pair][elem[pair]][2]-v)/v
+                if v!=-1 and change >= self.constant["gamma"] and not pair[:4] in self.constant["donottrade"] and not pair[4:] in self.constant["donottrade"]:
+                    performTrades[pair] = change *self.constant["beta"]*self.account.balance[pair[4:]]
 
             if (performTrades):
                 return performTrades
