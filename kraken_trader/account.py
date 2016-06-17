@@ -19,6 +19,7 @@ class kraken_account:
 
         self.logger = logger
 
+
     def get_balance(self):
         all_balances = self.k.query_private('Balance')['result']
         for balance in all_balances:
@@ -39,29 +40,37 @@ class kraken_account:
         self.open_orders = self.k.query_private('OpenOrders')['result']
 
     def place_orders(self,k,trades,trader):
+        keepAmount = 0
+        if trader.constant["delta"]:
+            keepAmount = trader.constant["delta"]
         # TODO: implement the trading request
         for action in trades:
             if action:
                 for pair in trades[action]:
-                    action_idx=1
+                    # TODO: check if for current pair other open orders are existing: if yes, stop, or cancle and replace them!
+                    if (trades[action][pair] < 0.01):
+                        self.logger.info("Not trading "+pair+ ", due to insufficient balance. Action: "+action+" Pair: "+pair)
+                        break
                     if action == "sell":
                         action_idx=2
-                    # TODO: check if for current pair other open orders are existing: if yes, stop, or cancle and replace them!
-                    if ((trades[action][pair]*self.balance[pair[:4]] > 0.01) and action_idx==2) or (trades[action][pair]*self.balance[pair[4:]] > 0.01 and action_idx==1):
-                        res = k.query_private("AddOrder",{'pair': pair,
-                                   'type': action,
-                                   'ordertype': 'limit',
-                                   'price': trader.price[pair][-1][action_idx],
-                                   'volume': trades[action][pair]*self.balance[pair[:4]]})
-                        if res['error']:
-                            self.logger.warning("Unable to perform a trade. Due to the error:")
-                            self.logger.info(res['error'])
-                            self.logger.info("Trade: "+str(action)+", "+str(pair)+", "+str(trades[action][pair]*self.balance[pair[:4]]))
-                        else:
-                            self.logger.info("Performed trade:")
-                            self.logger.info(res['result'])
+                    elif action == "buy":
+                        action_idx=1
+                        #Guess the price to pay, and if there is enough balance
+                        trades[action][pair] = min(trades[action][pair],self.balance[pair[4:]]/trader.price[pair][-1][action_idx] - keepAmount)
+
+                    res = k.query_private("AddOrder",{'pair': pair,
+                           'type': action,
+                           'ordertype': 'limit',
+                           'price': trader.price[pair][-1][action_idx],
+                           'volume': trades[action][pair]*self.balance[pair[:4]]})
+
+                    if res['error']:
+                        self.logger.warning("Unable to perform a trade. Due to the error:")
+                        self.logger.info(res['error'])
+                        self.logger.info("Trade: "+str(action)+", "+str(pair)+", "+str(trades[action][pair]*self.balance[pair[:4]]))
                     else:
-                        self.logger.info("Not trading "+pair+ ", due to insufficient balance. Action: "+action+" Pair: "+pair)
+                        self.logger.info("Performed trade:")
+                        self.logger.info(res['result'])
 
     def populate_balance(self):
         empty = False
@@ -80,3 +89,5 @@ class kraken_account:
                 else:
                     self.balance[pair[4:]] = 1
 
+def get_closest_elem(list,time):
+    return np.argmin(np.abs(np.matrix(list)[:,0]-time))
