@@ -87,8 +87,8 @@
       <file leaf-file-name="account.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kraken_trader/account.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="366">
-              <caret line="51" column="49" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
+            <state relative-caret-position="336">
+              <caret line="49" column="100" selection-start-line="49" selection-start-column="100" selection-end-line="49" selection-end-column="100" />
               <folding />
             </state>
           </provider>
@@ -1121,7 +1121,7 @@
       <workItem from="1465900047643" duration="26000" />
       <workItem from="1465916209290" duration="240000" />
       <workItem from="1465923348420" duration="507000" />
-      <workItem from="1466151550383" duration="519000" />
+      <workItem from="1466151550383" duration="809000" />
     </task>
     <task id="LOCAL-00001" summary="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
       <created>1461150582538</created>
@@ -1312,11 +1312,18 @@
       <option name="project" value="LOCAL" />
       <updated>1465814800033</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="hotfix, still not fully correct">
+      <created>1466152110911</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1466152110911</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="240950000" />
+    <option name="totallyTimeSpent" value="241240000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1920" y="24" width="1920" height="1056" extended-state="6" />
@@ -1393,7 +1400,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created." />
     <MESSAGE value="minor changes. mostly comments" />
     <MESSAGE value="added framework foraccount information and traders." />
     <MESSAGE value="getting the traders to work...." />
@@ -1418,7 +1424,8 @@
     <MESSAGE value="added more logging information, when trade fails." />
     <MESSAGE value="nicer logging informations...." />
     <MESSAGE value="optimized" />
-    <option name="LAST_COMMIT_MESSAGE" value="optimized" />
+    <MESSAGE value="hotfix, still not fully correct" />
+    <option name="LAST_COMMIT_MESSAGE" value="hotfix, still not fully correct" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1935,8 +1942,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kraken_trader/account.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="51" column="49" selection-start-line="51" selection-start-column="49" selection-end-line="51" selection-end-column="49" />
+        <state relative-caret-position="336">
+          <caret line="49" column="100" selection-start-line="49" selection-start-column="100" selection-end-line="49" selection-end-column="100" />
           <folding />
         </state>
       </provider>
