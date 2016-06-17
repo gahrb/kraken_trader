@@ -44,13 +44,6 @@ class analyzer:
                 for sellPair in sorted(advice, key=lambda key: advice[key],reverse=True):
                     sellFX = sellPair[:4]
                     buyFX = sellPair[4:]
-                    # #Check if we buy/sell a new currency: (sell can happen, when the advice is: buy nothing)
-                    # if not(balance.has_key(sellFX)):
-                    #     balance.update({sellFX:0.0})
-                    # if not(balance.has_key(buyFX)):
-                    #     balance.update({buyFX:0.0})
-                    # amountSell = min(advice[sellPair],1)*balance[sellFX] # Ensure, we're not selling more than we have or have spent on previous transactions
-
                     elem = get_closest_elem(self.trader.price[sellPair],key[0])
                     #Check if sufficient funds
                     advice[sellPair] = min(advice[sellPair],balance[sellFX]-self.keepAmount)
@@ -59,7 +52,7 @@ class analyzer:
                     if advice[sellPair] > min(self.trader.keep,0.01) :
                         balance[sellFX] -= advice[sellPair]
                         credit_item[buyFX] += amountBuy
-                        sold[sellPair] = [advice[sellPair], amountBuy]
+                        sold[sellPair] = [advice[sellPair], amountBuy, self.trader.price[sellPair][elem][2]]
 
             # buy action
             advice = self.trader.get_buy_advice(key[0])
@@ -68,28 +61,20 @@ class analyzer:
                 for buyPair in sorted(advice, key=lambda key: advice[key],reverse=True):
                     buyFX = buyPair[:4]
                     sellFX= buyPair[4:]
-                    # #Check if we buy a new currency:
-                    # if not(balance.has_key(sellFX)):
-                    #     balance.update({sellFX:0.0})
-                    # if not(balance.has_key(buyFX)):
-                    #     balance.update({buyFX:0.0})
-                    # amountSell = min(1,advice[buyPair])*balance[sellFX] #Ensure, we're not buying more than we can afford
-
                     elem = get_closest_elem(self.trader.price[buyPair],key[0])
-                    # amountBuy = amountSell/self.trader.price[buyPair][elem][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
                     sellAmount = advice[buyPair]*self.trader.price[buyPair][elem][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
+                    #Chek if enough money is left to buy
+                    if sellAmount > balance[sellFX] - self.keepAmount:
+                        sellAmount = balance[sellFX] - self.keepAmount
+                        #Estimate the buyAmount
+                        advice[buyPair] = sellAmount/self.trader.price[buyPair][elem][1]
+                        #Apply Fees
+                        sellAmount = sellAmount*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
                     if advice[buyPair] > 0.01 :
-                        #Chek if enough money is left to buy
-                        if sellAmount - self.keepAmount > balance[sellFX]:
-                            sellAmount = balance[sellFX] - self.keepAmount
-                            #Estimate the buyAmount
-                            advice[buyPair] = sellAmount/self.trader.price[buyPair][elem][1]
-                            #Apply Fees
-                            sellAmount = sellAmount*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
 
                         balance[sellFX] -= sellAmount
                         credit_item[buyFX] += advice[buyPair]
-                        bought[buyPair] = [sellAmount, advice[buyPair]]
+                        bought[buyPair] = [sellAmount, advice[buyPair], self.trader.price[buyPair][elem][1]]
 
             # Write credit items to the account balance
             if credit_item:
