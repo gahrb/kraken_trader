@@ -1,30 +1,8 @@
+import helper_functions as hf
 import numpy as np
-import json
 import datetime as dt
 
 filename = "traders.json"
-
-class standard_trader():
-
-    def __init__(self,conn,k):
-        self.conn = conn
-        self.k = k
-
-        # Get Configuration Values for Trader from JSON File
-        # This is required in case, we want ot optimize the algorithms later on.
-        trader_name = get_tader_name(self)
-        filename = "traders.json"
-        json_data=open("./kraken_trader/"+filename).read()
-        data = json.loads(json_data)
-        self.constant = data[trader_name]
-
-    def get_buy_advice(self):
-
-        return (0,1)
-
-    def get_sell_advice(self):
-
-        return (0,1)
 
 class basic_trader():
     """
@@ -42,15 +20,15 @@ class basic_trader():
 
         # Get Configuration Values for Trader from JSON File
         # This is required in case, we want ot optimize the algorithms later on.
-        trader_name = get_tader_name(self)
-        self.constant = get_trader_config()[trader_name]
+        trader_name = hf.get_tader_name(self)
+        self.constant = hf.get_trader_config()[trader_name]
 
         #Calculate the predicted change
         self.predict_change()
 
     def write_new_trader(self):
 
-        save_trader_config(self.constant,get_tader_name(self))
+        hf.save_trader_config(self.constant,hf.get_tader_name(self))
 
     def get_buy_advice(self,time):
 
@@ -116,26 +94,26 @@ class ma_trader():
 
         # Get Configuration Values for Trader from JSON File
         # This is required in case, we want ot optimize the algorithms later on.
-        trader_name = get_tader_name(self)
-        self.constant = get_trader_config()[trader_name]
-
+        trader_name = hf.get_tader_name(self)
+        self.constant = hf.get_trader_config()[trader_name]
 
         self.keep = min(0.01,self.constant["delta"])
 
         #Calculate the predicted change
         self.run_trader()
+        self.keep_back(dt.datetime.strptime("2016-01-01","%Y-%m-%d"))
 
 
 
     def write_new_trader(self):
-        save_trader_config(self.constant,get_tader_name(self))
+        hf.save_trader_config(self.constant,hf.get_tader_name(self))
 
     def get_buy_advice(self,time):
 
         allow_trade = dict()
         elem = dict()
         for pair in self.pairs:
-            elem[pair] = get_closest_elem(self.ma[pair]["ask"],time)
+            elem[pair] = hf.get_closest_elem(self.ma[pair]["ask"],time)
             if elem[pair] > self.constant["alpha"]:
                 allow_trade[pair]=self.ma[pair]["ask"][elem[pair]][1]
             else:
@@ -145,10 +123,16 @@ class ma_trader():
             performTrades = dict()
             for (pair,v) in allow_trade.items():
                 change = (v-self.price[pair][elem[pair]][1])/v
-                if v!=-1 and change >= self.constant["gamma"] and not pair[:4] in self.constant["donottrade"] and not pair[4:] in self.constant["donottrade"]:
-                    performTrades[pair] = change *self.constant["beta"]*self.account.balance[pair[4:]]
+                if v!=-1 and change >= self.constant["gamma"] and \
+                        not pair[:4] in self.constant["donottrade"] and \
+                        not pair[4:] in self.constant["donottrade"] and \
+                        self.account.balance[pair[4:]]-self.keep[pair[4:]] > 0:
+                    performTrades[pair] = min(self.account.balance[pair[4:]] - self.keep[pair[4:]] , \
+                            change *self.constant["beta"]*self.account.balance[pair[4:]] * self.price[pair][elem[pair]][2]) / \
+                            self.price[pair][elem[pair]][2]
 
             if (performTrades):
+                self.keep_back(time)
                 return performTrades
         return []
 
@@ -157,7 +141,7 @@ class ma_trader():
         allow_trade = dict()
         elem = dict()
         for pair in self.pairs:
-            elem[pair] = get_closest_elem(self.ma[pair]["bid"],time)
+            elem[pair] = hf.get_closest_elem(self.ma[pair]["bid"],time)
             if elem[pair] > self.constant["alpha"]:
                 allow_trade[pair]=self.ma[pair]["bid"][elem[pair]][1]
             else:
@@ -167,12 +151,43 @@ class ma_trader():
             performTrades = dict()
             for (pair,v) in allow_trade.items():
                 change = (self.price[pair][elem[pair]][2]-v)/v
-                if v!=-1 and change >= self.constant["gamma"] and not pair[:4] in self.constant["donottrade"] and not pair[4:] in self.constant["donottrade"]:
-                    performTrades[pair] = change *self.constant["beta"]*self.account.balance[pair[4:]]
+                if v!=-1 and change >= self.constant["gamma"] and\
+                        not pair[:4] in self.constant["donottrade"] and\
+                        not pair[4:] in self.constant["donottrade"] and\
+                        self.account.balance[pair[:4]]-self.keep[pair[:4]] > 0: #Ensures, that there is enough amount on this currency to trade
+                    #Check if transaction does not exceed the self.keep amount
+                    performTrades[pair] = min(self.account.balance[pair[:4]]-self.keep[pair[:4]],\
+                                            change*self.constant["beta"]*self.account.balance[pair[:4]])
 
             if (performTrades):
+                self.keep_back(time)
                 return performTrades
         return []
+
+    def keep_back(self,time):
+        reference_curr = "XXBT"
+        balance = self.account.balance
+        eq_bal = balance[reference_curr]
+        elem = dict()
+        for bal in balance:
+            if bal!=reference_curr and not bal in self.constant["donottrade"]:
+                pair = bal+reference_curr
+                if self.price.has_key(pair):
+                    elem[pair] = hf.get_closest_elem(self.price[pair],time)
+                    eq_bal +=  balance[bal]*self.price[pair][elem[pair]][1]
+                else: #not able to translate the currency directly to the reference currency...
+                    pair = "XXBT"+bal
+                    elem[pair] = hf.get_closest_elem(self.price[pair],time)
+                    eq_bal +=  balance[bal]/self.price[pair][elem[pair]][2]
+
+        self.keep = dict()
+        self.keep["XXBT"] = eq_bal*self.constant["delta"]
+        for pair in elem:
+            if pair.find("XXBT")==0:
+                self.keep[pair[4:]] = self.constant["delta"] * eq_bal * self.price[pair][elem[pair]][1]
+            else:
+                self.keep[pair[:4]] = self.constant["delta"] * eq_bal / self.price[pair][elem[pair]][1]
+
 
     def run_trader(self):
         self.ma = dict()
@@ -194,23 +209,3 @@ class ma_trader():
                 self.ma[pair]["ask"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,1])])
                 self.ma[pair]["bid"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,2])])
 
-
-def get_trader_config():
-    json_data=open("./kraken_trader/"+filename).read()
-    return json.loads(json_data)
-
-def save_trader_config(data,trader_name):
-    json_data = get_trader_config()
-    # TODO: replace the config of the current trader with the new constants
-    json_data[trader_name] = data
-    with open("./kraken_trader/"+filename,mode='w') as outfile:
-        json.dump(json_data, outfile)
-
-
-def get_tader_name(input_class):
-    name_sidx = str(input_class).find("all_traders.")
-    name_eidx = str(input_class).find(" instance")
-    return str(input_class)[name_sidx+12:name_eidx]
-
-def get_closest_elem(list,time):
-    return np.argmin(np.abs(np.matrix(list)[:,0]-time))

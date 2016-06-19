@@ -1,3 +1,4 @@
+import helper_functions as hf
 import numpy as np
 import datetime as dt
 
@@ -44,7 +45,7 @@ class analyzer:
                 for sellPair in sorted(advice, key=lambda key: advice[key],reverse=True):
                     sellFX = sellPair[:4]
                     buyFX = sellPair[4:]
-                    elem = get_closest_elem(self.trader.price[sellPair],key[0])
+                    elem = hf.get_closest_elem(self.trader.price[sellPair],key[0])
                     #Check if sufficient funds
                     advice[sellPair] = min(advice[sellPair],balance[sellFX]-self.keepAmount)
                     # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
@@ -61,7 +62,7 @@ class analyzer:
                 for buyPair in sorted(advice, key=lambda key: advice[key],reverse=True):
                     buyFX = buyPair[:4]
                     sellFX= buyPair[4:]
-                    elem = get_closest_elem(self.trader.price[buyPair],key[0])
+                    elem = hf.get_closest_elem(self.trader.price[buyPair],key[0])
                     sellAmount = advice[buyPair]*self.trader.price[buyPair][elem][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
                     #Chek if enough money is left to buy
                     if sellAmount > balance[sellFX] - self.keepAmount:
@@ -116,11 +117,11 @@ class analyzer:
                     pair = reference_curr+bal
                     buy = False
                 try:
-                    elem = get_closest_elem(self.trader.price[pair],time)
+                    elem = hf.get_closest_elem(self.trader.price[pair],time)
                 except KeyError: #not able to translate the currency directly to the reference currency...
-                    elem = get_closest_elem(self.trader.price["XXBT"+bal],time)
+                    elem = hf.get_closest_elem(self.trader.price["XXBT"+bal],time)
                     eq_xbt = balance[bal]/self.trader.price["XXBT"+bal][elem][1]
-                    elem = get_closest_elem(self.trader.price["XXBT"+reference_curr],time)
+                    elem = hf.get_closest_elem(self.trader.price["XXBT"+reference_curr],time)
                     eq_bal += eq_xbt*self.trader.price["XXBT"+reference_curr][elem][2]
                     continue
                 if buy:
@@ -183,7 +184,7 @@ class analyzer:
     def stepsize(self,g,f_x,size,sim_length=-1):
 
         for i in range(len(g)):
-            if self.trader.constant[self.trader.constant["float"][i]] + float(g[i])>0:# and self.trader.constant[constant_enum(i)] + float(g[i])<1:
+            if self.trader.constant[self.trader.constant["float"][i]] + float(g[i])>0:
                 self.trader.constant[self.trader.constant["float"][i]] = self.trader.constant[self.trader.constant["float"][i]] + float(g[i])
             else:
                 return g
@@ -201,19 +202,3 @@ class analyzer:
                 self.trader.constant[self.trader.constant["float"][i]] = self.trader.constant[self.trader.constant["float"][i]]- float(g[i])*size
         return g
 
-
-def get_closest_elem(list,time):
-    return np.argmin(np.abs(np.matrix(list)[:,0]-time))
-
-def constant_enum(i):
-    return {
-        0:"alpha",
-        1:"beta",
-        2:"gamma",
-        3:"delta",
-        4:"eps",
-        5:"zeta",
-        6:"eta",
-        7:"theta",
-        8:"omega"
-    }.get(i, "unknown")
