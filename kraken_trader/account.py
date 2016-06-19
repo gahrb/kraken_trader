@@ -89,5 +89,3 @@ class kraken_account:
                 else:
                     self.balance[pair[4:]] = 1
 
-def get_closest_elem(list,time):
-    return np.argmin(np.abs(np.matrix(list)[:,0]-time))
