@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="bugfix, and nicer">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/kraken_trader/helper_functions.py" />
+    <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/account.py" afterPath="$PROJECT_DIR$/kraken_trader/account.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/all_traders.py" afterPath="$PROJECT_DIR$/kraken_trader/all_traders.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/analyzer.py" afterPath="$PROJECT_DIR$/kraken_trader/analyzer.py" />
     </list>
     <ignored path="kraken_trader.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -22,7 +19,7 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/kraken_trader$main.coverage" NAME="main Coverage Results" MODIFIED="1461250510624" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/kraken_trader$simulate__ma_trader_.coverage" NAME="simulate (ma_trader) Coverage Results" MODIFIED="1466323060972" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kraken_trader$simulate__ma_trader_.coverage" NAME="simulate (ma_trader) Coverage Results" MODIFIED="1466331427846" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$trade__advanced_trader_.coverage" NAME="trade (basic trader) Coverage Results" MODIFIED="1464085835306" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$optimize.coverage" NAME="optimize Coverage Results" MODIFIED="1462741086804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$optimize__ma_trader_.coverage" NAME="optimize (ma_trader) Coverage Results" MODIFIED="1466166601877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
@@ -78,8 +75,8 @@
       <file leaf-file-name="all_traders.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="159" column="0" selection-start-line="159" selection-start-column="0" selection-end-line="159" selection-end-column="0" />
+            <state relative-caret-position="210">
+              <caret line="155" column="66" selection-start-line="155" selection-start-column="66" selection-end-line="155" selection-end-column="66" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
                 <element signature="e#125#2962#0" expanded="false" />
@@ -1161,7 +1158,7 @@
       <workItem from="1466151550383" duration="809000" />
       <workItem from="1466166588778" duration="2233000" />
       <workItem from="1466168998930" duration="30000" />
-      <workItem from="1466320943569" duration="2154000" />
+      <workItem from="1466320943569" duration="4107000" />
     </task>
     <task id="LOCAL-00001" summary="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
       <created>1461150582538</created>
@@ -1359,11 +1356,18 @@
       <option name="project" value="LOCAL" />
       <updated>1466152110911</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="towards a propotional keep_back amount. for each currency">
+      <created>1466323133169</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1466323133169</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="245657000" />
+    <option name="totallyTimeSpent" value="247610000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="24" width="1867" height="1056" extended-state="6" />
@@ -1440,7 +1444,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="minor changes. mostly comments" />
     <MESSAGE value="added framework foraccount information and traders." />
     <MESSAGE value="getting the traders to work...." />
     <MESSAGE value="added a basic trader, as an example" />
@@ -1465,7 +1468,8 @@
     <MESSAGE value="nicer logging informations...." />
     <MESSAGE value="optimized" />
     <MESSAGE value="hotfix, still not fully correct" />
-    <option name="LAST_COMMIT_MESSAGE" value="hotfix, still not fully correct" />
+    <MESSAGE value="towards a propotional keep_back amount. for each currency" />
+    <option name="LAST_COMMIT_MESSAGE" value="towards a propotional keep_back amount. for each currency" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1477,13 +1481,18 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/kraken_trader/all_traders.py</url>
-          <line>155</line>
-          <option name="timeStamp" value="443" />
+          <line>179</line>
+          <option name="timeStamp" value="449" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="python-line">
           <url>file://$PROJECT_DIR$/kraken_trader/all_traders.py</url>
-          <line>160</line>
-          <option name="timeStamp" value="446" />
+          <line>151</line>
+          <option name="timeStamp" value="450" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="python-line">
+          <url>file://$PROJECT_DIR$/kraken_trader/all_traders.py</url>
+          <line>125</line>
+          <option name="timeStamp" value="452" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
@@ -1493,7 +1502,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="447" />
+      <option name="time" value="453" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1994,8 +2003,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="159" column="0" selection-start-line="159" selection-start-column="0" selection-end-line="159" selection-end-column="0" />
+        <state relative-caret-position="210">
+          <caret line="155" column="66" selection-start-line="155" selection-start-column="66" selection-end-line="155" selection-end-column="66" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
             <element signature="e#125#2962#0" expanded="false" />

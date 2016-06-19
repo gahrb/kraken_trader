@@ -123,10 +123,14 @@ class ma_trader():
             performTrades = dict()
             for (pair,v) in allow_trade.items():
                 change = (v-self.price[pair][elem[pair]][1])/v
-                if v!=-1 and change >= self.constant["gamma"] and not pair[:4] in self.constant["donottrade"] and not pair[4:] in self.constant["donottrade"]:
+                if v!=-1 and change >= self.constant["gamma"] and \
+                        not pair[:4] in self.constant["donottrade"] and \
+                        not pair[4:] in self.constant["donottrade"]:
+                    #TODO: check if transaction does not exceed the self.keep amount
                     performTrades[pair] = change *self.constant["beta"]*self.account.balance[pair[4:]]
 
             if (performTrades):
+                self.keep_back(time)
                 return performTrades
         return []
 
@@ -145,10 +149,14 @@ class ma_trader():
             performTrades = dict()
             for (pair,v) in allow_trade.items():
                 change = (self.price[pair][elem[pair]][2]-v)/v
-                if v!=-1 and change >= self.constant["gamma"] and not pair[:4] in self.constant["donottrade"] and not pair[4:] in self.constant["donottrade"]:
+                if v!=-1 and change >= self.constant["gamma"] and\
+                        not pair[:4] in self.constant["donottrade"] and\
+                        not pair[4:] in self.constant["donottrade"]:
+                    #TODO: check if transaction does not exceed the self.keep amount
                     performTrades[pair] = change *self.constant["beta"]*self.account.balance[pair[4:]]
 
             if (performTrades):
+                self.keep_back(time)
                 return performTrades
         return []
 
@@ -156,25 +164,23 @@ class ma_trader():
         reference_curr = "XXBT"
         balance = self.account.balance
         eq_bal = balance[reference_curr]
+        elem = dict()
         for bal in balance:
             if bal!=reference_curr and not bal in self.constant["donottrade"]:
                 pair = bal+reference_curr
-                buy = True
-                if not(pair in self.account.asset_pair):
-                    pair = reference_curr+bal
-                    buy = False
-                try:
-                    elem = hf.get_closest_elem(self.price[pair],time)
-                except KeyError: #not able to translate the currency directly to the reference currency...
-                    elem = hf.get_closest_elem(self.price["XXBT"+bal],time)
-                    eq_xbt = balance[bal]/self.price["XXBT"+bal][elem][1]
-                    elem = hf.get_closest_elem(self.trader.price["XXBT"+reference_curr],time)
-                    eq_bal += eq_xbt*self.price["XXBT"+reference_curr][elem][2]
-                    continue
-                if buy:
-                    eq_bal +=  balance[bal]*self.price[pair][elem][1]
-                else:
-                    eq_bal +=  balance[bal]/self.price[pair][elem][2]
+                if self.price.has_key(pair):
+                    elem[pair] = hf.get_closest_elem(self.price[pair],time)
+                    eq_bal +=  balance[bal]*self.price[pair][elem[pair]][1]
+                else: #not able to translate the currency directly to the reference currency...
+                    pair = "XXBT"+bal
+                    elem[pair] = hf.get_closest_elem(self.price[pair],time)
+                    eq_bal +=  balance[bal]/self.price[pair][elem[pair]][2]
+
+        self.keep = dict()
+        self.keep["XXBT"] = eq_bal*self.constant["delta"]
+        for pair in elem:
+            curr = pair.strip("XXBT")
+            self.keep[curr] = self.constant["delta"] * eq_bal * self.price[pair][elem[pair]][1]
 
 
     def run_trader(self):
