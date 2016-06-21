@@ -129,7 +129,7 @@ class ma_trader():
                         self.account.balance[pair[4:]]-self.keep[pair[4:]] > 0:
                     performTrades[pair] = min(self.account.balance[pair[4:]] - self.keep[pair[4:]] , \
                             change *self.constant["beta"]*self.account.balance[pair[4:]] * self.price[pair][elem[pair]][2]) / \
-                            self.price[pair][elem[pair]][2]
+                            self.price[pair][elem[pair]][1]
 
             if (performTrades):
                 self.keep_back(time)
