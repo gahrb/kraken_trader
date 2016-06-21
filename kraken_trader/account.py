@@ -4,7 +4,7 @@ import logging
 class kraken_account:
 
     def __init__(self,conn,k,simulate=True,logger=""):
-        self.conn = conn
+        self.cur = conn.cursor()
         self.k = k
         self.balance = dict()
         self.trade_balance = dict()
@@ -24,6 +24,11 @@ class kraken_account:
         all_balances = self.k.query_private('Balance')['result']
         for balance in all_balances:
             self.balance[str(balance)] = float(all_balances[balance])
+
+        # dbString = "INSERT INTO " + self.k.key
+        # for balance in self.balance:
+        #     dbString += " "+balance + " = " + self.balance[balance]
+        # self.cur.execute(dbString)
 
     def get_trade_balance(self):
         trade_balance = self.k.query_private('TradeBalance',{'Currency':'ZEUR'})['result']

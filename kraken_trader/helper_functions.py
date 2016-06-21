@@ -21,8 +21,13 @@ def get_tader_name(input_class):
     name_eidx = str(input_class).find(" instance")
     return str(input_class)[name_sidx+12:name_eidx]
 
-def get_closest_elem(list,time):
-    return np.argmin(np.abs(np.matrix(list)[:,0]-time))
+def get_closest_elem(list,time,elem = 0):
+    if not elem:
+        return np.argmin(np.abs(np.matrix(list)[:,0]-time))
+
+    if np.abs(list[elem+1,0]-time) < np.abs(list[elem,0]-time):
+        return elem+1
+    return elem
 
 
 def constant_enum(i):
