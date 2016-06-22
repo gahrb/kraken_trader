@@ -4,7 +4,6 @@
     <list default="true" id="afe107c2-4d7c-4514-ace6-d758d354844b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/kraken_trader/account.py" afterPath="$PROJECT_DIR$/kraken_trader/account.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/main.py" afterPath="$PROJECT_DIR$/main.py" />
     </list>
     <ignored path="kraken_trader.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -24,13 +23,13 @@
     <SUITE FILE_PATH="coverage/kraken_trader$trade__advanced_trader_.coverage" NAME="trade (basic trader) Coverage Results" MODIFIED="1464085835306" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$optimize.coverage" NAME="optimize Coverage Results" MODIFIED="1462741086804" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$optimize__ma_trader_.coverage" NAME="optimize (ma_trader) Coverage Results" MODIFIED="1466350171377" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/kraken_trader$populateDB.coverage" NAME="populateDB Coverage Results" MODIFIED="1464340273516" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/kraken_trader$accountInfo.coverage" NAME="accountInfo Coverage Results" MODIFIED="1466537387253" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kraken_trader$populateDB.coverage" NAME="populateDB Coverage Results" MODIFIED="1466592922387" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kraken_trader$accountInfo.coverage" NAME="accountInfo Coverage Results" MODIFIED="1466593134115" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$optimize__advanced_trader_.coverage" NAME="optimize (advanced_trader) Coverage Results" MODIFIED="1464547005851" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$account_info.coverage" NAME="accountINFO Coverage Results" MODIFIED="1461250731775" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$simulate.coverage" NAME="simulate Coverage Results" MODIFIED="1462348197549" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/kraken_trader$trade__basic_trader_.coverage" NAME="trade (basic trader) Coverage Results" MODIFIED="1464088222669" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/kraken_trader$trade__ma_trader_.coverage" NAME="trade (ma_trader) Coverage Results" MODIFIED="1466583363541" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/kraken_trader$trade__ma_trader_.coverage" NAME="trade (ma_trader) Coverage Results" MODIFIED="1466593092928" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -51,11 +50,10 @@
       <file leaf-file-name="main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
-              <caret line="15" column="67" selection-start-line="15" selection-start-column="67" selection-end-line="15" selection-end-column="67" />
+            <state relative-caret-position="303">
+              <caret line="165" column="0" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
               <folding>
                 <element signature="e#19#32#0" expanded="true" />
-                <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
               </folding>
             </state>
           </provider>
@@ -64,8 +62,8 @@
       <file leaf-file-name="analyzer.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kraken_trader/analyzer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="138">
-              <caret line="121" column="0" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
+            <state relative-caret-position="399">
+              <caret line="179" column="67" selection-start-line="179" selection-start-column="67" selection-end-line="179" selection-end-column="67" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
               </folding>
@@ -76,7 +74,7 @@
       <file leaf-file-name="all_traders.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1500">
+            <state relative-caret-position="519">
               <caret line="172" column="0" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
               <folding>
                 <element signature="e#0#29#0" expanded="true" />
@@ -89,18 +87,16 @@
       <file leaf-file-name="account.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/kraken_trader/account.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+            <state relative-caret-position="183">
+              <caret line="63" column="31" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="31" />
               <folding>
-                <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-                <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-                <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-                <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-                <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-                <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-                <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-                <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-                <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+                <element signature="e#0#14#0" expanded="true" />
+                <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+                <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+                <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+                <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+                <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+                <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
               </folding>
             </state>
           </provider>
@@ -113,9 +109,6 @@
               <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
               <folding>
                 <element signature="e#0#18#0" expanded="true" />
-                <marker date="1466578676892" expanded="true" signature="85:173" ph="..." />
-                <marker date="1466578676892" expanded="true" signature="216:464" ph="..." />
-                <marker date="1466578676892" expanded="true" signature="498:655" ph="..." />
               </folding>
             </state>
           </provider>
@@ -124,7 +117,7 @@
       <file leaf-file-name="traders.json" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
+            <state relative-caret-position="15">
               <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
               <folding />
             </state>
@@ -145,7 +138,7 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="get_elem_optimization" />
+        <entry key="$PROJECT_DIR$" value="optimization" />
       </map>
     </option>
   </component>
@@ -237,9 +230,9 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
+      <pane id="PackagesPane" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -299,7 +292,7 @@
       <recent name="$PROJECT_DIR$/kraken_trader" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.trade (ma_trader)">
+  <component name="RunManager" selected="Python.accountInfo">
     <configuration default="false" name="populateDB" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -1179,6 +1172,8 @@
       <workItem from="1466537033471" duration="1244000" />
       <workItem from="1466538653670" duration="910000" />
       <workItem from="1466578456749" duration="3783000" />
+      <workItem from="1466583456394" duration="626000" />
+      <workItem from="1466585670058" duration="4240000" />
     </task>
     <task id="LOCAL-00001" summary="Finished quering-part: all crypto exchange rates, which are not linked to a foreign currency are queried and updated into the db. For new exchange pairs a new tables is automatically created.">
       <created>1461150582538</created>
@@ -1401,7 +1396,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="269774000" />
+    <option name="totallyTimeSpent" value="274640000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="53" y="24" width="2507" height="1056" extended-state="6" />
@@ -1513,16 +1508,6 @@
           <line>22</line>
           <option name="timeStamp" value="463" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/kraken_trader/account.py</url>
-          <line>75</line>
-          <option name="timeStamp" value="466" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="python-line">
-          <url>file://$PROJECT_DIR$/kraken_trader/account.py</url>
-          <line>22</line>
-          <option name="timeStamp" value="467" />
-        </line-breakpoint>
       </breakpoints>
       <default-breakpoints>
         <breakpoint type="python-exception">
@@ -1531,7 +1516,7 @@
           </properties>
         </breakpoint>
       </default-breakpoints>
-      <option name="time" value="468" />
+      <option name="time" value="475" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="PythonConfigurationType">
@@ -1570,15 +1555,13 @@
         <state relative-caret-position="210">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -1589,7 +1572,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -1638,15 +1620,13 @@
         <state relative-caret-position="210">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -1657,7 +1637,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -1706,15 +1685,13 @@
         <state relative-caret-position="210">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -1725,7 +1702,6 @@
           <caret line="56" column="0" selection-start-line="56" selection-start-column="0" selection-end-line="56" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -1774,15 +1750,13 @@
         <state relative-caret-position="210">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -1793,7 +1767,6 @@
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -1824,15 +1797,13 @@
         <state relative-caret-position="210">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -1843,7 +1814,6 @@
           <caret line="63" column="0" selection-start-line="63" selection-start-column="0" selection-end-line="63" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -1874,15 +1844,13 @@
         <state relative-caret-position="210">
           <caret line="14" column="0" selection-start-line="14" selection-start-column="0" selection-end-line="14" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -1893,7 +1861,6 @@
           <caret line="57" column="68" selection-start-line="57" selection-start-column="68" selection-end-line="57" selection-end-column="68" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -1914,15 +1881,13 @@
         <state relative-caret-position="45">
           <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -1933,7 +1898,6 @@
           <caret line="57" column="68" selection-start-line="57" selection-start-column="68" selection-end-line="57" selection-end-column="68" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -1954,15 +1918,13 @@
         <state relative-caret-position="45">
           <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -1973,7 +1935,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -1994,15 +1955,13 @@
         <state relative-caret-position="45">
           <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -2013,7 +1972,6 @@
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
           </folding>
         </state>
       </provider>
@@ -2034,15 +1992,13 @@
         <state relative-caret-position="45">
           <caret line="5" column="0" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
@@ -2083,14 +2039,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
+    <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1500">
-          <caret line="172" column="0" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#29#0" expanded="true" />
-            <element signature="e#125#2962#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="15">
+          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2100,25 +2053,14 @@
           <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
           <folding>
             <element signature="e#0#18#0" expanded="true" />
-            <marker date="1466578676892" expanded="true" signature="85:173" ph="..." />
-            <marker date="1466578676892" expanded="true" signature="216:464" ph="..." />
-            <marker date="1466578676892" expanded="true" signature="498:655" ph="..." />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/kraken_trader/traders.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kraken_trader/analyzer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="121" column="0" selection-start-line="121" selection-start-column="0" selection-end-line="121" selection-end-column="0" />
+        <state relative-caret-position="399">
+          <caret line="179" column="67" selection-start-line="179" selection-start-column="67" selection-end-line="179" selection-end-column="67" />
           <folding>
             <element signature="e#0#29#0" expanded="true" />
           </folding>
@@ -2127,29 +2069,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
-          <caret line="15" column="67" selection-start-line="15" selection-start-column="67" selection-end-line="15" selection-end-column="67" />
+        <state relative-caret-position="303">
+          <caret line="165" column="0" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
           <folding>
             <element signature="e#19#32#0" expanded="true" />
-            <marker date="1466581825732" expanded="true" signature="6187:6299" ph="INSERT INTO missing_value... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/kraken_trader/all_traders.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="519">
+          <caret line="172" column="0" selection-start-line="172" selection-start-column="0" selection-end-line="172" selection-end-column="0" />
+          <folding>
+            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#125#2962#0" expanded="false" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/kraken_trader/account.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="27" column="0" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
+        <state relative-caret-position="183">
+          <caret line="63" column="31" selection-start-line="63" selection-start-column="31" selection-end-line="63" selection-end-column="31" />
           <folding>
-            <marker date="1466583359606" expanded="true" signature="494:556" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:569" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:588" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:589" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:591" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:592" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="494:4233" ph="SELECT EXIST... " />
-            <marker date="1466583359606" expanded="true" signature="510:555" ph="SELECT 1 FRO... tables" />
-            <marker date="1466583359606" expanded="true" signature="510:556" ph="SELECT 1 FRO... tables" />
+            <element signature="e#0#14#0" expanded="true" />
+            <marker date="1466593084960" expanded="true" signature="637:722" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="637:723" ph="SELECT EXIST... " />
+            <marker date="1466593084960" expanded="true" signature="653:711" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="653:721" ph="SELECT 1 FRO... tables" />
+            <marker date="1466593084960" expanded="true" signature="1639:1660" ph="INSERT INTO balance... " />
+            <marker date="1466593084960" expanded="true" signature="1639:1661" ph="INSERT INTO balance... " />
           </folding>
         </state>
       </provider>
