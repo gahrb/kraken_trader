@@ -4,7 +4,7 @@ import logging
 class kraken_account:
 
     def __init__(self,conn,k,simulate=True,logger=""):
-        self.conn = conn
+        self.cur = conn.cursor()
         self.k = k
         self.balance = dict()
         self.trade_balance = dict()
@@ -17,6 +17,14 @@ class kraken_account:
             self.get_trade_balance()
             self.get_open_orders()
 
+
+        #dbAccount Check:
+        dbString = "SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_name = '"+str(self.k.key)+"');"
+        if not self.cur.execute(dbString):
+            #TODO create table
+            print "create table..."
+
+
         self.logger = logger
 
 
@@ -24,6 +32,11 @@ class kraken_account:
         all_balances = self.k.query_private('Balance')['result']
         for balance in all_balances:
             self.balance[str(balance)] = float(all_balances[balance])
+
+        dbString = "INSERT INTO " + self.k.key
+        for balance in self.balance:
+            dbString += " "+balance + " = " + str(self.balance[balance])
+        #self.cur.execute(dbString)
 
     def get_trade_balance(self):
         trade_balance = self.k.query_private('TradeBalance',{'Currency':'ZEUR'})['result']
@@ -48,21 +61,23 @@ class kraken_account:
             if action:
                 for pair in trades[action]:
                     # TODO: check if for current pair other open orders are existing: if yes, stop, or cancle and replace them!
+                    amount = 0
+                    if action == "sell":
+                        action_idx=2
+                        amount = trades[action][pair]
+                    elif action == "buy":
+                        action_idx=1
+                        #Guess the price to pay, and hence there is enough balance
+                        amount = min(trades[action][pair],self.balance[pair[4:]]/trader.price[pair][-1][action_idx] - keepAmount)
+
                     if (trades[action][pair] < 0.01):
                         self.logger.info("Not trading "+pair+ ", due to insufficient balance. Action: "+action+" Pair: "+pair)
                         break
-                    if action == "sell":
-                        action_idx=2
-                    elif action == "buy":
-                        action_idx=1
-                        #Guess the price to pay, and if there is enough balance
-                        trades[action][pair] = min(trades[action][pair],self.balance[pair[4:]]/trader.price[pair][-1][action_idx] - keepAmount)
-
                     res = k.query_private("AddOrder",{'pair': pair,
                            'type': action,
                            'ordertype': 'limit',
                            'price': trader.price[pair][-1][action_idx],
-                           'volume': trades[action][pair]*self.balance[pair[:4]]})
+                           'volume': amount})
 
                     if res['error']:
                         self.logger.warning("Unable to perform a trade. Due to the error:")
