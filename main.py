@@ -12,7 +12,8 @@ from kraken_trader.account import kraken_account
 from kraken_trader.all_traders import *
 from kraken_trader.analyzer import *
 
-simulate = False  # as long as this is under development, leave it on True
+simulate = False
+realSim = False # uses the real balance from the account to simulate
 conn = psycopg2.connect(database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
 logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT)
@@ -21,6 +22,7 @@ logger = logging.getLogger('kraken_crawler')
 
 def main(argv):
     global simulate
+    global realSim
     keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
     try:
         opts, args = getopt.getopt(argv, 'ht:a:o:s')
@@ -40,6 +42,8 @@ def main(argv):
             keyfile = arg
         elif opt == "-s":
             simulate = True
+        elif opt == "-r":
+            realSim = True
 
 
     k = krakenex.API()
