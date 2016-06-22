@@ -1,8 +1,9 @@
 import numpy as np
 import json
-
+import sys
 
 filename = "traders.json"
+sys.setrecursionlimit(9999)
 
 
 def get_trader_config():
@@ -25,8 +26,8 @@ def get_closest_elem(list,time,elem = 0):
     if not elem:
         return np.argmin(np.abs(np.matrix(list)[:,0]-time))
 
-    if np.abs(list[elem+1,0]-time) < np.abs(list[elem,0]-time):
-        return elem+1
+    if np.abs(list[elem+1][0]-time) < np.abs(list[elem][0]-time):
+        return get_closest_elem(list,time,elem+1)
     return elem
 
 

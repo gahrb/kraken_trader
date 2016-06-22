@@ -45,6 +45,8 @@ class analyzer:
             credit_item = dict((key,0) for key in balance)
             if not type(advice) is bool:
                 for sellPair in sorted(advice, key=lambda key: advice[key],reverse=True):
+                    if not elem.has_key(sellPair):
+                        elem[sellPair] = 0
                     sellFX = sellPair[:4]
                     buyFX = sellPair[4:]
                     elem[sellPair] = hf.get_closest_elem(self.trader.price[sellPair],key[0],elem[sellPair])
@@ -62,6 +64,8 @@ class analyzer:
             bought = dict()
             if not type(advice) is bool:
                 for buyPair in sorted(advice, key=lambda key: advice[key],reverse=True):
+                    if not elem.has_key(buyPair):
+                        elem[buyPair] = 0
                     buyFX = buyPair[:4]
                     sellFX= buyPair[4:]
                     elem[buyPair] = hf.get_closest_elem(self.trader.price[buyPair],key[0],elem[buyPair])
@@ -113,6 +117,8 @@ class analyzer:
             reference_curr = self.reference_curr
         eq_bal = balance[reference_curr]
         for bal in balance:
+            if not elem.has_key(bal):
+                elem[bal] = 0
             if bal!=reference_curr and not bal in self.trader.constant["donottrade"]:
                 pair = bal+reference_curr
                 buy = True
