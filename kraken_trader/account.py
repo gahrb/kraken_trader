@@ -47,19 +47,21 @@ class kraken_account:
         for balance in all_balances:
             self.balance[str(balance)] = float(all_balances[balance])
 
-        dbString = "INSERT INTO balance ("
-        nameString = "modtime"
-        valueString = "%s"
-        values = (dt.datetime.now(),)
+    def balance_to_db(self):
         for balance in self.balance:
-            nameString += ", "+balance.lower()
-            valueString += ", %s"
-            values += (self.balance[balance],)
+            dbString = "INSERT INTO balance ("
+            nameString = "modtime"
+            valueString = "%s"
+            values = (dt.datetime.now(),)
+            for balance in self.balance:
+                nameString += ", "+balance.lower()
+                valueString += ", %s"
+                values += (self.balance[balance],)
 
-        dbString += nameString+") VALUES ("+valueString+");"
-        self.cur.execute(dbString,values)
-        self.cur.close()
-        self.conn.commit()
+            dbString += nameString+") VALUES ("+valueString+");"
+            self.cur.execute(dbString,values)
+            self.cur.close()
+            self.conn.commit()
 
     def get_trade_balance(self):
         trade_balance = self.k.query_private('TradeBalance',{'Currency':'ZEUR'})['result']
@@ -113,6 +115,7 @@ class kraken_account:
                     else:
                         self.logger.info("Performed trade:")
                         self.logger.info(res['result'])
+        self.balance_to_db()
 
     def populate_balance(self):
         empty = False
