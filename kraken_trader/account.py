@@ -1,5 +1,6 @@
 import logging
 import datetime as dt
+import helper_functions as hf
 
 
 class kraken_account:
@@ -133,4 +134,8 @@ class kraken_account:
                     self.balance[pair[:4]] = 0
                 else:
                     self.balance[pair[4:]] = 1
+
+
+
+
 

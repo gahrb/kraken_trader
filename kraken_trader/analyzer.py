@@ -21,23 +21,27 @@ class analyzer:
             be careful, this depends heavily on the exchange rates!!!)
         """
 
-        balance = self.account.balance # Important: this copys only the pointer. changing balance will change self.account.balance
-        if not self.optimize:
-            s_balance = self.account.balance.copy()
         pair = self.trader.price.iterkeys().next()
         i=0
         if n==-1:
             n = len(self.trader.price[pair])
 
-
         start_time = self.trader.price[pair][len(self.trader.price[pair])-n][0]
         end_time = dt.datetime.now()
+
+        self.starting_balance(start_time)
+
+        balance = self.account.balance # Important: this copys only the pointer. changing balance will change self.account.balance
+        if not self.optimize:
+            s_balance = self.account.balance.copy()
+
         start_bal = self.get_eq_bal(balance,start_time)
         end_bal = self.get_eq_bal(balance,end_time)
 
         for key in self.trader.price[pair][len(self.trader.price[pair])-n:]:
             i=i+1
             #Sell action
+            self.trader.keep_back(key[0])
             advice = self.trader.get_sell_advice(key[0])
             sold = dict()
             credit_item = dict((key,0) for key in balance)
@@ -89,7 +93,9 @@ class analyzer:
                 if sold or bought:
                     print "-----\nPerformed trade ($): sell: "+str(sold)+" buy: "+str(bought)
                 s_eq_bal = self.get_eq_bal(s_balance,key[0])
-                print str(key[0])+" "+str(i)+", Equivalent in "+self.reference_curr+": " + str(round(eq_bal,2))+", Compared to market: " + str(round((eq_bal-s_eq_bal)/s_eq_bal*100,2))+"%"
+                print str(key[0])+" "+str(i)+", Equivalent in "+self.reference_curr+": " + str(round(eq_bal,2))+\
+                      ",\n\t Compared to market ("+str(round(s_eq_bal,2))+"): " + str(round((eq_bal-s_eq_bal)/s_eq_bal*100,2))+\
+                      "%,\n\t Compared to start ("+str(round(start_bal,2))+"): " + str(round((eq_bal-start_bal)/s_eq_bal*100,2))+"%."
 
         print "Start balance: "+str(start_bal)
         print "Market adjusted end balance: "+str(end_bal)
@@ -201,4 +207,20 @@ class analyzer:
             for i in range(0,len(g)):
                 self.trader.constant[self.trader.constant["float"][i]] = self.trader.constant[self.trader.constant["float"][i]]- float(g[i])*size
         return g
+
+    def starting_balance(self,time):
+        eq_bal = self.get_eq_bal(self.account.balance,time,True)
+        for bal in self.account.balance:
+            price = 1
+            if not  bal == "XXBT":
+                pair = "XXBT"+bal
+                if self.trader.price.has_key(pair):
+                    elem = hf.get_closest_elem(self.trader.price[pair],time)
+                    price = self.trader.price[pair][elem][1]
+                else:
+                    pair = bal+"XXBT"
+                    elem = hf.get_closest_elem(self.trader.price[pair],time)
+                    price =  1/self.trader.price[pair][elem][2]
+            self.account.balance[bal] = eq_bal/len(self.account.balance)*price
+
 

@@ -186,7 +186,7 @@ class ma_trader():
             if pair.find("XXBT")==0:
                 self.keep[pair[4:]] = self.constant["delta"] * eq_bal * self.price[pair][elem[pair]][1]
             else:
-                self.keep[pair[:4]] = self.constant["delta"] * eq_bal / self.price[pair][elem[pair]][1]
+                self.keep[pair[:4]] = self.constant["delta"] * eq_bal / self.price[pair][elem[pair]][2]
 
 
     def run_trader(self):

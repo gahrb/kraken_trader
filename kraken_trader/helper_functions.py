@@ -38,11 +38,3 @@ def constant_enum(i):
         8:"omega"
     }.get(i, "unknown")
 
-
-
-
-
-
-
-
-
