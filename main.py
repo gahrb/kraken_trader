@@ -23,7 +23,6 @@ logger = logging.getLogger('kraken_crawler')
 def main(argv):
     global simulate
     global realSim
-    keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
     try:
         opts, args = getopt.getopt(argv, 'ht:a:o:s')
     except getopt.GetoptError:
@@ -47,7 +46,6 @@ def main(argv):
 
 
     k = krakenex.API()
-    k.load_key(keyfile)
 
 
     for opt, arg in opts:

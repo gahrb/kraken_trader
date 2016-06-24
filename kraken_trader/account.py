@@ -1,7 +1,7 @@
-import logging
 import datetime as dt
-import helper_functions as hf
+import os
 
+keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
 
 class kraken_account:
 
@@ -16,11 +16,14 @@ class kraken_account:
         if simulate:
             self.populate_balance()
         else:
+            # Load the key to perform private queries.
+            self.k.load_key(keyfile)
+
+            # Query private account information
             #self.get_ledger_info()
             self.get_balance()
             self.get_trade_balance()
             self.get_open_orders()
-
 
         #dbAccount Check:
         #TODO modify this so each user has it's own table
