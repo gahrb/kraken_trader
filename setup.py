@@ -13,5 +13,5 @@ setup(
         'psycopg2',
         'numpy',
         'krakenex'],
-    packages=['']
+    #packages=['']
 )

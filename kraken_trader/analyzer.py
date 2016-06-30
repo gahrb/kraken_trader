@@ -94,8 +94,8 @@ class analyzer:
                     print "-----\nPerformed trade ($): sell: "+str(sold)+" buy: "+str(bought)
                 s_eq_bal = self.get_eq_bal(s_balance,key[0])
                 print str(key[0])+" "+str(i)+", Equivalent in "+self.reference_curr+": " + str(round(eq_bal,2))+\
-                      ",\n\t Compared to market ("+str(round(s_eq_bal,2))+"): " + str(round((eq_bal-s_eq_bal)/s_eq_bal*100,2))+\
-                      "%,\n\t Compared to start ("+str(round(start_bal,2))+"): " + str(round((eq_bal-start_bal)/s_eq_bal*100,2))+"%."
+                      ",\n\t Compared to market ("+str(round(s_eq_bal,2))+"): " + str(round((eq_bal/s_eq_bal-1)*100,2))+\
+                      "%,\n\t Compared to start ("+str(round(start_bal,2))+"): " + str(round((eq_bal/start_bal-1)*100,2))+"%."
 
         print "Start balance: "+str(start_bal)
         print "Market adjusted end balance: "+str(end_bal)

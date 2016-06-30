@@ -14,9 +14,13 @@ from kraken_trader.analyzer import *
 
 simulate = False
 realSim = False # uses the real balance from the account to simulate
-conn = psycopg2.connect(database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+try_host = "192.168.1.184"
+# try:
+#     conn = psycopg2.connect(host=try_host,database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+# except:
+conn = psycopg2.connect(host="localhost",database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
-logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT)
+logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT,datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('kraken_crawler')
 
 

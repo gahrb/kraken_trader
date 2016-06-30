@@ -1,3 +1,10 @@
+kraken_trader.egg-info/
+kraken_trader.egg-info/*
+kraken_trader/kraken_trader.iml
+build/
+build/*
+dist/
+dist/*
 .idea/
 .idea/*
 *.pyc
