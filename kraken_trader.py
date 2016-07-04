@@ -16,10 +16,10 @@ simulate = False
 optimize = False
 realSim = False # uses the real balance from the account to simulate
 try_host = "192.168.1.184"
-# try:
-#     conn = psycopg2.connect(host=try_host,database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
-# except:
-conn = psycopg2.connect(host="localhost",database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+try:
+    conn = psycopg2.connect(host=try_host,database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+except:
+    conn = psycopg2.connect(host="localhost",database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
 logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT,datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('kraken_crawler')
@@ -79,13 +79,13 @@ def main(argv):
             account = kraken_account(conn,k,simulate,logger)
             trader_class = trader_class(conn,k,account)
 
-            if simulate:
-                a = analyzer(trader_class,account)
-                a.simulate()
-            elif optimize:
+            if optimize:
                 a = analyzer(trader_class,account)
                 a.optimize=True
                 a.gradient()
+            elif simulate:
+                a = analyzer(trader_class,account)
+                a.simulate()
             else:
                 #account = kraken_account(conn,k,simulate)
                 logger.info("Starting Trader...")
