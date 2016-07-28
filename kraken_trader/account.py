@@ -1,5 +1,6 @@
 import datetime as dt
 import os
+import psycopg2
 
 keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
 
@@ -24,7 +25,6 @@ class kraken_account:
             self.get_balance()
             self.get_trade_balance()
             self.get_open_orders()
-
         #dbAccount Check:
         #TODO modify this so each user has it's own table
         # dbString = "SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_name = 'balance');"
@@ -52,20 +52,35 @@ class kraken_account:
             self.balance[str(balance)] = float(all_balances[balance])
 
     def balance_to_db(self):
-        for balance in self.balance:
-            dbString = "INSERT INTO balance ("
-            nameString = "modtime"
-            valueString = "%s"
-            values = (dt.datetime.now(),)
-            for balance in self.balance:
-                nameString += ", "+balance.lower()
-                valueString += ", %s"
-                values += (self.balance[balance],)
+        query = "select column_name from information_schema.columns where table_name='balance';"
+        try:
+            self.cur.execute(query)
+            cols = self.cur.fetchall()
+        except psycopg2.Error as e:
+            logger.error("Could not query the balance table schema.")
+            logger.error(pgcode)
+            logger.error(e.pgerror)
 
-            dbString += nameString+") VALUES ("+valueString+");"
-            self.cur.execute(dbString,values)
-            self.cur.close()
-            self.conn.commit()
+        missing =  set(map(str.lower,self.balance))-set([ seq[0] for seq in cols ])
+        if missing:
+            query = "ALTER TABLE balance "
+            for miss in missing:
+                query += "ADD COLUMN "+miss+" double precision default 0"
+            self.cur.execute(query+";")
+
+        dbString = "INSERT INTO balance ("
+        nameString = "modtime"
+        valueString = "%s"
+        values = (dt.datetime.now(),)
+        for balance in self.balance:
+            nameString += ", "+balance.lower()
+            valueString += ", %s"
+            values += (self.balance[balance],)
+
+        dbString += nameString+") VALUES ("+valueString+");"
+        self.cur.execute(dbString,values)
+        self.cur.close()
+        self.conn.commit()
 
     def get_trade_balance(self):
         trade_balance = self.k.query_private('TradeBalance',{'Currency':'ZEUR'})['result']

@@ -14,7 +14,7 @@ def save_trader_config(data,trader_name):
     # TODO: replace the config of the current trader with the new constants
     json_data[trader_name] = data
     with open("./kraken_trader/"+filename,mode='w') as outfile:
-        json.dump(json_data, outfile)
+        json.dump(json_data, outfile,indent=4, sort_keys=True)
 
 def get_tader_name(input_class):
     name_sidx = str(input_class).find("all_traders.")

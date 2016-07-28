@@ -125,10 +125,18 @@ class analyzer:
                 try:
                     elem = hf.get_closest_elem(self.trader.price[pair],time)
                 except KeyError: #not able to translate the currency directly to the reference currency...
-                    elem = hf.get_closest_elem(self.trader.price["XXBT"+bal],time)
-                    eq_xbt = balance[bal]/self.trader.price["XXBT"+bal][elem][1]
-                    elem = hf.get_closest_elem(self.trader.price["XXBT"+reference_curr],time)
-                    eq_bal += eq_xbt*self.trader.price["XXBT"+reference_curr][elem][2]
+                    pair = bal+"XXBT"
+                    try: #As Kraken changed some traid pairs, this extra try catch is needed.
+                        elem = hf.get_closest_elem(self.trader.price[pair],time)
+                        eq_xbt = balance[bal]*self.trader.price[pair][elem][1]
+                        elem = hf.get_closest_elem(self.trader.price["XXBT"+reference_curr],time)
+                        eq_bal += eq_xbt/self.trader.price["XXBT"+reference_curr][elem][2]
+                    except KeyError:
+                        pair = "XXBT"+bal
+                        elem = hf.get_closest_elem(self.trader.price[pair],time)
+                        eq_xbt = balance[bal]/self.trader.price[pair][elem][2]
+                        elem = hf.get_closest_elem(self.trader.price["XXBT"+reference_curr],time)
+                        eq_bal += eq_xbt*self.trader.price["XXBT"+reference_curr][elem][1]
                     continue
                 if buy:
                     eq_bal +=  balance[bal]*self.trader.price[pair][elem][1]
