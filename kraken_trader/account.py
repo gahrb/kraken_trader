@@ -162,5 +162,13 @@ class kraken_account:
             eq_bal = hf.get_eq_bal(self,balance,time)
             print str(time) + ": " + str(eq_bal)
 
+        time = dt.datetime.now()
+        balance = dict()
+        for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
+            bal = self.cur.description[it+1][0].upper()
+            balance[bal] = DBbalance[-1][it+1]
+        eq_bal = hf.get_eq_bal(self,balance,time)
+        print "Current equivalent Balance estimated:[ZEUR]"
+        print str(time) + ": " + str(eq_bal)
 
 
