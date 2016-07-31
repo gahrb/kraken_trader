@@ -1,4 +1,5 @@
 import datetime as dt
+import helper_functions as hf
 import os
 
 keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
@@ -6,6 +7,7 @@ keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
 class kraken_account:
 
     def __init__(self,conn,k,simulate=True,logger=""):
+        self.logger = logger
         self.conn = conn
         self.cur = conn.cursor()
         self.k = k
@@ -24,6 +26,7 @@ class kraken_account:
             self.get_balance()
             self.get_trade_balance()
             self.get_open_orders()
+            self.DBupdatecheck()
 
         #dbAccount Check:
         #TODO modify this so each user has it's own table
@@ -41,9 +44,6 @@ class kraken_account:
         #             curr_str += currency[4:] + " float DEFAULT 0, "
         #     dbString = "CREATE TABLE balance (" + curr_str[:-2] + ");"
         #     self.cur.execute(dbString)
-
-
-        self.logger = logger
 
 
     def get_balance(self):
@@ -138,7 +138,29 @@ class kraken_account:
                 else:
                     self.balance[pair[4:]] = 1
 
+    def DBupdatecheck(self):
+        self.cur.execute("SELECT * FROM balance order by modtime desc limit 1;")
+        dBbalance = self.cur.fetchall()
+        for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
+            bal = self.cur.description[it+1][0].upper()
+            if bal in self.balance.keys() and self.balance[bal] != dBbalance[0][it+1]:
+                self.balance_to_db()
+                break
 
+    def accountDev(self,trader):
+        self.trader = trader
+        self.account = self #How ugly is this shit? get it fixed...
+        self.reference_curr = "ZEUR"
+        self.cur.execute("SELECT * FROM balance order by modtime asc;")
+        DBbalance = self.cur.fetchall()
+        for row in DBbalance:
+            time = row[0]
+            balance = dict()
+            for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
+                bal = self.cur.description[it+1][0].upper()
+                balance[bal] = row[it+1]
+            eq_bal = hf.get_eq_bal(self,balance,time)
+            print str(time) + ": " + str(eq_bal)
 
 
 

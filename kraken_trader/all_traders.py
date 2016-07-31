@@ -60,7 +60,7 @@ class basic_trader():
 
         for pair in self.pairs:
             cur = self.conn.cursor()
-            cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair)
+            cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair +" order by modtime asc;")
             res = cur.fetchall()
             cur.close()
 
@@ -194,7 +194,7 @@ class ma_trader():
         for pair in self.pairs:
             if not self.price.has_key(pair): #no new results shall be queried, when in the optimization loop!
                 cur = self.conn.cursor()
-                cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair)
+                cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair +" order by modtime asc;")
                 res = cur.fetchall()
                 cur.close()
                 self.price[pair] = res

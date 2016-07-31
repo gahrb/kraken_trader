@@ -16,10 +16,10 @@ simulate = False
 optimize = False
 realSim = False # uses the real balance from the account to simulate
 try_host = "192.168.1.184"
-try:
-    conn = psycopg2.connect(host=try_host,database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
-except:
-    conn = psycopg2.connect(host="localhost",database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+#try:
+#    conn = psycopg2.connect(host=try_host,database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+#except:
+conn = psycopg2.connect(host="localhost",database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
 logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT,datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('kraken_crawler')
@@ -39,7 +39,7 @@ def main(argv):
         if opt == '-h':
             print "./kraken_trader.py -a [action] <options>\n" \
                 "The action can be one of the followings:\n" \
-                "\t<algorithm-name>, \"accountInfo\" or \"pupolateDB\"" \
+                "\t<algorithm-name>, \"accountInfo\", \"accountDev\" or \"pupolateDB\"" \
                 "\n\t-k <path-to-key.file>:\t uses a specific kraken key-file"\
                 "\n\t-s:\t only simulates the algorithm" \
                 "\n\t-r:\t simulates the algorithm, with the current balance of the account" \
@@ -66,6 +66,11 @@ def main(argv):
         elif opt == '-a' and arg == 'accountInfo':
             account = kraken_account(conn,k,simulate)
             print_account_info(account)
+
+        elif opt == '-a' and arg == 'accountDev':
+            trader_class = eval("ma_trader")
+            account = kraken_account(conn,k,simulate)
+            account.accountDev(trader_class(conn,k,account))
 
         elif opt == "-a":
             logger = logging.getLogger('kraken_trader')

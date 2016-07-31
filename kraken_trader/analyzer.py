@@ -21,7 +21,7 @@ class analyzer:
             be careful, this depends heavily on the exchange rates!!!)
         """
 
-        pair = self.trader.price.iterkeys().next()
+        pair = "XETHZEUR" #self.trader.price.iterkeys().next()
         i=0
         if n==-1:
             n = len(self.trader.price[pair])
