@@ -39,7 +39,7 @@ def main(argv):
         if opt == '-h':
             print "./kraken_trader.py -a [action] <options>\n" \
                 "The action can be one of the followings:\n" \
-                "\t<algorithm-name>, \"accountInfo\", \"accountDev\" or \"pupolateDB\"" \
+                "\t<algorithm-name>, \"accountInfo\", \"accountDev\" or \"populateDB\"" \
                 "\n\t-k <path-to-key.file>:\t uses a specific kraken key-file"\
                 "\n\t-s:\t only simulates the algorithm" \
                 "\n\t-r:\t simulates the algorithm, with the current balance of the account" \
