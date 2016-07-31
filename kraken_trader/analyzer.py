@@ -24,7 +24,7 @@ class analyzer:
         balance = self.account.balance # Important: this copys only the pointer. changing balance will change self.account.balance
         if not self.optimize:
             s_balance = self.account.balance.copy()
-        pair = self.trader.price.iterkeys().next()
+        pair = "XETHZEUR" #self.trader.price.iterkeys().next()
         i=0
         if n==-1:
             n = len(self.trader.price[pair])

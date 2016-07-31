@@ -1,4 +1,3 @@
-import numpy as np
 import json
 import sys
 
@@ -22,12 +21,9 @@ def get_tader_name(input_class):
     name_eidx = str(input_class).find(" instance")
     return str(input_class)[name_sidx+12:name_eidx]
 
-def get_closest_elem(list,time,elem = 0):
-    if not elem:
-        return np.argmin(np.abs(np.matrix(list)[:,0]-time))
-
-    if np.abs(list[elem+1][0]-time) < np.abs(list[elem][0]-time):
-        return get_closest_elem(list,time,elem+1)
+def get_closest_elem(price,time,elem = 0):
+    if elem+1 < len(price) and time > price[elem][0] and (time - price[elem+1][0] < time - price[elem][0]):
+        return get_closest_elem(price,time,elem+1)
     return elem
 
 
