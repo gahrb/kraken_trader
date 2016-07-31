@@ -1,8 +1,8 @@
-import numpy as np
 import json
-
+import sys
 
 filename = "traders.json"
+sys.setrecursionlimit(9999)
 
 
 def get_trader_config():
@@ -21,8 +21,10 @@ def get_tader_name(input_class):
     name_eidx = str(input_class).find(" instance")
     return str(input_class)[name_sidx+12:name_eidx]
 
-def get_closest_elem(list,time):
-    return np.argmin(np.abs(np.matrix(list)[:,0]-time))
+def get_closest_elem(price,time,elem = 0):
+    if elem+1 < len(price) and time > price[elem][0] and (time - price[elem+1][0] < time - price[elem][0]):
+        return get_closest_elem(price,time,elem+1)
+    return elem
 
 def get_eq_bal(self,balance,time,toXBT=False):
     """
