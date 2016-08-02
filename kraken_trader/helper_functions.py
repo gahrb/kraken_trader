@@ -36,25 +36,27 @@ def get_eq_bal(self,balance,time,toXBT=False):
         reference_curr = self.reference_curr
     eq_bal = balance[reference_curr]
     for bal in balance:
-        if bal!=reference_curr and not bal in self.trader.constant["donottrade"]:
+        if bal!=reference_curr:
             pair = bal+reference_curr
-            buy = True
+            tmp_bal = balance[bal]
+            buy = False
             if not(pair in self.account.asset_pair):
-                pair = reference_curr+bal
-                buy = False
-            try:
-                elem = get_closest_elem(self.trader.price[pair],time)
-            except KeyError: #not able to translate the currency directly to the reference currency...
-                elem = get_closest_elem(self.trader.price["XXBT"+bal],time)
-                eq_xbt = balance[bal]/self.trader.price["XXBT"+bal][elem][1]
-                elem = get_closest_elem(self.trader.price["XXBT"+reference_curr],time)
-                eq_bal += eq_xbt*self.trader.price["XXBT"+reference_curr][elem][2]
-                continue
-            if buy:
-                eq_bal +=  balance[bal]*self.trader.price[pair][elem][1]
-            else:
-                eq_bal +=  balance[bal]/self.trader.price[pair][elem][2]
+                if (reference_curr+bal in self.account.asset_pair):
+                    pair = reference_curr+bal
+                    buy = True
+                else:
+                    #Change it first to xxbt, then to reference curr
+                    tmp_bal = xbal(self.trader.price["XXBT"+reference_curr],tmp_bal,time,True)
+                    pair = bal+"XXBT"
+            eq_bal += xbal(self.trader.price[pair],tmp_bal,time,buy)
     return eq_bal
+
+def xbal(price,bal,time,action):
+    # exchanges cur1 with cur2 at specific time
+    elem = get_closest_elem(price,time)
+    if action:
+        return bal/price[elem][1]
+    return bal*price[elem][2]
 
 def constant_enum(i):
     return {

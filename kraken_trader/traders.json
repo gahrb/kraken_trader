@@ -1,1 +1,29 @@
-{"ma_trader": {"float": ["beta", "gamma", "delta"], "beta": 1.8003844503742965, "gamma": 0.041030930000000014, "alpha": 46, "delta": 0.074761811465752746, "integer": ["alpha"], "donottrade": ["XETHC","XXDG", "XXLM", "XDAO", "XXRP"]}, "standard_trader": 0, "basic_trader": {"alpha": 0.09680870950688335, "beta": 0.0006854641562708591}}
+{"mas_trader":
+  { "max_vol": {
+    "default": 0,
+    "ZEUR": 1,
+    "XXBT": 0.7,
+    "XETH": 0.7,
+    "XLTC": 0.1,
+    "XETC":0.05,
+    "XXDG":0.01
+  },
+    "x_thresh": 0.041030930000000014,
+    "window": 46,
+    "trade_factor":1.8,
+    "integer": ["window"],
+    "float": ["x_thresh"]
+  },
+  "ma_trader":
+  {"float": ["beta", "gamma", "delta"],
+    "beta": 1.8003844503742965,
+    "gamma": 0.041030930000000014,
+    "alpha": 46,
+    "delta": 0.074761811465752746,
+    "integer": ["alpha"],
+    "donottrade": ["XETHC","XXDG", "XXLM", "XDAO", "XXRP"]
+  },
+  "standard_trader": 0,
+  "basic_trader": {"alpha": 0.09680870950688335,
+    "beta": 0.0006854641562708591}
+}

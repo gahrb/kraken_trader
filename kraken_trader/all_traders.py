@@ -209,3 +209,125 @@ class ma_trader():
                 self.ma[pair]["ask"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,1])])
                 self.ma[pair]["bid"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,2])])
 
+class mas_trader():
+    """
+    Returns sell/buy advices on the moving average, if a currency is under rated or overrated
+    """
+
+    def __init__(self,conn,k,account):
+        self.conn = conn
+        self.k = k
+        self.account = account
+        self.pairs = account.asset_pair.keys()
+        #self.pred = dict()
+        self.diff = dict()
+        self.price = dict()
+
+        # Get Configuration Values for Trader from JSON File
+        # This is required in case, we want ot optimize the algorithms later on.
+        trader_name = hf.get_tader_name(self)
+        self.constant = hf.get_trader_config()[trader_name]
+
+        #Calculate the predicted change
+        self.calc_ma()
+
+
+
+    def write_new_trader(self):
+        hf.save_trader_config(self.constant,hf.get_tader_name(self))
+
+    def get_buy_advice(self,time):
+
+        allow_trade = dict()
+        elem = dict()
+        for pair in self.pairs:
+            elem[pair] = hf.get_closest_elem(self.ma[pair]["ask"],time)
+            if elem[pair] > self.constant["window"]:
+                allow_trade[pair]=self.ma[pair]["ask"][elem[pair]][1]
+            else:
+                allow_trade[pair]=-1
+
+        if not all(val==-1 for val in allow_trade.values()):
+            performTrades = dict()
+            for (pair,v) in allow_trade.items():
+                change = (v-self.price[pair][elem[pair]][1])/v
+                if v!=-1 and change >= self.constant["x_thresh"]:
+                    performTrades[pair] = min(self.account.balance[pair[4:]], \
+                            change *self.constant["trade_factor"]*self.account.balance[pair[4:]] * self.price[pair][elem[pair]][2]) / \
+                            self.price[pair][elem[pair]][1]
+
+            if (performTrades):
+                self.check_max_vol(time)
+                return performTrades
+        return []
+
+    def get_sell_advice(self,time):
+
+        allow_trade = dict()
+        elem = dict()
+        for pair in self.pairs:
+            elem[pair] = hf.get_closest_elem(self.ma[pair]["bid"],time)
+            if elem[pair] > self.constant["window"]:
+                allow_trade[pair]=self.ma[pair]["bid"][elem[pair]][1]
+            else:
+                allow_trade[pair]=-1
+
+        if not all(val==-1 for val in allow_trade.values()):
+            performTrades = dict()
+            for (pair,v) in allow_trade.items():
+                change = (self.price[pair][elem[pair]][2]-v)/v
+                if v!=-1 and change >= self.constant["x_thresh"]:
+                    #Check if transaction does not exceed the max amount of currency
+                    #TODO: this part needs love!
+                    performTrades[pair] = min(self.account.balance[pair[:4]],\
+                                            change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
+
+            if (performTrades):
+                self.check_max_vol(time)
+                return performTrades
+        return []
+
+    def check_max_vol(self,time):
+        reference_curr = "XXBT"
+        balance = self.account.balance
+        eq_bal = balance[reference_curr]
+        elem = dict()
+        for bal in balance:
+            if bal!=reference_curr:
+                pair = bal+reference_curr
+                if self.price.has_key(pair):
+                    elem[pair] = hf.get_closest_elem(self.price[pair],time)
+                    eq_bal +=  balance[bal]*self.price[pair][elem[pair]][1]
+                else: #not able to translate the currency directly to the reference currency...
+                    pair = "XXBT"+bal
+                    elem[pair] = hf.get_closest_elem(self.price[pair],time)
+                    eq_bal +=  balance[bal]/self.price[pair][elem[pair]][2]
+
+        self.keep = dict()
+        self.keep["XXBT"] = eq_bal*self.constant["x_thresh"]
+        for pair in elem:
+            if pair.find("XXBT")==0:
+                self.keep[pair[4:]] = self.constant["x_thresh"] * eq_bal * self.price[pair][elem[pair]][1]
+            else:
+                self.keep[pair[:4]] = self.constant["x_thresh"] * eq_bal / self.price[pair][elem[pair]][2]
+
+
+    def calc_ma(self):
+        self.ma = dict()
+        for pair in self.pairs:
+            if not self.price.has_key(pair): #no new results shall be queried, when in the optimization loop!
+                cur = self.conn.cursor()
+                cur.execute("SELECT modtime, ask_price, bid_price FROM "+ pair +" order by modtime asc;")
+                res = cur.fetchall()
+                cur.close()
+                self.price[pair] = res
+
+            self.ma[pair] = dict()
+            self.ma[pair]["ask"] = []
+            self.ma[pair]["bid"] = []
+            self.ma[pair]["ask"].append([self.price[pair][0][0],self.price[pair][0][1]])
+            self.ma[pair]["bid"].append([self.price[pair][0][0],self.price[pair][0][2]])
+            for i in range(1,len(self.price[pair])):
+                lookback = min(int(self.constant["window"]),i)
+                self.ma[pair]["ask"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,1])])
+                self.ma[pair]["bid"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,2])])

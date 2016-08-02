@@ -123,7 +123,7 @@ class kraken_account:
 
     def populate_balance(self):
         empty = False
-        if not hasattr(self,"balance" ):
+        if not hasattr(self,"balance"):
             self.balance = dict()
             emtpy = True
         for pair in self.asset_pair.keys():
