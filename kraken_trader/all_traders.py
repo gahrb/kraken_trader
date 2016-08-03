@@ -252,6 +252,11 @@ class mas_trader():
             for (pair,v) in allow_trade.items():
                 change = (v-self.price[pair][elem[pair]][1])/v
                 if v!=-1 and change >= self.constant["x_thresh"]:
+                    """
+                    Things to take care of:
+                    - predict amount to buy
+                    - enough balance to sell (incl. keep back amount),
+                    """
                     performTrades[pair] = min(self.account.balance[pair[4:]], \
                             change *self.constant["trade_factor"]*self.account.balance[pair[4:]] * self.price[pair][elem[pair]][2]) / \
                             self.price[pair][elem[pair]][1]
@@ -279,7 +284,11 @@ class mas_trader():
                 if v!=-1 and change >= self.constant["x_thresh"]:
                     #Check if transaction does not exceed the max amount of currency
                     #TODO: this part needs love!
-                    performTrades[pair] = min(self.account.balance[pair[:4]],\
+                    """
+                    Things to take care of:
+                    - enough balance to sell (incl. keep back amount),
+                    """
+                     performTrades[pair] = min(self.account.balance[pair[:4]],\
                                             change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
 
             if (performTrades):
