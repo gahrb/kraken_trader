@@ -18,7 +18,7 @@ class analyzer:
             be careful, this depends heavily on the exchange rates!!!)
         """
 
-        pair = "XETHZEUR" #self.trader.price.iterkeys().next()
+        pair = "XETHXXBT" #self.trader.price.iterkeys().next()
         i=0
         if n==-1:
             n = len(self.trader.price[pair])
@@ -34,8 +34,8 @@ class analyzer:
         if not self.optimize:
             s_balance = self.account.balance.copy()
 
-        start_bal = hf.get_eq_bal(self,balance,start_time)
-        end_bal = hf.get_eq_bal(self,balance,end_time)
+        start_bal,_ = hf.get_eq_bal(balance,self.trader.price,start_time,'ZEUR')
+        end_bal,_ = hf.get_eq_bal(balance,self.trader.price,end_time,'ZEUR')
 
         for key in self.trader.price[pair][len(self.trader.price[pair])-n:]:
             i=i+1
@@ -80,16 +80,19 @@ class analyzer:
                 for curr in credit_item:
                     balance[curr] += credit_item[curr]
 
-            eq_bal = hf.get_eq_bal(self,balance,key[0])
+            eq_bal,rel_bal = hf.get_eq_bal(balance,self.trader.price,key[0],'ZEUR')
 
 
             if not self.optimize:
                 if sold or bought:
                     print "-----\nPerformed trade ($): sell: "+str(sold)+" buy: "+str(bought)
-                s_eq_bal = hf.get_eq_bal(self,s_balance,key[0])
+                s_eq_bal,_ = hf.get_eq_bal(s_balance,self.trader.price,key[0],'ZEUR')
+                for bal in rel_bal:
+                    rel_bal[bal] = round(rel_bal[bal]*100,1)
                 print str(key[0])+" "+str(i)+", Equivalent in "+self.reference_curr+": " + str(round(eq_bal,2))+\
-                      ",\n\t Compared to market ("+str(round(s_eq_bal,2))+"): " + str(round((eq_bal/s_eq_bal-1)*100,2))+\
-                      "%,\n\t Compared to start ("+str(round(start_bal,2))+"): " + str(round((eq_bal/start_bal-1)*100,2))+"%."
+                    ",\n\t Compared to market ("+str(round(s_eq_bal,2))+"): " + str(round((eq_bal/s_eq_bal-1)*100,2))+\
+                    "%,\n\t Compared to start ("+str(round(start_bal,2))+"): " + str(round((eq_bal/start_bal-1)*100,2))+"%."+\
+                    "\nRelative balances[%]: "+str(sorted(rel_bal.items(), key=lambda x: x[1], reverse=True))
 
         print "Start balance: "+str(start_bal)
         print "Market adjusted end balance: "+str(end_bal)
@@ -105,25 +108,24 @@ class analyzer:
         calculates the gradient of the trader with it's constants: alpha, beta, ...
         afterwards steepest descend/ascend can be applied
         """
-        self.reference_curr = "XXBT" #For performance reasons
-        sim_length = -1
+        sim_length = 5000
         eps = pow(10,-5)
         if vec.size==0:
             for i in self.trader.constant["float"]:
                 vec = np.hstack((vec,self.trader.constant[i]))
         print "Current constants: "+str(vec)
         self.account.populate_balance() #set balance back to all = 1
-        self.trader.run_trader()
         f_x = self.simulate(sim_length)
         print "-----------------\nEquivalent optimized balance: "+str(f_x)+"\n-----------------"
         g = np.empty([len(self.trader.constant["float"]),1])
         for i in range(len(g)):
+            #set balance back to all = 1
+            self.account.populate_balance()
             for j in range(len(g)):
                 if j==i:
                     self.trader.constant[self.trader.constant["float"][i]] = vec[i] + eps
                 else:
                     self.trader.constant[self.trader.constant["float"][i]] = vec[i]
-            self.account.populate_balance() #set balance back to all = 1
             self.trader.run_trader()
             f_x_eps = self.simulate(sim_length)
             g[i] = (f_x_eps - f_x)/eps
@@ -139,7 +141,7 @@ class analyzer:
             return
 
         if self.iter_count < 100:
-            self.iter_count = self.iter_count +1
+            self.iter_count = self.iter_count+1
             print str(self.iter_count)+" Iterations: "+str(self.trader.constant)
             #self.trader.write_new_trader()
             if np.linalg.norm(g) < eps: #avoid too small gradiants
@@ -173,18 +175,19 @@ class analyzer:
         return g
 
     def starting_balance(self,time):
-        eq_bal = hf.get_eq_bal(self,self.account.balance,time,True)
+        ref = "XXBT"
+        start_factor = 0.1
         for bal in self.account.balance:
-            price = 1
-            if not  bal == "XXBT":
-                pair = "XXBT"+bal
-                if self.trader.price.has_key(pair):
+            if not bal == ref:
+                pair = bal+ref
+                if pair in self.trader.price:
                     elem = hf.get_closest_elem(self.trader.price[pair],time)
-                    price = self.trader.price[pair][elem][1]
+                    self.account.balance[bal] = start_factor/self.trader.price[pair][elem][1]
                 else:
-                    pair = bal+"XXBT"
+                    pair = ref+bal
                     elem = hf.get_closest_elem(self.trader.price[pair],time)
-                    price =  1/self.trader.price[pair][elem][2]
-            self.account.balance[bal] = eq_bal/len(self.account.balance)*price
+                    self.account.balance[bal] = start_factor*self.trader.price[pair][elem][2]
+            else:
+                self.account.balance[bal] = 1*start_factor
 
 

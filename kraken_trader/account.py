@@ -148,9 +148,6 @@ class kraken_account:
                 break
 
     def accountDev(self,trader):
-        self.trader = trader
-        self.account = self #How ugly is this shit? get it fixed...
-        self.reference_curr = "ZEUR"
         self.cur.execute("SELECT * FROM balance order by modtime asc;")
         DBbalance = self.cur.fetchall()
         for row in DBbalance:
@@ -159,7 +156,7 @@ class kraken_account:
             for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
                 bal = self.cur.description[it+1][0].upper()
                 balance[bal] = row[it+1]
-            eq_bal = hf.get_eq_bal(self,balance,time)
+            eq_bal,_ = hf.get_eq_bal(balance,trader.price,time,"ZEUR")
             print str(time) + ": " + str(eq_bal)
 
         time = dt.datetime.now()
@@ -167,8 +164,9 @@ class kraken_account:
         for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
             bal = self.cur.description[it+1][0].upper()
             balance[bal] = DBbalance[-1][it+1]
-        eq_bal = hf.get_eq_bal(self,balance,time)
+        eq_bal,rel_bal = hf.get_eq_bal(balance,trader.price,time,"ZEUR")
         print "Current equivalent Balance estimated:[ZEUR]"
-        print str(time) + ": " + str(eq_bal)
+        print str(time) + ": " + str(eq_bal)+\
+            "\nRelative balances[%]: "+str(sorted(rel_bal.items(), key=lambda x: x[1], reverse=True))
 
 

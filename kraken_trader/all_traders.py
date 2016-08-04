@@ -229,7 +229,7 @@ class mas_trader():
         self.constant = hf.get_trader_config()[trader_name]
 
         #Calculate the predicted change
-        self.calc_ma()
+        self.run_trader()
 
 
 
@@ -255,11 +255,35 @@ class mas_trader():
                     """
                     Things to take care of:
                     - predict amount to buy
+                    - the buy amount does not exceed the max_vol amount
                     - enough balance to sell (incl. keep back amount),
                     """
-                    performTrades[pair] = min(self.account.balance[pair[4:]], \
-                            change *self.constant["trade_factor"]*self.account.balance[pair[4:]] * self.price[pair][elem[pair]][2]) / \
-                            self.price[pair][elem[pair]][1]
+                    # performTrades[pair] = min(self.account.balance[pair[4:]], \
+                    #         change *self.constant["trade_factor"]*self.account.balance[pair[4:]] * self.price[pair][elem[pair]][2]) / \
+                    #         self.price[pair][elem[pair]][1]
+                    # Get equivalent balance first, translate the pair currencies into the base
+
+                    eq_bal,rel_bal = hf.get_eq_bal(self.account.balance,self.price,time,'XXBT')
+                    if pair[:4] in self.constant['max_vol']:
+                        max_vol = self.constant['max_vol'][pair[:4]]
+                    else:
+                        max_vol = self.constant['max_vol']['default']
+
+                    if pair[4:] in self.constant['min_vol']:
+                        min_vol = self.constant['min_vol'][pair[4:]]
+                    else:
+                        min_vol = self.constant['min_vol']['default']
+
+                    sell_lim = max(rel_bal[pair[4:]]-min_vol,0)
+                    buy_lim = max(max_vol - rel_bal[pair[:4]],0)
+                    rel_amount = min(sell_lim, buy_lim)
+
+                    #The max absolute amount, which will be bought
+                    abs_amountBuy = min(rel_amount/rel_bal[pair[:4]]*self.account.balance[pair[:4]],\
+                                              change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
+
+                    if abs_amountBuy>0.01: #Kraken's minimum amount to trade
+                        performTrades[pair] = abs_amountBuy
 
             if (performTrades):
                 self.check_max_vol(time)
@@ -286,10 +310,34 @@ class mas_trader():
                     #TODO: this part needs love!
                     """
                     Things to take care of:
-                    - enough balance to sell (incl. keep back amount),
+                    - enough balance to sell (incl. the min_vol),
+                    - bought balance does not exceed it's max_vol value
                     """
-                     performTrades[pair] = min(self.account.balance[pair[:4]],\
-                                            change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
+                    # Get equivalent balance first, translate the pair currencies into the base
+                    eq_bal,rel_bal = hf.get_eq_bal(self.account.balance,self.price,time,'XXBT')
+                    if pair[4:] in self.constant['max_vol']:
+                        max_vol = self.constant['max_vol'][pair[4:]]
+                    else:
+                        max_vol = self.constant['max_vol']['default']
+
+                    if pair[:4] in self.constant['min_vol']:
+                        min_vol = self.constant['min_vol'][pair[:4]]
+                    else:
+                        min_vol = self.constant['min_vol']['default']
+
+                    #The max relative amount, which will be traded
+                    sell_lim = max(rel_bal[pair[:4]]-min_vol,0)
+                    buy_lim = max(max_vol - rel_bal[pair[4:]],0)
+                    rel_amount = min(sell_lim, buy_lim)
+                    #The max absolute amount, which will be sold
+
+                    abs_amountSell = min(rel_amount/rel_bal[pair[:4]]*self.account.balance[pair[:4]],\
+                                              change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
+
+                    if abs_amountSell>0.01: #Kraken's minimum amount to trade
+                        performTrades[pair] = abs_amountSell
+
+
 
             if (performTrades):
                 self.check_max_vol(time)
@@ -321,7 +369,7 @@ class mas_trader():
                 self.keep[pair[:4]] = self.constant["x_thresh"] * eq_bal / self.price[pair][elem[pair]][2]
 
 
-    def calc_ma(self):
+    def run_trader(self):
         self.ma = dict()
         for pair in self.pairs:
             if not self.price.has_key(pair): #no new results shall be queried, when in the optimization loop!
