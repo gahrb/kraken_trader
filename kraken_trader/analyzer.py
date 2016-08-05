@@ -43,37 +43,35 @@ class analyzer:
             advice = self.trader.get_sell_advice(key[0])
             sold = dict()
             credit_item = dict((key,0) for key in balance)
-            if not type(advice) is bool:
-                for sellPair in sorted(advice, key=lambda key: advice[key],reverse=True):
-                    if not elem.has_key(sellPair):
-                        elem[sellPair] = 0
-                    sellFX = sellPair[:4]
-                    buyFX = sellPair[4:]
-                    elem[sellPair] = hf.get_closest_elem(self.trader.price[sellPair],key[0],elem[sellPair])
-                    #Check if sufficient funds
-                    # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
-                    amountBuy = advice[sellPair]*self.trader.price[sellPair][elem[sellPair]][2]*(1-self.account.asset_pair[sellPair]['fees'][0][1]/100)
-                    if advice[sellPair] > min(self.trader.keep,0.01) :
-                        balance[sellFX] -= advice[sellPair]
-                        credit_item[buyFX] += amountBuy
-                        sold[sellPair] = [advice[sellPair], amountBuy, self.trader.price[sellPair][elem[sellPair]][2]]
+            for pair in sorted(advice, key=lambda key: advice[key],reverse=True):
+                if not elem.has_key(pair):
+                    elem[pair] = 0
+                sellFX = pair[:4]
+                buyFX = pair[4:]
+                elem[pair] = hf.get_closest_elem(self.trader.price[pair],key[0],elem[pair])
+                #Check if sufficient funds
+                # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
+                amountBuy = advice[pair]*self.trader.price[pair][elem[pair]][2]*(1-self.account.asset_pair[pair]['fees'][0][1]/100)
+                if advice[pair] > min(self.trader.keep,0.01) :
+                    balance[sellFX] -= advice[pair]
+                    credit_item[buyFX] += amountBuy
+                    sold[pair] = [advice[pair], amountBuy, self.trader.price[pair][elem[pair]][2]]
 
             # buy action
             advice = self.trader.get_buy_advice(key[0])
             bought = dict()
-            if not type(advice) is bool:
-                for buyPair in sorted(advice, key=lambda key: advice[key],reverse=True):
-                    if not elem.has_key(buyPair):
-                        elem[buyPair] = 0
-                    buyFX = buyPair[:4]
-                    sellFX= buyPair[4:]
-                    elem[buyPair] = hf.get_closest_elem(self.trader.price[buyPair],key[0],elem[buyPair])
-                    sellAmount = advice[buyPair]*self.trader.price[buyPair][elem[buyPair]][1]*(1-self.account.asset_pair[buyPair]['fees'][0][1]/100)
-                    #Chek if enough money is left to buy
-                    if advice[buyPair] > 0.01 :
-                        balance[sellFX] -= sellAmount
-                        credit_item[buyFX] += advice[buyPair]
-                        bought[buyPair] = [sellAmount, advice[buyPair], self.trader.price[buyPair][elem[buyPair]][1]]
+            for pair in sorted(advice, key=lambda key: advice[key],reverse=True):
+                if not elem.has_key(pair):
+                    elem[pair] = 0
+                buyFX = pair[:4]
+                sellFX= pair[4:]
+                elem[pair] = hf.get_closest_elem(self.trader.price[pair],key[0],elem[pair])
+                sellAmount = advice[pair]*self.trader.price[pair][elem[pair]][1]*(1-self.account.asset_pair[pair]['fees'][0][1]/100)
+                #Chek if enough money is left to buy
+                if advice[pair] > 0.01 :
+                    balance[sellFX] -= sellAmount
+                    credit_item[buyFX] += advice[pair]
+                    bought[pair] = [sellAmount, advice[pair], self.trader.price[pair][elem[pair]][1]]
 
             # Write credit items to the account balance
             if credit_item:
@@ -176,17 +174,20 @@ class analyzer:
 
     def starting_balance(self,time):
         ref = "XXBT"
-        start_factor = 0.1
+        start_factor = 0.4 #to avoid starting with 0.0001 or 5 xbt (or zeur, or xeth, ....)
         for bal in self.account.balance:
+            max_vol = self.trader.constant['max_vol']['default']
+            if bal in self.trader.constant['max_vol']:
+                max_vol = self.trader.constant['max_vol'][bal]
             if not bal == ref:
                 pair = bal+ref
                 if pair in self.trader.price:
                     elem = hf.get_closest_elem(self.trader.price[pair],time)
-                    self.account.balance[bal] = start_factor/self.trader.price[pair][elem][1]
+                    self.account.balance[bal] = start_factor/self.trader.price[pair][elem][1]*max_vol
                 else:
                     pair = ref+bal
                     elem = hf.get_closest_elem(self.trader.price[pair],time)
-                    self.account.balance[bal] = start_factor*self.trader.price[pair][elem][2]
+                    self.account.balance[bal] = start_factor*self.trader.price[pair][elem][2]*max_vol
             else:
                 self.account.balance[bal] = 1*start_factor
 
