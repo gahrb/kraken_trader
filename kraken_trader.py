@@ -2,7 +2,6 @@
 
 import getopt
 import logging
-import os
 import psycopg2
 import sys
 from datetime import datetime
@@ -13,29 +12,34 @@ from kraken_trader.all_traders import *
 from kraken_trader.analyzer import *
 
 simulate = False
+optimize = False
 realSim = False # uses the real balance from the account to simulate
-conn = psycopg2.connect(database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+try_host = "192.168.1.184"
+conn = psycopg2.connect(host="localhost",database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
-logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT)
+logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT,datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('kraken_crawler')
 
 
 def main(argv):
     global simulate
+    global optimize
     global realSim
     try:
-        opts, args = getopt.getopt(argv, 'ht:a:o:s')
+        opts, args = getopt.getopt(argv, 'a:hskor')
     except getopt.GetoptError:
-        print 'Invalid Usage: test.py -a [action]'  # -i <inputfile> -o <outputfile>'
+        print 'Invalid Usage: ./kraken_trader.py -a [action] <options>\n\tFor more information try ./kraken_trader.py -h'  # -i <inputfile> -o <outputfile>'
         sys.exit()
 
     for opt, arg in opts:
         if opt == '-h':
-            print "test.py -k <kraken.secret> -a [action]\n" \
-                  "\tThe kraken.secret file contains in the first line the key and in the second the secret - " \
-                  "nothing else. This is optional.\n" \
-                  "\tThe action can be one of the followings:" \
-                  "\t\"pupolateDB\" or \"-t <algorithm>\" \n\t\tadding the \"-s\" flag only simulates the algorithm"
+            print "./kraken_trader.py -a [action] <options>\n" \
+                "The action can be one of the followings:\n" \
+                "\t<algorithm-name>, \"accountInfo\", \"accountDev\" or \"populateDB\"" \
+                "\n\t-k <path-to-key.file>:\t uses a specific kraken key-file"\
+                "\n\t-s:\t only simulates the algorithm" \
+                "\n\t-r:\t simulates the algorithm, with the current balance of the account" \
+                "\n\t-o:\t optimizes the constants of the algorithm"
             sys.exit()
         elif opt in ("-k", "--kfile"):
             keyfile = arg
@@ -43,7 +47,9 @@ def main(argv):
             simulate = True
         elif opt == "-r":
             realSim = True
-
+        elif opt == "-o":
+            optimize = True
+            simulate = True
 
     k = krakenex.API()
 
@@ -52,10 +58,17 @@ def main(argv):
         if opt == '-a' and arg == 'populateDB':
             logger = logging.getLogger('kraken_crawler')
             populate_db(k)
+
         elif opt == '-a' and arg == 'accountInfo':
             account = kraken_account(conn,k,simulate)
             print_account_info(account)
-        elif opt == "-t":
+
+        elif opt == '-a' and arg == 'accountDev':
+            trader_class = eval("ma_trader")
+            account = kraken_account(conn,k,simulate)
+            account.accountDev(trader_class(conn,k,account))
+
+        elif opt == "-a":
             logger = logging.getLogger('kraken_trader')
             try:
                 trader_class = eval(arg)
@@ -67,12 +80,16 @@ def main(argv):
             account = kraken_account(conn,k,simulate,logger)
             trader_class = trader_class(conn,k,account)
 
-            if simulate:
+            if optimize:
+                a = analyzer(trader_class,account)
+                a.optimize=True
+                a.gradient()
+            elif simulate:
                 a = analyzer(trader_class,account)
                 a.simulate()
             else:
                 #account = kraken_account(conn,k,simulate)
-                logger.info("Starting Trader...")
+                logger.info("Starting Trader '"+arg+"'...")
                 print_account_info(account)
                 trade = dict()
                 logger.info("Getting Sell Advices...")
@@ -89,19 +106,6 @@ def main(argv):
                     print "---------------------\nNo trade orders received!\n---------------------"
                     logger.info("No trade orders received!")
 
-        elif opt == "-o":
-            account = kraken_account(conn,k,simulate)
-            try:
-                trader_class = eval(arg)
-            except:
-                print "Invalid trader class name!"
-                logger.error("Invalid trader class name!")
-                break
-            print trader_class
-            trader_class = trader_class(conn,k,account)
-            a = analyzer(trader_class,account)
-            a.optimize = True
-            a.gradient()
 
 def print_account_info(acc):
     print "Single Balances\n---------------------"

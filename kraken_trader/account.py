@@ -1,4 +1,5 @@
 import datetime as dt
+import helper_functions as hf
 import os
 import psycopg2
 
@@ -7,6 +8,7 @@ keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
 class kraken_account:
 
     def __init__(self,conn,k,simulate=True,logger=""):
+        self.logger = logger
         self.conn = conn
         self.cur = conn.cursor()
         self.k = k
@@ -25,26 +27,7 @@ class kraken_account:
             self.get_balance()
             self.get_trade_balance()
             self.get_open_orders()
-        #dbAccount Check:
-        #TODO modify this so each user has it's own table
-        # dbString = "SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_name = 'balance');"
-        # if not self.cur.execute(dbString):
-        #     print "create table..."
-        #     currs = list()
-        #     curr_str = "modtime TIMESTAMP, "
-        #     for currency in self.asset_pair.keys():
-        #         if not currency[:4] in currs:
-        #             currs.append(currency[:4])
-        #             curr_str += currency[:4] + " float DEFAULT 0, "
-        #         if not currency[4:] in currs:
-        #             currs.append(currency[4:])
-        #             curr_str += currency[4:] + " float DEFAULT 0, "
-        #     dbString = "CREATE TABLE balance (" + curr_str[:-2] + ");"
-        #     self.cur.execute(dbString)
-
-
-        self.logger = logger
-
+            self.DBupdatecheck()
 
     def get_balance(self):
         all_balances = self.k.query_private('Balance')['result']
@@ -102,7 +85,7 @@ class kraken_account:
 
     def place_orders(self,k,trades,trader):
         keepAmount = 0
-        if trader.constant["delta"]:
+        if "delta" in trader.constant:
             keepAmount = trader.constant["delta"]
         # TODO: implement the trading request
         for action in trades:
@@ -138,7 +121,7 @@ class kraken_account:
 
     def populate_balance(self):
         empty = False
-        if not hasattr(self,"balance" ):
+        if not hasattr(self,"balance"):
             self.balance = dict()
             emtpy = True
         for pair in self.asset_pair.keys():
@@ -153,7 +136,35 @@ class kraken_account:
                 else:
                     self.balance[pair[4:]] = 1
 
+    def DBupdatecheck(self):
+        self.cur.execute("SELECT * FROM balance order by modtime desc limit 1;")
+        dBbalance = self.cur.fetchall()
+        for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
+            bal = self.cur.description[it+1][0].upper()
+            if bal in self.balance.keys() and self.balance[bal] != dBbalance[0][it+1]:
+                self.balance_to_db()
+                break
 
+    def accountDev(self,trader):
+        self.cur.execute("SELECT * FROM balance order by modtime asc;")
+        DBbalance = self.cur.fetchall()
+        for row in DBbalance:
+            time = row[0]
+            balance = dict()
+            for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
+                bal = self.cur.description[it+1][0].upper()
+                balance[bal] = row[it+1]
+            eq_bal,_ = hf.get_eq_bal(balance,trader.price,time,"ZEUR")
+            print str(time) + ": " + str(eq_bal)
 
+        time = dt.datetime.now()
+        balance = dict()
+        for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
+            bal = self.cur.description[it+1][0].upper()
+            balance[bal] = DBbalance[-1][it+1]
+        eq_bal,rel_bal = hf.get_eq_bal(balance,trader.price,time,"ZEUR")
+        print "Current equivalent Balance estimated:[ZEUR]"
+        print str(time) + ": " + str(eq_bal)+\
+            "\nRelative balances[%]: "+str(sorted(rel_bal.items(), key=lambda x: x[1], reverse=True))
 
 
