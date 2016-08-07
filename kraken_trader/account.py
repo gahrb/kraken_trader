@@ -107,7 +107,7 @@ class kraken_account:
                     res = k.query_private("AddOrder",{'pair': pair,
                            'type': action,
                            'ordertype': 'limit',
-                           'price': trader.price[pair][-1][action_idx],
+                           'price': format(trader.price[pair][-1][action_idx],'.10f'),
                            'volume': amount})
 
                     if res['error']:
