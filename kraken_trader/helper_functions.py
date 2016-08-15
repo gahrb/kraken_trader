@@ -28,7 +28,7 @@ def get_closest_elem(price,time,elem = 0):
 
 def get_eq_bal(balance,price,time,reference_curr="XXBT"):
     """
-    Calculate the equivalent balance in XBTs
+    Calculate the equivalent balance (default: in XBT)
     """
     eq_bal = balance[reference_curr]
     rel_bal = dict()

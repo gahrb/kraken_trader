@@ -274,6 +274,11 @@ class mas_trader():
                     else:
                         min_vol = self.constant['min_vol']['default']
 
+                    if not pair[:4] in rel_bal:
+			rel_bal[pair[:4]] = 0
+			self.account.balance[pair[:4]]=0
+                    if not pair[4:] in rel_bal:
+			rel_bal[pair[4:]] = 0
                     sell_lim = max(rel_bal[pair[4:]]-min_vol,0)
                     buy_lim = max(max_vol - rel_bal[pair[:4]],0)
                     rel_amount = min(sell_lim, buy_lim)
@@ -324,6 +329,11 @@ class mas_trader():
                         min_vol = self.constant['min_vol']['default']
 
                     #The max relative amount, which will be traded
+		    if not pair[:4] in rel_bal:
+			rel_bal[pair[:4]] = 0
+			self.account.balance[pair[:4]]=0
+                    if not pair[4:] in rel_bal:
+			rel_bal[pair[4:]] = 0
                     sell_lim = max(rel_bal[pair[:4]]-min_vol,0)
                     buy_lim = max(max_vol - rel_bal[pair[4:]],0)
                     rel_amount = min(sell_lim, buy_lim)
