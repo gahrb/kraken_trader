@@ -4,6 +4,7 @@
     "XXBT": 0.5,
     "XETH": 0.5,
     "XLTC": 0.1,
+    "XETC": 0.0,
     "default": 0.01
   },
   "min_vol": {
@@ -11,6 +12,7 @@
     "XXBT": 0.1,
     "XETH": 0.1,
     "XLTC": 0.01,
+    "XETC": 0.0,
     "default": 0.005
   },
     "x_thresh": 0.06103093,

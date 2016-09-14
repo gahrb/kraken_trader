@@ -10,6 +10,7 @@ import krakenex
 from kraken_trader.account import kraken_account
 from kraken_trader.all_traders import *
 from kraken_trader.analyzer import *
+from gi.repository import Notify
 
 simulate = False
 optimize = False
@@ -25,6 +26,7 @@ def main(argv):
     global simulate
     global optimize
     global realSim
+    Notify.init("kraken_trader")
     try:
         opts, args = getopt.getopt(argv, 'a:hskor')
     except getopt.GetoptError:
@@ -52,6 +54,7 @@ def main(argv):
             simulate = True
 
     k = krakenex.API()
+    k.notify = Notify
 
 
     for opt, arg in opts:
