@@ -113,12 +113,12 @@ class kraken_account:
                     if res['error']:
                         self.logger.warning("Unable to perform a trade. Due to the error:")
                         self.logger.info(res['error'])
-                        self.logger.info("Trade: "+str(action)+", "+str(pair)+", "+str(trades[action][pair]*self.balance[pair[:4]])+ "\n\t\t Reason: "+res['error'][0])
+                        self.logger.info("Trade: "+str(action)+", "+str(pair)+", "+str(trades[action][pair]*self.balance[pair[:4]]))
                         k.notify.Notification.new("Transaction Error","Trade: "+str(action)+", "+str(pair)+", "+str(trades[action][pair]*self.balance[pair[:4]])+ "\nReason: "+res['error'][0]).show()
                     else:
                         self.logger.info("Performed trade:")
                         self.logger.info(res['result'])
-                        k.notify.Notification.new("New Transaction",self.logger.info(res['result'])).show()
+                        k.notify.Notification.new("New Transaction",res['result']).show()
 
         self.balance_to_db()
 

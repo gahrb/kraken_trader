@@ -6,7 +6,7 @@ sys.setrecursionlimit(9999)
 
 
 def get_trader_config():
-    json_data=open("./kraken_trader/"+filename).read()
+    json_data=open("./src/"+filename).read()
     return json.loads(json_data)
 
 def save_trader_config(data,trader_name):

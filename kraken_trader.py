@@ -7,9 +7,9 @@ import sys
 from datetime import datetime
 
 import krakenex
-from kraken_trader.account import kraken_account
-from kraken_trader.all_traders import *
-from kraken_trader.analyzer import *
+from src.account import kraken_account
+from src.all_traders import *
+from src.analyzer import *
 from gi.repository import Notify
 
 simulate = False
