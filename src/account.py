@@ -32,10 +32,10 @@ class kraken_account:
     def get_balance(self):
 
         for pair in self.asset_pair.keys():
-            if not(pair[:4] in self.balance):
-                self.balance[pair[:4]] = 0
-            if not(pair[4:] in self.balance):
-                self.balance[pair[4:]] = 0
+            if not(str(pair[:4]) in self.balance):
+                self.balance[str(pair[:4])] = 0
+            if not(str(pair[4:]) in self.balance):
+                self.balance[str(pair[4:])] = 0
 
         all_balances = self.k.query_private('Balance')['result']
         for balance in all_balances:
@@ -55,7 +55,9 @@ class kraken_account:
         if missing:
             query = "ALTER TABLE balance "
             for miss in missing:
-                query += "ADD COLUMN "+miss+" double precision default 0"
+                self.logger.info("Adding new column "+miss+" to the account table.")
+                query += "ADD COLUMN "+miss+" double precision default 0, "
+            query = query[0:-2]
             self.cur.execute(query+";")
 
         dbString = "INSERT INTO balance ("
@@ -125,7 +127,7 @@ class kraken_account:
                     else:
                         self.logger.info("Performed trade:")
                         self.logger.info(res['result'])
-                        k.notify.Notification.new("New Transaction",res['result']).show()
+                        k.notify.Notification.new("New Transaction",str(res['result'])).show()
 
         self.balance_to_db()
 
