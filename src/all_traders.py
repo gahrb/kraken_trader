@@ -183,8 +183,10 @@ class ma_trader():
         for pair in elem:
             if pair.find("XXBT")==0:
                 self.keep[pair[4:]] = self.constant["delta"] * eq_bal * self.price[pair][elem[pair]][1]
-            else:
+            elif self.price[pair][elem[pair]][2] != 0:
                 self.keep[pair[:4]] = self.constant["delta"] * eq_bal / self.price[pair][elem[pair]][2]
+            else:
+                self.keep[pair[:4]] = 0
 
 
     def run_trader(self):
