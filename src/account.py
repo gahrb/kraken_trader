@@ -30,6 +30,13 @@ class kraken_account:
             self.DBupdatecheck()
 
     def get_balance(self):
+
+        for pair in self.asset_pair.keys():
+            if not(pair[:4] in self.balance):
+                self.balance[pair[:4]] = 0
+            if not(pair[4:] in self.balance):
+                self.balance[pair[4:]] = 0
+
         all_balances = self.k.query_private('Balance')['result']
         for balance in all_balances:
             self.balance[str(balance)] = float(all_balances[balance])
@@ -135,7 +142,7 @@ class kraken_account:
                     self.balance[pair[:4]] = 1
             if self.simulate or not(pair[4:] in self.balance):
                 if empty:
-                    self.balance[pair[:4]] = 0
+                    self.balance[pair[4:]] = 0
                 else:
                     self.balance[pair[4:]] = 1
 

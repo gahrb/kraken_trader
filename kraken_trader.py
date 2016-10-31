@@ -10,6 +10,8 @@ import krakenex
 from src.account import kraken_account
 from src.all_traders import *
 from src.analyzer import *
+import gi
+gi.require_version('Notify', '0.7')
 from gi.repository import Notify
 
 simulate = False
