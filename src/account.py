@@ -127,7 +127,7 @@ class kraken_account:
                     else:
                         self.logger.info("Performed trade:")
                         self.logger.info(res['result'])
-                        k.notify.Notification.new("New Transaction",str(res['result'])).show()
+                        k.notify.Notification.new("New Transaction",str(res['result']['descr']['order'])).show()
 
         self.balance_to_db()
 
@@ -175,8 +175,11 @@ class kraken_account:
             bal = self.cur.description[it+1][0].upper()
             balance[bal] = DBbalance[-1][it+1]
         eq_bal,rel_bal = hf.get_eq_bal(balance,trader.price,time,"ZEUR")
+
         print "Current equivalent Balance estimated:[ZEUR]"
-        print str(time) + ": " + str(eq_bal)+\
-            "\nRelative balances[%]: "+str(sorted(rel_bal.items(), key=lambda x: x[1], reverse=True))
+        print str(time) + ": " + str(eq_bal)
+
+        for val in sorted(rel_bal.items(), key=lambda x: x[1],reverse=True):
+            print str(val[0]) + ": " + str(round(val[1]*100,2))
 
 
