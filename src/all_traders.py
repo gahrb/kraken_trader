@@ -379,8 +379,10 @@ class mas_trader():
             if pair.find("XXBT")==0:
                 self.keep[pair[4:]] = self.constant["x_thresh"] * eq_bal * self.price[pair][elem[pair]][1]
             else:
-                self.keep[pair[:4]] = self.constant["x_thresh"] * eq_bal / self.price[pair][elem[pair]][2]
-
+                if self.price[pair][elem[pair]][2]:
+                    self.keep[pair[:4]] = self.constant["x_thresh"] * eq_bal / self.price[pair][elem[pair]][2]
+                else:
+                    self.keep[pair[:4]] = 0
 
     def run_trader(self):
         self.ma = dict()

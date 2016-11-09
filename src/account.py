@@ -113,6 +113,7 @@ class kraken_account:
                     if (trades[action][pair] < 0.01):
                         self.logger.info("Not trading "+pair+ ", due to insufficient balance. Action: "+action+" Pair: "+pair)
                         break
+
                     res = k.query_private("AddOrder",{'pair': pair,
                            'type': action,
                            'ordertype': 'limit',

@@ -183,7 +183,10 @@ class analyzer:
                 pair = bal+ref
                 if pair in self.trader.price:
                     elem = hf.get_closest_elem(self.trader.price[pair],time)
-                    self.account.balance[bal] = start_factor/self.trader.price[pair][elem][1]*max_vol
+                    if self.trader.price[pair][elem][1]:
+                        self.account.balance[bal] = start_factor/self.trader.price[pair][elem][1]*max_vol
+                    else:
+                        self.account.balance[bal] = 0
                 else:
                     pair = ref+bal
                     elem = hf.get_closest_elem(self.trader.price[pair],time)
