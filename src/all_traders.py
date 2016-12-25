@@ -263,7 +263,7 @@ class mas_trader():
                     #         self.price[pair][elem[pair]][1]
                     # Get equivalent balance first, translate the pair currencies into the base
 
-                    eq_bal,rel_bal = hf.get_eq_bal(self.account.balance,self.price,time,'XXBT')
+                    eq_bal,rel_bal,_ = hf.get_eq_bal(self.account.balance,self.price,time,'XXBT')
                     if pair[:4] in self.constant['max_vol']:
                         max_vol = self.constant['max_vol'][pair[:4]]
                     else:
@@ -320,7 +320,7 @@ class mas_trader():
                     - bought balance does not exceed it's max_vol value
                     """
                     # Get equivalent balance first, translate the pair currencies into the base
-                    eq_bal,rel_bal = hf.get_eq_bal(self.account.balance,self.price,time,'XXBT')
+                    eq_bal,rel_bal,_ = hf.get_eq_bal(self.account.balance,self.price,time,'XXBT')
                     if pair[4:] in self.constant['max_vol']:
                         max_vol = self.constant['max_vol'][pair[4:]]
                     else:

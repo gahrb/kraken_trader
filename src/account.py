@@ -167,7 +167,7 @@ class kraken_account:
             for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
                 bal = self.cur.description[it+1][0].upper()
                 balance[bal] = row[it+1]
-            eq_bal,_ = hf.get_eq_bal(balance,trader.price,time,"ZEUR")
+            eq_bal,_,elem = hf.get_eq_bal(balance,trader.price,time,"ZEUR")
             print str(time) + ": " + str(eq_bal)
 
         time = dt.datetime.now()
@@ -175,7 +175,7 @@ class kraken_account:
         for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
             bal = self.cur.description[it+1][0].upper()
             balance[bal] = DBbalance[-1][it+1]
-        eq_bal,rel_bal = hf.get_eq_bal(balance,trader.price,time,"ZEUR")
+        eq_bal,rel_bal,_ = hf.get_eq_bal(balance,trader.price,time,"ZEUR",elem)
 
         print "Current equivalent Balance estimated:[ZEUR]"
         print str(time) + ": " + str(eq_bal)

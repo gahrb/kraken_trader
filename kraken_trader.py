@@ -69,7 +69,7 @@ def main(argv):
             print_account_info(account)
 
         elif opt == '-a' and arg == 'accountDev':
-            trader_class = eval("ma_trader")
+            trader_class = eval("mas_trader")
             account = kraken_account(conn,k,simulate)
             account.accountDev(trader_class(conn,k,account))
 

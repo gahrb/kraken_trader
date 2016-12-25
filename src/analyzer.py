@@ -34,8 +34,8 @@ class analyzer:
         if not self.optimize:
             s_balance = self.account.balance.copy()
 
-        start_bal,_ = hf.get_eq_bal(balance,self.trader.price,start_time,'ZEUR')
-        end_bal,_ = hf.get_eq_bal(balance,self.trader.price,end_time,'ZEUR')
+        start_bal,_,_ = hf.get_eq_bal(balance,self.trader.price,start_time,'ZEUR')
+        end_bal,_,_ = hf.get_eq_bal(balance,self.trader.price,end_time,'ZEUR')
 
         for key in self.trader.price[pair][len(self.trader.price[pair])-n:]:
             i=i+1
@@ -78,13 +78,13 @@ class analyzer:
                 for curr in credit_item:
                     balance[curr] += credit_item[curr]
 
-            eq_bal,rel_bal = hf.get_eq_bal(balance,self.trader.price,key[0],'ZEUR')
+            eq_bal,rel_bal,_ = hf.get_eq_bal(balance,self.trader.price,key[0],'ZEUR')
 
 
             if not self.optimize:
                 if sold or bought:
                     print "-----\nPerformed trade ($): sell: "+str(sold)+" buy: "+str(bought)
-                s_eq_bal,_ = hf.get_eq_bal(s_balance,self.trader.price,key[0],'ZEUR')
+                s_eq_bal,_,_ = hf.get_eq_bal(s_balance,self.trader.price,key[0],'ZEUR')
                 for bal in rel_bal:
                     rel_bal[bal] = round(rel_bal[bal]*100,1)
                 print str(key[0])+" "+str(i)+", Equivalent in "+self.reference_curr+": " + str(round(eq_bal,2))+\
