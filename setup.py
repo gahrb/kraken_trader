@@ -13,5 +13,7 @@ setup(
         'psycopg2',
         'numpy',
         'krakenex'],
-    #packages=['']
+    package_dir={'kraken_source':'src'},
+    packages=['src'],
+    scripts=['kraken_trader'],
 )

@@ -2,20 +2,22 @@ import json
 import sys
 import numpy as np
 import datetime as dt
+import os
 
 filename = "traders.json"
+path = os.path.expanduser('~')+"/.kraken/"
 sys.setrecursionlimit(99999)
 
 
 def get_trader_config():
-    json_data=open("./src/"+filename).read()
+    json_data=open(path+filename).read()
     return json.loads(json_data)
 
 def save_trader_config(data,trader_name):
     json_data = get_trader_config()
     # TODO: replace the config of the current trader with the new constants
     json_data[trader_name] = data
-    with open("./kraken_trader/"+filename,mode='w') as outfile:
+    with open(path+filename,mode='w') as outfile:
         json.dump(json_data, outfile,indent=4, sort_keys=True)
 
 def get_tader_name(input_class):
