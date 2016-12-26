@@ -28,9 +28,10 @@ def main(argv):
     global simulate
     global optimize
     global realSim
+    startdate = -1
     Notify.init("kraken_trader")
     try:
-        opts, args = getopt.getopt(argv, 'a:hskor')
+        opts, args = getopt.getopt(argv, 'a:t:hskor')
     except getopt.GetoptError:
         print 'Invalid Usage: ./kraken_trader.py -a [action] <options>\n\tFor more information try ./kraken_trader.py -h'  # -i <inputfile> -o <outputfile>'
         sys.exit()
@@ -43,7 +44,8 @@ def main(argv):
                 "\n\t-k <path-to-key.file>:\t uses a specific kraken key-file"\
                 "\n\t-s:\t only simulates the algorithm" \
                 "\n\t-r:\t simulates the algorithm, with the current balance of the account" \
-                "\n\t-o:\t optimizes the constants of the algorithm"
+                "\n\t-o:\t optimizes the constants of the algorithm"\
+                "\n\t-t [\"YYYY-MM-DD HH:MM:SS.ssss\"]:\t use a specific start date, when using simulations or optimization"
             sys.exit()
         elif opt in ("-k", "--kfile"):
             keyfile = arg
@@ -54,6 +56,8 @@ def main(argv):
         elif opt == "-o":
             optimize = True
             simulate = True
+        elif opt == "-t":
+            startdate = arg
 
     k = krakenex.API()
     k.notify = Notify
@@ -88,10 +92,10 @@ def main(argv):
             if optimize:
                 a = analyzer(trader_class,account)
                 a.optimize=True
-                a.gradient()
+                a.gradient(startdate)
             elif simulate:
                 a = analyzer(trader_class,account)
-                a.simulate()
+                a.simulate(startdate)
             else:
                 #account = kraken_account(conn,k,simulate)
                 logger.info("Starting Trader '"+arg+"'...")

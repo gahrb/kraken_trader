@@ -1,6 +1,7 @@
 import helper_functions as hf
 import numpy as np
 import datetime as dt
+dtf =dt.datetime
 
 class analyzer:
 
@@ -18,16 +19,21 @@ class analyzer:
             be careful, this depends heavily on the exchange rates!!!)
         """
 
-        pair = "XETHXXBT" #self.trader.price.iterkeys().next()
+        pair = "XXBTZEUR" #self.trader.price.iterkeys().next()
         i=0
-        if n==-1:
-            n = len(self.trader.price[pair])
+
+        end_time = dt.datetime.now()
+        if type(n)==str:
+            start_time = dt.datetime.strptime(n,"%Y-%m-%d")
+            n = hf.get_closest_elem(self.trader.price[pair],start_time)
+        elif n==-1:
+            n = 0 #n used as an index
+            start_time = self.trader.price[pair][n][0]
+        else:
+            n = len(self.trader.price[pair])-n #translate the input n (lookback window) into the index n used in this context
+            start_time = self.trader.price[pair][n][0]
 
         elem = dict()
-
-        start_time = self.trader.price[pair][len(self.trader.price[pair])-n][0]
-        end_time = dt.datetime.now()
-
         self.starting_balance(start_time)
 
         balance = self.account.balance # Important: this copys only the pointer. changing balance will change self.account.balance
@@ -37,7 +43,7 @@ class analyzer:
         start_bal,_,_ = hf.get_eq_bal(balance,self.trader.price,start_time,'ZEUR')
         end_bal,_,_ = hf.get_eq_bal(balance,self.trader.price,end_time,'ZEUR')
 
-        for key in self.trader.price[pair][len(self.trader.price[pair])-n:]:
+        for key in self.trader.price[pair][n:]:
             i=i+1
             #Sell action
             advice = self.trader.get_sell_advice(key[0])
