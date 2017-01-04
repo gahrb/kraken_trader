@@ -368,7 +368,7 @@ class mas_trader():
                 if self.price.has_key(pair):
                     elem[pair] = hf.get_closest_elem(self.price[pair],time)
                     eq_bal +=  balance[bal]*self.price[pair][elem[pair]][1]
-                else: #not able to translate the currency directly to the reference currency...
+                elif self.price.has_key("XXBT"+bal): #not able to translate the currency directly to the reference currency...
                     pair = "XXBT"+bal
                     elem[pair] = hf.get_closest_elem(self.price[pair],time)
                     eq_bal +=  balance[bal]/self.price[pair][elem[pair]][2]
