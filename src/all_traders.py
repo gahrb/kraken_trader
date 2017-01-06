@@ -263,32 +263,36 @@ class mas_trader():
                     #         self.price[pair][elem[pair]][1]
                     # Get equivalent balance first, translate the pair currencies into the base
 
-                    eq_bal,rel_bal,_ = hf.get_eq_bal(self.account.balance,self.price,time,'XXBT')
-                    if pair[:4] in self.constant['max_vol']:
-                        max_vol = self.constant['max_vol'][pair[:4]]
+                    sell_curr = str(pair[4:])
+                    buy_curr = str(pair[:4])
+
+                    eq_bal,rel_bal,_ = hf.get_eq_bal(self.account.balance,self.price,time,sell_curr)
+                    if buy_curr in self.constant['max_vol']:
+                        max_vol = self.constant['max_vol'][buy_curr]
                     else:
                         max_vol = self.constant['max_vol']['default']
 
-                    if pair[4:] in self.constant['min_vol']:
-                        min_vol = self.constant['min_vol'][pair[4:]]
+                    if sell_curr in self.constant['min_vol']:
+                        min_vol = self.constant['min_vol'][sell_curr]
                     else:
                         min_vol = self.constant['min_vol']['default']
 
                     #The max relative amount, which will be traded
-                    fac = 0.0
                     sell_lim = 0
-                    if pair[:4] in rel_bal and rel_bal[pair[:4]]:
-                        fac = self.account.balance[pair[:4]]/rel_bal[pair[:4]]
-                        sell_lim = max(rel_bal[pair[:4]]-min_vol,0)
+                    if sell_curr in rel_bal and rel_bal[sell_curr]:
+                        sell_lim = max(rel_bal[sell_curr]-min_vol,0)
                     else:
-                        self.account.balance[str(pair[:4])] = 0
-                    if not pair[4:] in rel_bal:
-                        rel_bal[pair[4:]] = 0
-                    buy_lim = max(max_vol - rel_bal[pair[:4]],0)
+                        self.account.balance[sell_curr] = 0
+                    if not buy_curr in rel_bal or not rel_bal[buy_curr]:
+                        rel_bal[buy_curr] = 0.0
+                    buy_lim = max(max_vol - rel_bal[buy_curr],0)
                     rel_amount = min(sell_lim, buy_lim)
 
+                    fac = eq_bal/self.price[pair][elem[pair]][1]
+
                     #The max absolute amount, which will be bought
-                    abs_amountBuy = min(rel_amount*fac, change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
+                    abs_amountBuy = min(rel_amount*fac,\
+                        change*1/self.constant["trade_factor"]*self.account.balance[sell_curr]/self.price[pair][elem[pair]][1])
 
                     if abs_amountBuy>0.01: #Kraken's minimum amount to trade
                         performTrades[pair] = abs_amountBuy
@@ -320,32 +324,36 @@ class mas_trader():
                     - bought balance does not exceed it's max_vol value
                     """
                     # Get equivalent balance first, translate the pair currencies into the base
+
+                    sell_curr = str(pair[:4])
+                    buy_curr = str(pair[4:])
+
                     eq_bal,rel_bal,_ = hf.get_eq_bal(self.account.balance,self.price,time,'XXBT')
-                    if pair[4:] in self.constant['max_vol']:
-                        max_vol = self.constant['max_vol'][pair[4:]]
+                    if buy_curr in self.constant['max_vol']:
+                        max_vol = self.constant['max_vol'][buy_curr]
                     else:
                         max_vol = self.constant['max_vol']['default']
 
-                    if pair[:4] in self.constant['min_vol']:
-                        min_vol = self.constant['min_vol'][pair[:4]]
+                    if sell_curr in self.constant['min_vol']:
+                        min_vol = self.constant['min_vol'][sell_curr]
                     else:
                         min_vol = self.constant['min_vol']['default']
 
                     #The max relative amount, which will be traded
                     fac = 0.0
                     sell_lim = 0
-                    if pair[:4] in rel_bal and rel_bal[pair[:4]]:
-                        fac = self.account.balance[pair[:4]]/rel_bal[pair[:4]]
-                        sell_lim = max(rel_bal[pair[:4]]-min_vol,0)
+                    if sell_curr in rel_bal and rel_bal[sell_curr]:
+                        fac = self.account.balance[sell_curr]/rel_bal[sell_curr]
+                        sell_lim = max(rel_bal[sell_curr]-min_vol,0)
                     else:
-                        self.account.balance[str(pair[:4])] = 0
-                    if not pair[4:] in rel_bal:
-                        rel_bal[str(pair[4:])] = 0
-                    buy_lim = max(max_vol - rel_bal[pair[4:]],0)
+                        self.account.balance[sell_curr] = 0
+                    if not buy_curr in rel_bal:
+                        rel_bal[buy_curr] = 0
+                    buy_lim = max(max_vol - rel_bal[buy_curr],0)
                     rel_amount = min(sell_lim, buy_lim)
                     #The max absolute amount, which will be sold
 
-                    abs_amountSell = min(rel_amount*fac, change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
+                    abs_amountSell = min(rel_amount*fac, change*self.constant["trade_factor"]*self.account.balance[sell_curr])
 
                     if abs_amountSell>0.01: #Kraken's minimum amount to trade
                         performTrades[pair] = abs_amountSell
