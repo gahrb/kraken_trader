@@ -1,7 +1,9 @@
 import datetime as dt
-import src.helper_functions as hf
 import os
 import psycopg2
+
+import src.helper_functions as hf
+from src.string_utils import contains_substring
 
 keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
 
@@ -16,6 +18,9 @@ class KrakenAccount:
         self.trade_balance = dict()
         self.simulate = simulate
         self.get_assets()
+        self.open_orders = {
+            'open': []
+        }
         if simulate:
             self.populate_balance()
         else:
@@ -80,11 +85,12 @@ class KrakenAccount:
             self.trade_balance[str(balance)] = float(trade_balance[balance])
 
     def get_assets(self):
-        self.asset_pair = self.k.query_public('AssetPairs')['result']
-        for key in self.asset_pair.keys():
-            if (key.find(".d") >= 0 or key.find("CAD") >= 0 or key.find("USD") >= 0 or key.find("JPY") >= 0 or key.find(
-                    "GBP") >= 0):
-                self.asset_pair.pop(key, None)
+        assets = self.k.query_public('AssetPairs')['result']
+        assets_without_currencies = {
+            key: assets[key]
+            for key in assets if not contains_substring(key, ['.d', 'CAD', 'USD', 'JPY', 'GBP'])
+        }
+        self.asset_pair = assets_without_currencies
 
     def get_open_orders(self):
         self.open_orders = self.k.query_private('OpenOrders')['result']
@@ -149,11 +155,6 @@ class KrakenAccount:
                     self.balance[pair[:4]] = 0
                 else:
                     self.balance[pair[:4]] = 1
-            if self.simulate or not (pair[4:] in self.balance):
-                if empty:
-                    self.balance[pair[4:]] = 0
-                else:
-                    self.balance[pair[4:]] = 1
 
     def db_updatecheck(self):
         self.cur.execute("SELECT * FROM balance order by modtime desc limit 1;")
@@ -188,3 +189,37 @@ class KrakenAccount:
 
         for val in sorted(rel_bal.items(), key=lambda x: x[1], reverse=True):
             print(str(val[0]) + ": " + str(round(val[1] * 100, 2)))
+
+    def account_info_str(self):
+        info_string = 'Single Balances\n---------------------\n'
+        for current_balance in self.balance:
+            info_string += '{} : {}'.format(current_balance[1:], self.balance[current_balance])
+
+        info_string += '\nOverall Information\n---------------------'
+        for tb in self.trade_balance:
+            info_string += '{}: {}'.format(enum(tb), str(self.trade_balance[tb]))
+        info_string += self.orders_info_str()
+        return info_string
+
+    def orders_info_str(self):
+        info_string = '\nOpen Orders\n---------------------\n'
+        for oo in self.open_orders['open']:
+            timestr = dt.fromtimestamp(int(self.open_orders['open'][oo]['opentm'])).strftime('%Y-%m-%d %H:%M:%S')
+            info_string += '{}: Volumen: {}\n'.format(timestr, self.open_orders['open'][oo]['vol'])
+            info_string += self.open_orders['open'][oo]['descr']
+            info_string += '\n'
+        return info_string
+
+
+def enum(x):
+    return {
+        'tb': "Trade Balance",
+        'eb': "Equivalent Balance",
+        'm': "Margin Amount of Open Positions",
+        'n': "Unrealized net profit/loss of open positions",
+        'c': "Cost basis of open positions",
+        'v': "Current floating valuation of open positions",
+        'e': "Equity = trade balance + unrealized net profit/loss",
+        'mf': "Free Margin = Equity - Initial Margin",
+        'ml': "Margin level = (equity / initial margin) * 100",
+    }.get(x, "unknown")

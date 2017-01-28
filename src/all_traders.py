@@ -390,7 +390,7 @@ class mas_trader():
     def run_trader(self):
         self.ma = dict()
         for pair in self.pairs:
-            if not self.price.has_key(pair):  # no new results shall be queried, when in the optimization loop!
+            if not pair in self.price:  # no new results shall be queried, when in the optimization loop!
                 cur = self.conn.cursor()
                 cur.execute("SELECT modtime, ask_price, bid_price FROM " + pair + " order by modtime asc;")
                 res = cur.fetchall()

@@ -22,10 +22,8 @@ def save_trader_config(data, trader_name):
         json.dump(json_data, outfile, indent=4, sort_keys=True)
 
 
-def get_tader_name(input_class):
-    name_sidx = str(input_class).find("all_traders.")
-    name_eidx = str(input_class).find(" instance")
-    return str(input_class)[name_sidx + 12:name_eidx]
+def get_tader_name(trader):
+    return type(trader).__name__
 
 
 def get_closest_elem(price, time, elem=0):
@@ -33,10 +31,10 @@ def get_closest_elem(price, time, elem=0):
             1):  # if no initial elem is given or the delta is too big, search with numpy
         return np.argmin(np.abs(np.matrix(price)[:, 0] - time))
     elif elem + 1 < len(price) and time > price[elem][0] and (
-        abs(time - price[elem + 1][0]) < abs(time - price[elem][0])):  # Step forward
+                abs(time - price[elem + 1][0]) < abs(time - price[elem][0])):  # Step forward
         return get_closest_elem(price, time, elem + 1)
     elif elem - 1 >= 0 and time < price[elem][0] and (
-        abs(time - price[elem - 1][0]) < abs(time - price[elem][0])):  # Step backward
+                abs(time - price[elem - 1][0]) < abs(time - price[elem][0])):  # Step backward
         return get_closest_elem(price, time, elem - 1)
     return elem
 
