@@ -12,7 +12,8 @@ setup(
     install_requires=[
         'psycopg2',
         'numpy',
-        'krakenex'],
+        'krakenex'
+    ],
     package_dir={'kraken_source':'src'},
     packages=['src'],
     scripts=['kraken_trader'],
