@@ -225,7 +225,7 @@ class mas_trader():
 
         # Get Configuration Values for Trader from JSON File
         # This is required in case, we want ot optimize the algorithms later on.
-        trader_name = hf.get_tader_name(self)
+        trader_name = 'mas_trader'
         self.constant = hf.get_trader_config()[trader_name]
 
         #Calculate the predicted change

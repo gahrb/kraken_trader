@@ -1,6 +1,7 @@
 import helper_functions as hf
 import numpy as np
 import datetime as dt
+import db_queries as dbq
 
 class analyzer:
 
@@ -10,6 +11,7 @@ class analyzer:
         self.iter_count = 0
         self.optimize = False
         self.reference_curr = "ZEUR"
+        self.dbq = dbq.DbQueries()
 
     def simulate(self,n=-1):
         """
@@ -18,14 +20,15 @@ class analyzer:
             be careful, this depends heavily on the exchange rates!!!)
         """
 
-        pair = "XETHXXBT" #self.trader.price.iterkeys().next()
+        pair = "xxbtzeur" #self.trader.price.iterkeys().next()
         i=0
+        pair_len = self.dbq.length(pair)
         if n==-1:
-            n = len(self.trader.price[pair])
+            n = pair_len
 
         elem = dict()
 
-        start_time = self.trader.price[pair][len(self.trader.price[pair])-n][0]
+        start_time = self.dbq.gettimeat(pair, pair_len - n)
         end_time = dt.datetime.now()
 
         self.starting_balance(start_time)

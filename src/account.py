@@ -2,6 +2,7 @@ import datetime as dt
 import helper_functions as hf
 import os
 import psycopg2
+import db_queries as dbq
 
 keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
 
@@ -9,8 +10,7 @@ class kraken_account:
 
     def __init__(self,conn,k,simulate=True,logger=""):
         self.logger = logger
-        self.conn = conn
-        self.cur = conn.cursor()
+        self.dbq = dbq.DbQueries()
         self.k = k
         self.balance = dict()
         self.trade_balance = dict()
@@ -27,25 +27,25 @@ class kraken_account:
             self.get_balance()
             self.get_trade_balance()
             self.get_open_orders()
-            self.DBupdatecheck()
+            self.db_updatecheck()
 
     def get_balance(self):
 
-        for pair in self.asset_pair.keys():
-            if not(str(pair[:4]) in self.balance):
-                self.balance[str(pair[:4])] = 0
-            if not(str(pair[4:]) in self.balance):
-                self.balance[str(pair[4:])] = 0
+        for balance, value in self.k.query_private('Balance')['result'].items():
+            self.balance[str(balance)] = float(value)
 
-        all_balances = self.k.query_private('Balance')['result']
-        for balance in all_balances:
-            self.balance[str(balance)] = float(all_balances[balance])
+        for key, descr in self.asset_pairs.items():
+            if not(descr['quote'] in self.balance):
+                self.balance[descr['quote']] = 0
+            if not(descr['base'] in self.balance):
+                self.balance[descr['base']] = 0
+
+
 
     def balance_to_db(self):
         query = "select column_name from information_schema.columns where table_name='balance';"
         try:
-            self.cur.execute(query)
-            cols = self.cur.fetchall()
+            cols = self.dbq.execute(query)
         except psycopg2.Error as e:
             logger.error("Could not query the balance table schema.")
             logger.error(pgcode)
@@ -75,15 +75,14 @@ class kraken_account:
         self.conn.commit()
 
     def get_trade_balance(self):
-        trade_balance = self.k.query_private('TradeBalance',{'Currency':'ZEUR'})['result']
-        for balance in trade_balance:
-            self.trade_balance[str(balance)] = float(trade_balance[balance])
+        for key, balance in self.k.query_private('TradeBalance', {'Currency': 'ZEUR'})['result'].items():
+            self.trade_balance[str(key)] = float(balance)
 
     def get_assets(self):
-        self.asset_pair = self.k.query_public('AssetPairs')['result']
-        for key in self.asset_pair.keys():
-            if ( key.find(".d") >=0 or key.find("CAD") >=0 or  key.find("USD") >=0 or  key.find("JPY") >=0 or key.find("GBP") >=0 ):
-                self.asset_pair.pop(key,None)
+        self.asset_pairs = self.k.query_public('AssetPairs')['result']
+        for key in self.asset_pairs.keys():
+            if key.find(".d") >= 0 or key.find("CAD") >= 0 or key.find("USD") >= 0 or key.find("JPY") >= 0 or 0 <= key.find("GBP"):
+                self.asset_pairs.pop(key,None)
 
     def get_open_orders(self):
         self.open_orders = self.k.query_private('OpenOrders')['result']
@@ -100,7 +99,8 @@ class kraken_account:
         for action in trades:
             if action:
                 for pair in trades[action]:
-                    # TODO: check if for current pair other open orders are existing: if yes, stop, or cancle and replace them!
+                    # TODO: check if for current pair other open orders are existing: if yes, stop, or cancle and
+                    # replace them!
                     amount = 0
                     if action == "sell":
                         action_idx=2
@@ -148,12 +148,12 @@ class kraken_account:
                 else:
                     self.balance[pair[4:]] = 1
 
-    def DBupdatecheck(self):
-        self.cur.execute("SELECT * FROM balance order by modtime desc limit 1;")
-        dBbalance = self.cur.fetchall()
+    def db_updatecheck(self):
+        dbstring = "SELECT * FROM balance order by modtime desc limit 1;"
+        dbbalance = self.dbq.execute(dbstring)
         for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
             bal = self.cur.description[it+1][0].upper()
-            if bal in self.balance.keys() and self.balance[bal] != dBbalance[0][it+1]:
+            if bal in self.balance.keys() and self.balance[bal] != dbbalance[0][it+1]:
                 self.balance_to_db()
                 break
 
