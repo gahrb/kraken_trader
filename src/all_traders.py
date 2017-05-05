@@ -214,8 +214,7 @@ class mas_trader():
     Returns sell/buy advices on the moving average, if a currency is under rated or overrated
     """
 
-    def __init__(self,conn,k,account):
-        self.conn = conn
+    def __init__(self,k,account):
         self.k = k
         self.account = account
         self.pairs = account.asset_pair.keys()

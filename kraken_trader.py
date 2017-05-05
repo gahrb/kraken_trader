@@ -17,8 +17,8 @@ from gi.repository import Notify
 simulate = False
 optimize = False
 realSim = False # uses the real balance from the account to simulate
-try_host = "192.168.1.184"
-conn = psycopg2.connect(host="localhost",database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
+# try_host = "192.168.1.184"
+# conn = psycopg2.connect(host="localhost",database="kraken_crawler", user="kraken",  password="kraken")  # basic connection information for a local postgeSQL-DB, change this
 FORMAT = '%(asctime)-5s [%(name)s] %(levelname)s: %(message)s'
 logging.basicConfig(filename='/var/log/kraken/kraken_log.log',level=logging.INFO,format=FORMAT,datefmt='%Y-%m-%d %H:%M:%S')
 logger = logging.getLogger('kraken_crawler')
@@ -65,13 +65,13 @@ def main(argv):
             populate_db(k)
 
         elif opt == '-a' and arg == 'accountInfo':
-            account = kraken_account(conn,k,simulate)
+            account = kraken_account(k,simulate)
             print_account_info(account)
 
         elif opt == '-a' and arg == 'accountDev':
             trader_class = eval("ma_trader")
-            account = kraken_account(conn,k,simulate)
-            account.accountDev(trader_class(conn,k,account))
+            account = kraken_account(k,simulate)
+            account.accountDev(trader_class(k,account))
 
         elif opt == "-a":
             logger = logging.getLogger('kraken_trader')

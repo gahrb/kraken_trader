@@ -8,7 +8,7 @@ keyfile = os.path.expanduser('~') + '/.kraken/kraken.secret'
 
 class kraken_account:
 
-    def __init__(self,conn,k,simulate=True,logger=""):
+    def __init__(self,k,simulate=True,logger=""):
         self.logger = logger
         self.dbq = dbq.DbQueries()
         self.k = k
@@ -31,16 +31,35 @@ class kraken_account:
 
     def get_balance(self):
 
-        for balance, value in self.k.query_private('Balance')['result'].items():
-            self.balance[str(balance)] = float(value)
+        for currency, value in self.k.query_private('Balance')['result'].items():
+            self.balance[str(currency)] = float(value)
 
-        for key, descr in self.asset_pairs.items():
-            if not(descr['quote'] in self.balance):
-                self.balance[descr['quote']] = 0
-            if not(descr['base'] in self.balance):
-                self.balance[descr['base']] = 0
+        for currency, value in self.get_local_balance().items():
+            if not currency in self.balance:
+                self.balance[currency] = value
+
+        for descr in self.asset_pairs.iteritems():
+            if not(descr[1]['quote'] in self.balance):
+                self.add_todb(descr[1]['quote'])
+                self.balance[str(descr[1]['quote'])] = 0
+            if not(descr[1]['base'] in self.balance):
+                self.add_todb(descr[1]['base'])
+                self.balance[str(descr[1]['base'])] = 0
+
+    def get_local_balance(self):
+        local_bal = dict()
+        query = "select column_name from information_schema.columns where table_name='balance';"
+        result = self.dbq.execute(query)
+        for currency in result.items():
+            query = "SELECT " + currency + " FROM balance"
+            local_bal[currency] = self.dbq.get_last(query)
 
 
+    def add_todb(self, currency):
+
+        query = "ALTER TABLE balance ADD COLUMN " + str(currency).lower() + " double precision default 0;"
+        self.dbq.execute(query)
+        self.dbq.commit()
 
     def balance_to_db(self):
         query = "select column_name from information_schema.columns where table_name='balance';"
@@ -149,11 +168,16 @@ class kraken_account:
                     self.balance[pair[4:]] = 1
 
     def db_updatecheck(self):
-        dbstring = "SELECT * FROM balance order by modtime desc limit 1;"
-        dbbalance = self.dbq.execute(dbstring)
-        for it in range(len(self.cur.description)-1): # -1 because the first row is 'modtime' --> add below +1
+
+        query = "SELECT "
+        for currency in  self.balance.keys():
+            query += currency + ", "
+        query = query.rstrip(", ") + " FROM balance order by modtime desc limit 1;"
+
+        balance = self.dbq.execute(query)[0]
+        for it in balance: # -1 because the first row is 'modtime' --> add below +1
             bal = self.cur.description[it+1][0].upper()
-            if bal in self.balance.keys() and self.balance[bal] != dbbalance[0][it+1]:
+            if bal in self.balance.keys() and self.balance[bal] != balance[0][it+1]:
                 self.balance_to_db()
                 break
 
