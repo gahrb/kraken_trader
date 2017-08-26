@@ -17,13 +17,14 @@ class DbQueries:
 
 
     def fetchall(self, string):
-        return self.execute(string).fetchall()
+        self.execute(string)
+        return self.cursor.fetchall()
 
     def execute(self, string):
         return self.cursor.execute(string)
 
     def get_last(self, string):
-        return self.fetchall(string + " ORDER BY timestamp DESC LIMIT 1;")
+        return self.fetchall(string + " ORDER BY modtime DESC LIMIT 1;")
 
     def gettimeat(self, table, idx):
         querystring = "SELECT timestamp FROM " + table + " ORDER BY timestamp OFFSET " + idx + "LIMIT 1;"

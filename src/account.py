@@ -31,28 +31,36 @@ class kraken_account:
 
     def get_balance(self):
 
-        for currency, value in self.k.query_private('Balance')['result'].items():
-            self.balance[str(currency)] = float(value)
 
         for currency, value in self.get_local_balance().items():
-            if not currency in self.balance:
-                self.balance[currency] = value
+            self.balance[str(currency).lower()] = float(value[0][0])
+
+        for currency, value in self.k.query_private('Balance')['result'].items():
+            if not str(currency).lower() in self.balance:
+                self.add_todb(str(currency).lower())
+                self.balance[str(currency).lower()] = float(value)
 
         for descr in self.asset_pairs.iteritems():
-            if not(descr[1]['quote'] in self.balance):
-                self.add_todb(descr[1]['quote'])
-                self.balance[str(descr[1]['quote'])] = 0
-            if not(descr[1]['base'] in self.balance):
-                self.add_todb(descr[1]['base'])
-                self.balance[str(descr[1]['base'])] = 0
+            if not(str(descr[1]['quote']).lower() in self.balance):
+                self.add_todb(str(descr[1]['quote']).lower())
+                self.balance[str(descr[1]['quote']).lower()] = 0
+            if not(str(descr[1]['base']).lower() in self.balance):
+                self.add_todb(str(descr[1]['base']).lower())
+                self.balance[str(descr[1]['base']).lower()] = 0
 
     def get_local_balance(self):
         local_bal = dict()
-        query = "select column_name from information_schema.columns where table_name='balance';"
-        result = self.dbq.execute(query)
-        for currency in result.items():
-            query = "SELECT " + currency + " FROM balance"
-            local_bal[currency] = self.dbq.get_last(query)
+        query = "select * from balance;"
+        self.dbq.execute(query)
+        for desc in self.dbq.cursor.description:
+            currency = desc[0]
+            if currency != 'modtime' and currency != 'eq_bal':
+                query = "SELECT " + currency + " FROM balance"
+                try:
+                    local_bal[currency] = self.dbq.get_last(query)
+                except:
+                    local_bal[currency] = 0
+        return local_bal
 
 
     def add_todb(self, currency):
@@ -105,7 +113,6 @@ class kraken_account:
 
     def get_open_orders(self):
         self.open_orders = self.k.query_private('OpenOrders')['result']
-
 
     def get_ledger_info(self):
         self.ledger_info = self.k.query_private('Ledgers')['result']
@@ -168,13 +175,15 @@ class kraken_account:
                     self.balance[pair[4:]] = 1
 
     def db_updatecheck(self):
-
+        # TODO: compare local balance vs. kraken_account balance renew local database
+        # I think everything below here is bad and has to be rewritten totally...
         query = "SELECT "
-        for currency in  self.balance.keys():
+        for currency in self.balance.keys():
             query += currency + ", "
         query = query.rstrip(", ") + " FROM balance order by modtime desc limit 1;"
 
-        balance = self.dbq.execute(query)[0]
+        self.dbq.execute(query)
+        balance = self.dbq.cursor.fetchall()[0]
         for it in balance: # -1 because the first row is 'modtime' --> add below +1
             bal = self.cur.description[it+1][0].upper()
             if bal in self.balance.keys() and self.balance[bal] != balance[0][it+1]:
