@@ -15,7 +15,6 @@ class DbQueries:
             return
         self.cursor = self.conn.cursor()
 
-
     def fetchall(self, string):
         self.execute(string)
         return self.cursor.fetchall()
@@ -27,12 +26,24 @@ class DbQueries:
         return self.fetchall(string + " ORDER BY modtime DESC LIMIT 1;")
 
     def gettimeat(self, table, idx):
-        querystring = "SELECT timestamp FROM " + table + " ORDER BY timestamp OFFSET " + idx + "LIMIT 1;"
+        querystring = "SELECT modtime FROM " + table + " ORDER BY modtime OFFSET " + idx + "LIMIT 1;"
         return self.execute(querystring)
 
     def closestelem(self, table, time):
-        querystring = "SELECT * FROM " + table + " ORDER BY ABS(timestamp - " + time + ") LIMIT 1;"
-        return self.execute(querystring)
+        if not type(time) == str:
+            time = str(time)
+        querystring = "SELECT * FROM " + table + " ORDER BY ABS(extract(epoch from modtime - '" + time + "')) LIMIT 1;"
+        return self.fetchall(querystring)
+
+    def get_balances(self):
+        querystring = "SELECT * FROM balance order by modtime asc;"
+        return self.fetchall(querystring)
+
+    def get_columns(self):
+        columns = []
+        for col in self.cursor.description:
+            columns.append(col.name)
+        return columns
 
     def commit(self):
         self.conn.commit()
