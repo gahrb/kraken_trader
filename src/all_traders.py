@@ -3,6 +3,7 @@ import helper_functions as hf
 import numpy as np
 import datetime as dt
 import db_queries
+import db_queries as dbq
 
 
 class ma_trader():
@@ -13,10 +14,8 @@ class ma_trader():
         self.account = account
         self.queries = db_queries.DbQueries()
         self.pairs = account.asset_pair.keys()
-        #self.pred = dict()
         self.diff = dict()
         self.price = dict()
-
 
         # Get Configuration Values for Trader from JSON File
         # This is required in case, we want ot optimize the algorithms later on.
@@ -25,7 +24,7 @@ class ma_trader():
 
         self.keep = min(0.01,self.constant["delta"])
 
-        #Calculate the predicted change
+        # Calculate the predicted change
         self.run_trader()
         self.keep_back(dt.datetime.strptime("2016-01-01","%Y-%m-%d"))
 
@@ -44,20 +43,20 @@ class ma_trader():
                 allow_trade[pair]=-1
 
         if not all(val==-1 for val in allow_trade.values()):
-            performTrades = dict()
-            for (pair,v) in allow_trade.items():
+            perform_trades = dict()
+            for (pair, v) in allow_trade.items():
                 change = (v-self.price[pair][elem[pair]][1])/v
                 if v!=-1 and change >= self.constant["gamma"] and \
                         not pair[:4] in self.constant["donottrade"] and \
                         not pair[4:] in self.constant["donottrade"] and \
                         self.account.balance[pair[4:]]-self.keep[pair[4:]] > 0:
-                    performTrades[pair] = min(self.account.balance[pair[4:]] - self.keep[pair[4:]] , \
+                    perform_trades[pair] = min(self.account.balance[pair[4:]] - self.keep[pair[4:]] , \
                             change *self.constant["beta"]*self.account.balance[pair[4:]] * self.price[pair][elem[pair]][2]) / \
                             self.price[pair][elem[pair]][1]
 
-            if (performTrades):
+            if (perform_trades):
                 self.keep_back(time)
-                return performTrades
+                return perform_trades
         return []
 
     def get_sell_advice(self,time):
@@ -72,7 +71,7 @@ class ma_trader():
                 allow_trade[pair]=-1
 
         if not all(val==-1 for val in allow_trade.values()):
-            performTrades = dict()
+            perform_trades = dict()
             for (pair,v) in allow_trade.items():
                 change = (self.price[pair][elem[pair]][2]-v)/v
                 if v!=-1 and change >= self.constant["gamma"] and\
@@ -80,12 +79,12 @@ class ma_trader():
                         not pair[4:] in self.constant["donottrade"] and\
                         self.account.balance[pair[:4]]-self.keep[pair[:4]] > 0: #Ensures, that there is enough amount on this currency to trade
                     #Check if transaction does not exceed the self.keep amount
-                    performTrades[pair] = min(self.account.balance[pair[:4]]-self.keep[pair[:4]],\
+                    perform_trades[pair] = min(self.account.balance[pair[:4]]-self.keep[pair[:4]],\
                                             change*self.constant["beta"]*self.account.balance[pair[:4]])
 
-            if (performTrades):
+            if (perform_trades):
                 self.keep_back(time)
-                return performTrades
+                return perform_trades
         return []
 
     def keep_back(self,time):
@@ -136,6 +135,7 @@ class ma_trader():
                 self.ma[pair]["ask"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,1])])
                 self.ma[pair]["bid"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,2])])
 
+
 class mas_trader():
     """
     Returns sell/buy advices on the moving average, if a currency is under rated or overrated
@@ -157,8 +157,6 @@ class mas_trader():
         #Calculate the predicted change
         self.run_trader()
 
-
-
     def write_new_trader(self):
         hf.save_trader_config(self.constant,hf.get_tader_name(self))
 
@@ -174,7 +172,7 @@ class mas_trader():
                 allow_trade[pair]=-1
 
         if not all(val==-1 for val in allow_trade.values()):
-            performTrades = dict()
+            perform_trades = dict()
             for (pair,v) in allow_trade.items():
                 change = (v-self.price[pair][elem[pair]][1])/v
                 if v!=-1 and change >= self.constant["x_thresh"]:
@@ -184,7 +182,7 @@ class mas_trader():
                     - the buy amount does not exceed the max_vol amount
                     - enough balance to sell (incl. keep back amount),
                     """
-                    # performTrades[pair] = min(self.account.balance[pair[4:]], \
+                    # perform_trades[pair] = min(self.account.balance[pair[4:]], \
                     #         change *self.constant["trade_factor"]*self.account.balance[pair[4:]] * self.price[pair][elem[pair]][2]) / \
                     #         self.price[pair][elem[pair]][1]
                     # Get equivalent balance first, translate the pair currencies into the base
@@ -217,11 +215,11 @@ class mas_trader():
                     abs_amountBuy = min(rel_amount*fac, change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
 
                     if abs_amountBuy>0.01: #Kraken's minimum amount to trade
-                        performTrades[pair] = abs_amountBuy
+                        perform_trades[pair] = abs_amountBuy
 
-            if (performTrades):
+            if (perform_trades):
                 self.check_max_vol(time)
-                return performTrades
+                return perform_trades
         return []
 
     def get_sell_advice(self,time):
@@ -236,7 +234,7 @@ class mas_trader():
                 allow_trade[pair]=-1
 
         if not all(val==-1 for val in allow_trade.values()):
-            performTrades = dict()
+            perform_trades = dict()
             for (pair,v) in allow_trade.items():
                 change = (self.price[pair][elem[pair]][2]-v)/v
                 if v!=-1 and change >= self.constant["x_thresh"]:
@@ -274,13 +272,13 @@ class mas_trader():
                     abs_amountSell = min(rel_amount*fac, change*self.constant["trade_factor"]*self.account.balance[pair[:4]])
 
                     if abs_amountSell>0.01: #Kraken's minimum amount to trade
-                        performTrades[pair] = abs_amountSell
+                        perform_trades[pair] = abs_amountSell
 
 
 
-            if (performTrades):
+            if (perform_trades):
                 self.check_max_vol(time)
-                return performTrades
+                return perform_trades
         return []
 
     def check_max_vol(self,time):
@@ -327,3 +325,151 @@ class mas_trader():
                 lookback = min(int(self.constant["window"]),i)
                 self.ma[pair]["ask"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,1])])
                 self.ma[pair]["bid"].append([self.price[pair][i][0],np.mean(np.array(self.price[pair][i-lookback:i])[:,2])])
+
+
+class MaDBTrader:
+    """
+    Returns sell/buy advices on the moving average, moves most of the logic to the DB
+    """
+
+    def __init__(self, account):
+        self.account = account
+        self.diff = dict()
+        self.dbq = dbq.DbQueries()
+        self.hf = hf.HelperFunctions(self.account.asset_pairs, self.dbq)
+
+        # Get Configuration Values for Trader from JSON File
+        # This is required in case, we want ot optimize the algorithms later on.
+        trader_name = 'MaDBTrader'
+        self.constant = hf.get_trader_config()[trader_name]
+
+    def ma(self, pair, type, timestamp, window_len):
+        series = self.dbq.get(table=pair, column=type, time=timestamp, limit=window_len, mode='smaller')
+        if len(series) < window_len:
+            return -1
+        return np.array(series).mean()
+
+    def write_new_trader(self):
+        hf.save_trader_config(self.constant, hf.get_tader_name(self))
+
+    def get_buy_advice(self, time):
+        allow_trade = dict()
+        for pair in self.account.asset_pairs:
+            allow_trade[pair] = {'base': self.account.asset_pairs[pair]['base'].lower(),
+                                 'quote': self.account.asset_pairs[pair]['quote'].lower(),
+                                 'basevol': self.account.balance[self.account.asset_pairs[pair]['base'].lower()],
+                                 'quotevol': self.account.balance[self.account.asset_pairs[pair]['quote'].lower()],
+                                 'price': self.dbq.get(table=pair, column='bid_price', time=time)[0][0],
+                                 'ma': self.ma(pair, "bid_price", time, self.constant["window"])}
+
+        for (pair, v) in allow_trade.items():
+            perform_trades = dict()
+            if not (v['ma'] == -1 or v['price'] == 0):
+                change = (v['ma'] - v['price']) / v['price']
+                if v['ma'] != -1 and change >= self.constant["x_thresh"] and v['price'] > 0.0:
+                    """
+                    Things to take care of:
+                    - enough balance to sell (incl. the min_vol),
+                    - bought balance does not exceed it's max_vol value
+                    """
+                    # Get equivalent balance first, translate the pair currencies into the base
+                    rel_base = self.hf.get_eq_bal(v['basevol'],
+                                                  v['base'],
+                                                  time,
+                                                  'xxbt') / self.hf.get_total_bal(time, ref='xxbt')
+                    rel_quote = self.hf.get_eq_bal(v['quotevol'],
+                                                   v['quote'],
+                                                   time,
+                                                   'xxbt') / self.hf.get_total_bal(time, ref='xxbt')
+                    # Wanted Trade Amount
+                    wta = change * self.constant["trade_factor"]
+
+                    # Maximum Buy Amount
+                    if v['base'] in set(k.lower() for k in self.constant['max_vol']):
+                        mba = self.constant['max_vol'][v['base'].upper()]
+                    else:
+                        mba = self.constant['max_vol']['default']
+
+                    # Minimum Keep Amount
+                    if v['quote'] in set(k.lower() for k in self.constant['max_vol']):
+                        mka = self.constant['min_vol'][v['quote'].upper()]
+                    else:
+                        mka = self.constant['min_vol']['default']
+
+                    # Maximum Sell Amount
+                    rmsa = max(rel_quote - mka, 0)
+                    # Relative Maximum Buy Amount
+                    rmba = max(mba - rel_base, 0)
+                    # Total Relative Trading Amount
+                    trta = min(min(rmba, rmsa), wta)
+
+                    # Transferred to absolute 'base' trading amount
+                    absamount = trta * v['basevol'] / v['price']
+                    if absamount > 0.01:  # Kraken's minimum amount to trade
+                        perform_trades.update({pair: absamount})
+
+            if perform_trades:
+                # self.check_max_vol(time)
+                return perform_trades
+        return []
+
+    def get_sell_advice(self, time):
+        allow_trade = dict()
+        for pair in self.account.asset_pairs:
+            allow_trade[pair] = {'base': self.account.asset_pairs[pair]['base'].lower(),
+                                 'quote': self.account.asset_pairs[pair]['quote'].lower(),
+                                 'basevol': self.account.balance[self.account.asset_pairs[pair]['base'].lower()],
+                                 'quotevol': self.account.balance[self.account.asset_pairs[pair]['quote'].lower()],
+                                 'price': self.dbq.get(table=pair, column='ask_price', time=time)[0][0],
+                                 'ma': self.ma(pair, "ask_price", time, self.constant["window"])}
+
+        for (pair, v) in allow_trade.items():
+            perform_trades = dict()
+            if not (v['ma'] == -1 or v['price'] == 0):
+                change = (-v['ma'] + v['price']) / v['price']
+                if v['ma'] != -1 and change >= self.constant["x_thresh"] and v['price'] > 0.0:
+                    """
+                    Things to take care of:
+                    - enough balance to sell (incl. the min_vol),
+                    - bought balance does not exceed it's max_vol value
+                    """
+                    # Get equivalent balance first, translate the pair currencies into the base
+                    rel_base = self.hf.get_eq_bal(v['basevol'],
+                                                  v['base'],
+                                                  time,
+                                                  'xxbt') / self.hf.get_total_bal(time, ref='xxbt')
+                    rel_quote = self.hf.get_eq_bal(v['quotevol'],
+                                                   v['quote'],
+                                                   time,
+                                                   'xxbt') / self.hf.get_total_bal(time, ref='xxbt')
+                    # Wanted Trade Amount
+                    wta = change * self.constant["trade_factor"]
+
+                    # Minimum Keep Amount
+                    if v['base'] in set(k.lower() for k in self.constant['min_vol']):
+                        mka = self.constant['min_vol'][v['base'].upper()]
+                    else:
+                        mka = self.constant['min_vol']['default']
+                    # Maximum Buy Amount
+                    if v['quote'] in set(k.lower() for k in self.constant['max_vol']):
+                        mba = self.constant['max_vol'][v['quote'].upper()]
+                    else:
+                        mba = self.constant['max_vol']['default']
+
+                    # Maximum Sell Amount
+                    rmsa = max(rel_base - mka, 0)
+                    # Relative Maximum Buy Amount
+                    rmba = max(mba - rel_quote, 0)
+                    # Total Relative Trading Amount
+                    trta = min(min(rmba, rmsa), wta)
+
+                    # Transferred to absolute 'base' trading amount
+                    absamount = trta * v['quotevol'] * v['price']
+
+                    if absamount > 0.01:  # Kraken's minimum amount to trade
+                        perform_trades.update({pair: absamount})
+
+            if perform_trades:
+                # self.check_max_vol(time)
+                return perform_trades
+        return []

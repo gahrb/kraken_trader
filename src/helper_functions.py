@@ -11,19 +11,6 @@ class HelperFunctions:
         self.dbq = dbq
         self.asset_pairs = asset_pairs
 
-    def get_trader_config(self):
-        json_data=open("./src/"+filename).read()
-        return json.loads(json_data)
-
-    def save_trader_config(self, data, trader_name):
-        json_data = self.get_trader_config()
-        # TODO: replace the config of the current trader with the new constants
-        json_data[trader_name] = data
-        with open("./kraken_trader/"+filename,mode='w') as outfile:
-            json.dump(json_data, outfile,indent=4, sort_keys=True)
-
-
-
     def get_closest_elem(self, price, time, elem = 0):
         if elem+1 < len(price) and time > price[elem][0] and (time - price[elem+1][0] < time - price[elem][0]):
             return self.get_closest_elem(price,time,elem+1)
@@ -35,64 +22,38 @@ class HelperFunctions:
         """
         currency = currency.lower()
         reference_curr = reference_curr.lower()
-
-        if currency==reference_curr:
+        if currency==reference_curr or amount == 0.0:
             # Nothing to do here
             return amount
 
-        mult = False
-        if currency+reference_curr in self.asset_pairs:
-            asset_pair = currency+reference_curr
-            mult = True
-        elif reference_curr+currency in self.asset_pairs:
-            asset_pair = reference_curr+currency
-        else:
-            # If there is no asset_pair towards the reference currency, go via xxbt
-            if reference_curr+"xxbt" in self.asset_pairs:
-                asset_pair = reference_curr+"xxbt"
-            elif "xxbt"+reference_curr in self.asset_pairs:
-                mult = True
-                asset_pair = "xxbt"+reference_curr
-            else:
-                # No asset pair found. Return 0
-                # self.logger.warn("Asset pair not found: " + reference_curr + ", " + currency)
-                return 0
+        # mult = False
+        asset_pair, base = self.get_asset_pair(currency, reference_curr)
+        if asset_pair is None and reference_curr != "xxbt":
             amount = self.get_eq_bal(amount, currency, time, reference_curr="xxbt")
+            if amount == 0:
+                return 0
+            asset_pair, base = self.get_asset_pair("xxbt", reference_curr)
+        if asset_pair is None:
+            # The asset_pair was removed -> the currency is not tradable
+            return 0
 
         price_row = self.dbq.closestelem(asset_pair, time)
         columns = self.dbq.get_columns()
 
-        if mult:
+        if base:
             price = price_row[0][columns.index('bid_price')]
             return amount*price
         price = price_row[0][columns.index('ask_price')]
         return amount/price
 
-
-        # rel_bal = dict()
-        # for bal in balance:
-        #     if bal!=reference_curr:
-        #         pair = bal+reference_curr
-        #         tmp_bal = balance[bal]
-        #         buy = False
-        #         if not(pair in price):
-        #             if (reference_curr+bal in price):
-        #                 pair = reference_curr+bal
-        #                 buy = True
-        #             else:
-        #                 #Change it first to xxbt, then to reference curr
-        #                 tmp_bal = xbal(price[bal+"XXBT"],tmp_bal,time,buy)
-        #                 pair = "XXBT"+reference_curr
-        #                 if not(pair in price):
-        #                     pair = reference_curr+"XXBT"
-        #                     buy = True
-        #         rel_bal[bal] = xbal(price[pair],tmp_bal,time,buy)
-        #         eq_bal += rel_bal[bal]
-        #     else:
-        #         rel_bal[bal] = balance[bal]
-        # for bal in rel_bal:
-        #     rel_bal[bal] = rel_bal[bal]/eq_bal
-        # return (eq_bal,rel_bal)
+    def get_total_bal(self, time, ref='xxbt'):
+        tot_bal = 0
+        balance = self.dbq.get(table='balance', column="*", time=time)[0]
+        curs = self.dbq.get_columns()
+        for cur in curs:
+            if cur != 'modtime' and cur != 'eq_bal':
+                tot_bal += self.get_eq_bal(balance[curs.index(cur)], cur, time, ref)
+        return tot_bal
 
     def xbal(self, price, bal, time, action):
         # exchanges cur1 with cur2 at specific time
@@ -101,11 +62,45 @@ class HelperFunctions:
             return bal/price[elem][1]
         return bal*price[elem][2]
 
+    def get_base(self, pair):
+        return self.asset_pairs[pair]['base'].lower()
 
-def get_tader_name(self, input_class):
+    def get_quote(self, pair):
+        return self.asset_pairs[pair]['quote'].lower()
+
+    def get_asset_pair(self, cur1, cur2):
+        """
+        :param cur1: currency 1, which is assumed to be the 'base' currency
+        :param cur2: currency 2, which is assumed to be the 'quote' currency
+        :return: None -> no asset pair found or asset_pair and True is cur1 is 'base' or False if cur2 is 'quote'
+        """
+        for pair in self.asset_pairs:
+            if cur1.lower() == self.asset_pairs[pair]['base'].lower() and\
+                    cur2.lower() == self.asset_pairs[pair]['quote'].lower():
+                return pair, True
+            if cur2.lower() == self.asset_pairs[pair]['base'].lower() and\
+                    cur1.lower() == self.asset_pairs[pair]['quote'].lower():
+                return pair, False
+        return None, None
+
+
+def get_trader_config():
+    json_data=open("./src/"+filename).read()
+    return json.loads(json_data)
+
+
+def get_tader_name(input_class):
     name_sidx = str(input_class).find("all_traders.")
     name_eidx = str(input_class).find(" instance")
     return str(input_class)[name_sidx+12:name_eidx]
+
+
+def save_trader_config(data, trader_name):
+    json_data = get_trader_config()
+    # TODO: replace the config of the current trader with the new constants
+    json_data[trader_name] = data
+    with open("./kraken_trader/"+filename,mode='w') as outfile:
+        json.dump(json_data, outfile,indent=4, sort_keys=True)
 
 
 def constant_enum(i):

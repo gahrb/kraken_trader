@@ -1,4 +1,30 @@
-{"mas_trader":
+{"MaDBTrader":
+  { "max_vol": {
+    "ZEUR": 0.5,
+    "XXBT": 0.3,
+    "XETH": 0.7,
+    "XLTC": 0.3,
+    "XETC": 0.0,
+    "DASH": 0.0,
+    "XREP": 0.1,
+    "default": 0.01
+  },
+  "min_vol": {
+    "ZEUR": 0.1,
+    "XXBT": 0.1,
+    "XBCH": 0.1,
+    "XETH": 0.1,
+    "XLTC": 0.1,
+    "XETC": 0.0,
+    "default": 0.005
+  },
+    "x_thresh": 0.06103093,
+    "window": 46,
+    "trade_factor": 0.0002,
+    "integer": ["window"],
+    "float": ["x_thresh"]
+  },
+  "mas_trader":
   { "max_vol": {
     "ZEUR": 1,
     "XXBT": 0.5,

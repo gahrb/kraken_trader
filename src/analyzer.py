@@ -3,6 +3,7 @@ import helper_functions as hf
 import numpy as np
 import datetime as dt
 import db_queries as dbq
+import ast
 
 
 class TraderAnalyzer:
@@ -12,90 +13,98 @@ class TraderAnalyzer:
         self.account = account
         self.iter_count = 0
         self.optimize = False
-        self.reference_curr = "ZEUR"
+        self.reference_curr = "zeur"
         self.dbq = dbq.DbQueries()
+        self.hf = hf.HelperFunctions(self.account.asset_pairs, self.dbq)
 
-    def simulate(self,n=-1):
+    def simulate(self, n=-1):
         """
         Simulates a trader's performance. creates new the variables eq_bal as equivalent balance
         (i.e. all values are transfered into Bitcoins (XBT) in order to compare them easily -
             be careful, this depends heavily on the exchange rates!!!)
         """
-
-        pair = "xxbtzeur" #self.trader.price.iterkeys().next()
-        i=0
+        pair = "xxbtzeur"  # self.trader.price.iterkeys().next()
+        i = 0
         pair_len = self.dbq.length(pair)
-        if n==-1:
+        if n == -1:
             n = pair_len
-
-        elem = dict()
 
         start_time = self.dbq.gettimeat(pair, pair_len - n)
         end_time = dt.datetime.now()
-
         self.starting_balance(start_time)
 
-        balance = self.account.balance # Important: this copys only the pointer. changing balance will change self.account.balance
+        balance = self.account.balance  # This copys only the pointer. changing balance will change self.account.balance
         if not self.optimize:
             s_balance = self.account.balance.copy()
 
-        start_bal,_ = hf.get_eq_bal(balance,self.trader.price,start_time,'ZEUR')
-        end_bal,_ = hf.get_eq_bal(balance,self.trader.price,end_time,'ZEUR')
+        start_bal = end_bal = 0
+        for cur in self.account.balance.keys():
+            start_bal += self.hf.get_eq_bal(balance[cur], cur, start_time, 'ZEUR')
+            end_bal += self.hf.get_eq_bal(balance[cur], cur, end_time, 'ZEUR')
 
-        for key in self.trader.price[pair][len(self.trader.price[pair])-n:]:
-            i=i+1
-            #Sell action
-            advice = self.trader.get_sell_advice(key[0])
+        for time in self.dbq.timestamps(table=pair, limit=n):
+            # Sell action
+            advice = self.trader.get_sell_advice(time[0])
             sold = dict()
-            credit_item = dict((key,0) for key in balance)
-            for pair in sorted(advice, key=lambda key: advice[key],reverse=True):
-                if not elem.has_key(pair):
-                    elem[pair] = 0
-                sellFX = pair[:4]
-                buyFX = pair[4:]
-                elem[pair] = hf.get_closest_elem(self.trader.price[pair],key[0],elem[pair])
-                #Check if sufficient funds
+            credit_item = dict()
+            for pair in sorted(advice, key=lambda key: advice[key], reverse=True):
+                base = self.hf.get_base(pair)
+                quote = self.hf.get_quote(pair)
+                # Check if sufficient funds
                 # TODO: add transaction fees dependent on numbers of transaction (change 2nd last index)
-                amountBuy = advice[pair]*self.trader.price[pair][elem[pair]][2]*(1-self.account.asset_pair[pair]['fees'][0][1]/100)
-                if advice[pair] > min(self.trader.keep,0.01) :
-                    balance[sellFX] -= advice[pair]
-                    credit_item[buyFX] += amountBuy
-                    sold[pair] = [advice[pair], amountBuy, self.trader.price[pair][elem[pair]][2]]
+                price = self.dbq.get(table=pair, column='bid_price', time=time[0])[0][0]
+                amountsell = min(advice[pair], balance[base])
+                amountbuy = (amountsell / price) *\
+                            (1 - ast.literal_eval(self.account.asset_pairs[pair]['fees'])[0][1] / 100)
+                if amountsell > 0.01:
+                    if quote not in credit_item:
+                        credit_item.update({quote: 0})
+                    balance[base] -= amountsell
+                    credit_item[quote] += amountbuy
+                    sold[pair] = [amountsell, amountbuy, price]
 
             # buy action
-            advice = self.trader.get_buy_advice(key[0])
+            advice = self.trader.get_buy_advice(time[0])
             bought = dict()
             for pair in sorted(advice, key=lambda key: advice[key],reverse=True):
-                if not elem.has_key(pair):
-                    elem[pair] = 0
-                buyFX = pair[:4]
-                sellFX= pair[4:]
-                elem[pair] = hf.get_closest_elem(self.trader.price[pair],key[0],elem[pair])
-                sellAmount = advice[pair]*self.trader.price[pair][elem[pair]][1]*(1-self.account.asset_pair[pair]['fees'][0][1]/100)
-                #Chek if enough money is left to buy
-                if advice[pair] > 0.01 :
-                    balance[sellFX] -= sellAmount
-                    credit_item[buyFX] += advice[pair]
-                    bought[pair] = [sellAmount, advice[pair], self.trader.price[pair][elem[pair]][1]]
-
-            # Write credit items to the account balance
-            if credit_item:
-                for curr in credit_item:
-                    balance[curr] += credit_item[curr]
-
-            eq_bal,rel_bal = hf.get_eq_bal(balance,self.trader.price,key[0],'ZEUR')
-
+                base = self.hf.get_base(pair)
+                quote = self.hf.get_quote(pair)
+                # Check if enough money is left to buy
+                price = self.dbq.get(table=pair, column='ask_price', time=time[0])[0][0]
+                amountsell = min(balance[quote], (advice[pair] * price))
+                amountbuy = amountsell / price
+                if amountbuy > 0.01:
+                    if base not in credit_item:
+                        credit_item.update({base: 0})
+                    balance[quote] -= amountsell
+                    credit_item[base] += amountbuy *\
+                                          (1 - ast.literal_eval(self.account.asset_pairs[pair]['fees'])[0][1]/100)
+                    bought[pair] = [amountbuy, amountsell, price]
 
             if not self.optimize:
                 if sold or bought:
                     print("-----\nPerformed trade ($): sell: "+str(sold)+" buy: "+str(bought))
-                s_eq_bal,_ = hf.get_eq_bal(s_balance,self.trader.price,key[0],'ZEUR')
-                for bal in rel_bal:
-                    rel_bal[bal] = round(rel_bal[bal]*100,1)
-                print(str(key[0])+" "+str(i)+", Equivalent in "+self.reference_curr+": " + str(round(eq_bal,2))+\
-                    ",\n\t Compared to market ("+str(round(s_eq_bal,2))+"): " + str(round((eq_bal/s_eq_bal-1)*100,2))+\
-                    "%,\n\t Compared to start ("+str(round(start_bal,2))+"): " + str(round((eq_bal/start_bal-1)*100,2))+"%."+\
-                    "\nRelative balances[%]: "+str(sorted(rel_bal.items(), key=lambda x: x[1], reverse=True)))
+                    # Write credit items to the account balance
+                    if credit_item:
+                        for curr in credit_item:
+                            balance[curr] += credit_item[curr]
+                    rel_bal = dict()
+                    for cur in balance.keys():
+                        rel_bal[cur] = self.hf.get_eq_bal(balance[cur], cur, time[0], 'ZEUR')
+                    eq_bal = sum(rel_bal.values())
+                    s_rel_bal = dict()
+                    for cur in s_balance.keys():
+                        s_rel_bal[cur] = self.hf.get_eq_bal(s_balance[cur], cur, time[0], 'ZEUR')
+                    s_eq_bal = sum(s_rel_bal.values())
+                    for bal in rel_bal:
+                        rel_bal[bal] = round(rel_bal[bal]/eq_bal, 2)*100
+                    print(str(time[0])+" "+str(i)+", Equivalent in "+self.reference_curr + ": " +
+                          str(round(eq_bal, 2)) +
+                          ",\n\t Compared to market ("+str(round(s_eq_bal, 2))+"): " +
+                          str(round((eq_bal/s_eq_bal-1)*100, 2))+\
+                          "%,\n\t Compared to start ("+str(round(start_bal, 2))+"): " +
+                          str(round((eq_bal/start_bal-1)*100, 2))+"%." +
+                          "\nRelative balances[%]: "+str(sorted(rel_bal.items(), key=lambda x: x[1], reverse=True)))
 
         print("Start balance: "+str(start_bal))
         print("Market adjusted end balance: "+str(end_bal))
@@ -104,7 +113,6 @@ class TraderAnalyzer:
         for bal in balance:
             print(str(bal) + ": "+str(balance[bal]))
         return eq_bal
-
 
     def gradient(self,vec = np.empty([0])):
         """
@@ -154,8 +162,6 @@ class TraderAnalyzer:
         else:
             print("Optimal Constants After 99 Iterations: "+str(self.trader.constant))
 
-
-
     def stepsize(self,g,f_x,size,sim_length=-1):
 
         for i in range(len(g)):
@@ -174,25 +180,29 @@ class TraderAnalyzer:
         else:
             g = g/size #resetting g to the last optimizing state
             for i in range(0,len(g)):
-                self.trader.constant[self.trader.constant["float"][i]] = self.trader.constant[self.trader.constant["float"][i]]- float(g[i])*size
+                self.trader.constant[self.trader.constant["float"][i]] =\
+                    self.trader.constant[self.trader.constant["float"][i]] - float(g[i])*size
         return g
 
-    def starting_balance(self,time):
-        ref = "XXBT"
-        start_factor = 0.4 #to avoid starting with 0.0001 or 5 xbt (or zeur, or xeth, ....)
-        for bal in self.account.balance:
+    def starting_balance(self, time):
+        ref = "xxbt"
+        start_factor = 0.4  # to avoid starting with 0.0001 or 5 xbt (or zeur, or xeth, ....)
+
+        for bal in self.account.assets.keys():
             max_vol = self.trader.constant['max_vol']['default']
             if bal in self.trader.constant['max_vol']:
                 max_vol = self.trader.constant['max_vol'][bal]
             if not bal == ref:
-                pair = bal+ref
-                if pair in self.trader.price:
-                    elem = hf.get_closest_elem(self.trader.price[pair],time)
-                    self.account.balance[bal] = start_factor/self.trader.price[pair][elem][1]*max_vol
+                pair, base = self.hf.get_asset_pair(bal, ref)
+                if pair is None:
+                    self.account.balance.pop(bal)
+                    print("Could not find asset pairs with: '" + ref + "' and '" + bal + "'.")
+                elif base:
+                    self.account.balance[bal] = start_factor / max(self.dbq.get(pair, 'ask_price', time)[0][0], 1e-6) *\
+                                                max_vol
                 else:
-                    pair = ref+bal
-                    elem = hf.get_closest_elem(self.trader.price[pair],time)
-                    self.account.balance[bal] = start_factor*self.trader.price[pair][elem][2]*max_vol
+                    self.account.balance[bal] = start_factor * self.dbq.get(pair, 'bid_price', time)[0][0] * max_vol
+
             else:
                 self.account.balance[bal] = 1*start_factor
 
